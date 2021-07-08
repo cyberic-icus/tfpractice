@@ -26,7 +26,6 @@ public class ProductDataEntity {
 
     @JsonBackReference
     @ManyToOne(cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     public ProductEntity productEntity;
 
     public Long getId() {

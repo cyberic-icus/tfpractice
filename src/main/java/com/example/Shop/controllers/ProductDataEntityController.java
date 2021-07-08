@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/products/{ProductID}/availability/")
+@RequestMapping("/products/{ProductID}/avail/")
 public class ProductDataEntityController {
     @Autowired
     private ProductDataEntityService productDataEntityService;
@@ -38,8 +38,7 @@ public class ProductDataEntityController {
 
     @PostMapping
     ProductDataEntity postProductDataEntity(@RequestBody ProductDataEntity productDataEntity, @PathVariable Long ProductID){
-        Optional<ProductEntity> productEntity = productEntityService.getProductById(ProductID);
-        productEntity.ifPresent(entity -> entity.getSizesAndColors().add(productDataEntity));
+        productDataEntityService.saveProductData(ProductID, productDataEntity);
         return productDataEntity;
     }
 

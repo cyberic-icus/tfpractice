@@ -30,7 +30,7 @@ public class ProductEntity {
     public double price;
     @CreatedDate public Instant createdDate;
     @JsonManagedReference
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     List<ProductDataEntity> sizesAndColors = new ArrayList<>();
 
     public List<ProductDataEntity> getSizesAndColors() {

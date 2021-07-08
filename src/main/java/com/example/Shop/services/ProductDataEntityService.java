@@ -17,9 +17,15 @@ public class ProductDataEntityService {
     private ProductDataEntityRepository productDataEntityRepository;
     @Autowired
     private ProductEntityRepository productEntityRepository;
-    public void saveProduct(ProductDataEntity productEntity){
-        if(productEntity!=null){
-            productDataEntityRepository.save(productEntity);
+
+
+    public void saveProductData(Long PID, ProductDataEntity productDataEntity){
+        Optional<ProductEntity> productEntity = productEntityRepository.findById(PID);
+        if((productDataEntity!=null)&&(productEntity.isPresent())){
+            productDataEntity.setProductEntity(productEntity.get());
+            productEntity.get().getSizesAndColors().add(productDataEntity);
+            productEntityRepository.save(productEntity.get());
+            //productDataEntityRepository.save(productDataEntity);
         }
     }
 
@@ -33,10 +39,13 @@ public class ProductDataEntityService {
 
     public void deleteProductDataById(Long PID, Long id){
         Optional<ProductEntity> productEntity = productEntityRepository.findById(PID);
-        if(productEntity.isPresent()){
-            productEntity.get().getSizesAndColors().remove(productDataEntityRepository.findById(id));
+        Optional<ProductDataEntity> productDataEntity = productDataEntityRepository.findById(id);
+        if((productEntity.isPresent())&&productDataEntity.isPresent()){
+            productEntity.get().getSizesAndColors().remove(productDataEntity.get());
+            productDataEntityRepository.deleteById(id);
+            productEntityRepository.save(productEntity.get());
+
         }
-        productDataEntityRepository.deleteById(id);
     }
 
     public boolean productDataExistsById(Long id){
