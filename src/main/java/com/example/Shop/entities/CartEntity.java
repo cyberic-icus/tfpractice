@@ -22,8 +22,8 @@ public class CartEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
 
-    @JsonManagedReference
-    @OneToMany
+    @JsonManagedReference(value="cart-test")
+    @OneToMany(cascade = CascadeType.ALL)
     public Set<ProductEntity> products = new HashSet<>();
 
 

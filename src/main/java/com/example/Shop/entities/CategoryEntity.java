@@ -22,7 +22,7 @@ public class CategoryEntity {
     public String name;
     public String description;
 
-    @JsonManagedReference
+    @JsonManagedReference(value="category-test")
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     Set<ProductEntity> productEntitySet = new HashSet<>();
 

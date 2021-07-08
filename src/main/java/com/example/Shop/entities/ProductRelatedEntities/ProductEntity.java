@@ -3,7 +3,9 @@ package com.example.Shop.entities.ProductRelatedEntities;
 
 //import com.example.Shop.entities.CartEntity;
 //import com.example.Shop.entities.CategoryEntity;
+import com.example.Shop.entities.CartEntity;
 import com.example.Shop.entities.CategoryEntity;
+import com.example.Shop.entities.OrderEntity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -36,10 +38,17 @@ public class ProductEntity {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     List<ProductDataEntity> sizesAndColors = new ArrayList<>();
 
-    @JsonBackReference
+    @JsonBackReference(value="order-test")
+    @ManyToOne(cascade = CascadeType.ALL)
+    OrderEntity orderEntity;
+
+    @JsonBackReference(value="category-test")
     @ManyToOne(cascade = CascadeType.ALL)
     CategoryEntity categoryEntity;
 
+    @JsonBackReference(value="cart-test")
+    @ManyToOne(cascade = CascadeType.ALL)
+    CartEntity cartEntity;
 
     public List<ProductDataEntity> getSizesAndColors() {
         return sizesAndColors;
@@ -50,6 +59,33 @@ public class ProductEntity {
         this.name = name;
         this.description = description;
         this.price = price;
+    }
+    public void setSizesAndColors(List<ProductDataEntity> sizesAndColors) {
+        this.sizesAndColors = sizesAndColors;
+    }
+
+    public OrderEntity getOrderEntity() {
+        return orderEntity;
+    }
+
+    public void setOrderEntity(OrderEntity orderEntity) {
+        this.orderEntity = orderEntity;
+    }
+
+    public CategoryEntity getCategoryEntity() {
+        return categoryEntity;
+    }
+
+    public void setCategoryEntity(CategoryEntity categoryEntity) {
+        this.categoryEntity = categoryEntity;
+    }
+
+    public CartEntity getCartEntity() {
+        return cartEntity;
+    }
+
+    public void setCartEntity(CartEntity cartEntity) {
+        this.cartEntity = cartEntity;
     }
 
     public Long getId() {

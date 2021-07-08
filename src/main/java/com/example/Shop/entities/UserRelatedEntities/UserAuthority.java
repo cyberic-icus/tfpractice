@@ -1,19 +1,24 @@
 package com.example.Shop.entities.UserRelatedEntities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sun.istack.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserAuthority implements GrantedAuthority {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
 
-    @JsonManagedReference
+    @JsonBackReference(value = "userauthorities-test")
     @ManyToOne(fetch = FetchType.LAZY)
     private UserEntity user;
 
@@ -40,4 +45,5 @@ public class UserAuthority implements GrantedAuthority {
     public UserEntity getUser() {
         return user;
     }
+
 }

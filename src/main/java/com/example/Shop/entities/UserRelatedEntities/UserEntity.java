@@ -35,7 +35,7 @@ public class UserEntity implements UserDetails {
     @CreatedDate public Instant dateJoined;
     private String password;
 
-
+    @JsonManagedReference(value = "userauthorities-test")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private Set<UserAuthority> authorities = new HashSet<>();
 
@@ -43,9 +43,9 @@ public class UserEntity implements UserDetails {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private Set<OrderEntity> orders = new HashSet<>();
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn
-    CartEntity cartEntity;
+    CartEntity cartEntity = new CartEntity();
 
     public void grantRole(UserRole role) {
         if (authorities == null) {

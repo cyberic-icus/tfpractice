@@ -24,7 +24,7 @@ public class OrderEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
 
-    @JsonManagedReference
+    @JsonManagedReference(value="order-test")
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     Set<ProductEntity> productEntitySet = new HashSet<>();
 
