@@ -1,6 +1,7 @@
 package com.example.Shop.entities.UserRelatedEntities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sun.istack.NotNull;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -12,6 +13,7 @@ public class UserAuthority implements GrantedAuthority {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
 
+    @JsonManagedReference
     @ManyToOne(fetch = FetchType.LAZY)
     private UserEntity user;
 
@@ -19,7 +21,7 @@ public class UserAuthority implements GrantedAuthority {
 
     @Override
     public String getAuthority() {
-        return null;
+        return authority.toString();
     }
 
     public UserAuthority(UserEntity user, UserRole authority) {

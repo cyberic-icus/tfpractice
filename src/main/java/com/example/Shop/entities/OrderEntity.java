@@ -2,6 +2,7 @@ package com.example.Shop.entities;
 
 
 import com.example.Shop.entities.ProductRelatedEntities.ProductEntity;
+import com.example.Shop.entities.UserRelatedEntities.UserAuthority;
 import com.example.Shop.entities.UserRelatedEntities.UserEntity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -13,44 +14,42 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CartEntity {
+public class OrderEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
 
     @JsonManagedReference
-    @OneToMany
-    public Set<ProductEntity> products = new HashSet<>();
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    Set<ProductEntity> productEntitySet = new HashSet<>();
 
+    @JsonBackReference
+    @ManyToOne(cascade = CascadeType.ALL)
+    UserEntity userEntity;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    public UserEntity userEntity;
-
-    public void setProducts(Set<ProductEntity> products) {
-        this.products = products;
-    }
-
-    public Set<ProductEntity> getProducts() {
-        return products;
-    }
 
     public Long getId() {
         return id;
+    }
+
+
+    public Set<ProductEntity> getProductEntitySet() {
+        return productEntitySet;
     }
 
     public void setId(Long id) {
         this.id = id;
     }
 
-    public UserEntity getUserEntity() {
-        return userEntity;
+
+    public void setProductEntitySet(Set<ProductEntity> productEntitySet) {
+        this.productEntitySet = productEntitySet;
     }
 
-    public void setUserEntity(UserEntity userEntity) {
-        this.userEntity = userEntity;
-    }
+
 }
