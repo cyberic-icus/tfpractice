@@ -72,4 +72,10 @@ public class ProductDataEntity {
     public int getQuantity() {
         return quantity;
     }
+
+    public ProductDataEntity(String color, int size, int quantity) {
+        this.color = color;
+        this.size = size;
+        this.quantity = quantity;
+    }
 }

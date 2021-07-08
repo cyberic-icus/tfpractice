@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/products/{ProductID}/avail/")
+@RequestMapping("category/{CID}/products/{ProductID}/avail/")
 public class ProductDataEntityController {
     @Autowired
     private ProductDataEntityService productDataEntityService;
@@ -45,6 +45,7 @@ public class ProductDataEntityController {
     @PutMapping("/{ID}/")
     ResponseEntity<ProductDataEntity> putProductDataEntity(@PathVariable Long ID,
                                                            @RequestBody ProductDataEntity productDataEntity){
+
         return productDataEntityService.putProductData(ID,productDataEntity);
     }
 

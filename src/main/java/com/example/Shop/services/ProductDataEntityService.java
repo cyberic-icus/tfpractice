@@ -13,15 +13,21 @@ import java.util.Optional;
 
 @Service
 public class ProductDataEntityService {
+
+    public ProductDataEntityService(ProductDataEntityRepository productDataEntityRepository, ProductEntityRepository productEntityRepository) {
+        this.productDataEntityRepository = productDataEntityRepository;
+        this.productEntityRepository = productEntityRepository;
+    }
+
     @Autowired
-    private ProductDataEntityRepository productDataEntityRepository;
+    private final ProductDataEntityRepository productDataEntityRepository;
     @Autowired
-    private ProductEntityRepository productEntityRepository;
+    private final ProductEntityRepository productEntityRepository;
 
 
-    public void saveProductData(Long PID, ProductDataEntity productDataEntity){
+    public void saveProductData(Long PID, ProductDataEntity productDataEntity) {
         Optional<ProductEntity> productEntity = productEntityRepository.findById(PID);
-        if((productDataEntity!=null)&&(productEntity.isPresent())){
+        if ((productDataEntity != null) && (productEntity.isPresent())) {
             productDataEntity.setProductEntity(productEntity.get());
             productEntity.get().getSizesAndColors().add(productDataEntity);
             productEntityRepository.save(productEntity.get());
@@ -29,18 +35,18 @@ public class ProductDataEntityService {
         }
     }
 
-    public Optional<ProductDataEntity> getProductById(Long id){
+    public Optional<ProductDataEntity> getProductById(Long id) {
         return productDataEntityRepository.findById(id);
     }
 
-    public Iterable<ProductDataEntity> getProductDataAll(){
+    public Iterable<ProductDataEntity> getProductDataAll() {
         return productDataEntityRepository.findAll();
     }
 
-    public void deleteProductDataById(Long PID, Long id){
+    public void deleteProductDataById(Long PID, Long id) {
         Optional<ProductEntity> productEntity = productEntityRepository.findById(PID);
         Optional<ProductDataEntity> productDataEntity = productDataEntityRepository.findById(id);
-        if((productEntity.isPresent())&&productDataEntity.isPresent()){
+        if ((productEntity.isPresent()) && productDataEntity.isPresent()) {
             productEntity.get().getSizesAndColors().remove(productDataEntity.get());
             productDataEntityRepository.deleteById(id);
             productEntityRepository.save(productEntity.get());
@@ -48,11 +54,11 @@ public class ProductDataEntityService {
         }
     }
 
-    public boolean productDataExistsById(Long id){
+    public boolean productDataExistsById(Long id) {
         return productDataEntityRepository.existsById(id);
     }
 
-    public ResponseEntity<ProductDataEntity> putProductData(Long id, ProductDataEntity productDataEntity){
+    public ResponseEntity<ProductDataEntity> putProductData(Long id, ProductDataEntity productDataEntity) {
         return
                 (productDataEntityRepository.existsById(id))
                         ? new ResponseEntity<>(productDataEntityRepository.save(productDataEntity), HttpStatus.CREATED)

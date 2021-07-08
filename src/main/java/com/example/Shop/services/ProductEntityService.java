@@ -11,8 +11,12 @@ import java.util.Optional;
 
 @Service
 public class ProductEntityService {
+    public ProductEntityService(ProductEntityRepository productEntityRepository) {
+        this.productEntityRepository = productEntityRepository;
+    }
+
     @Autowired
-    private ProductEntityRepository productEntityRepository;
+    private final ProductEntityRepository productEntityRepository;
 
     public void saveProduct(ProductEntity productEntity){
         if(productEntity!=null){

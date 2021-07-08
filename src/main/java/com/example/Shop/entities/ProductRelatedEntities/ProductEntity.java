@@ -3,6 +3,8 @@ package com.example.Shop.entities.ProductRelatedEntities;
 
 //import com.example.Shop.entities.CartEntity;
 //import com.example.Shop.entities.CategoryEntity;
+import com.example.Shop.entities.CategoryEntity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
@@ -33,12 +35,16 @@ public class ProductEntity {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     List<ProductDataEntity> sizesAndColors = new ArrayList<>();
 
+    @JsonBackReference
+    @ManyToOne(cascade = CascadeType.ALL)
+    CategoryEntity categoryEntity;
+
+
     public List<ProductDataEntity> getSizesAndColors() {
         return sizesAndColors;
     }
 
-    //@ManyToOne CategoryEntity categoryEntity;
-    //@ManyToMany Set<CartEntity> cartEntities;
+
     public ProductEntity(String name, String description, double price) {
         this.name = name;
         this.description = description;
