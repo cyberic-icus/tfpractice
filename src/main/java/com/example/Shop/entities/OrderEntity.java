@@ -51,5 +51,16 @@ public class OrderEntity {
         this.productEntitySet = productEntitySet;
     }
 
+    public UserEntity getUserEntity() {
+        return userEntity;
+    }
 
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
+    }
+
+    public OrderEntity(Set<ProductEntity> productEntitySet, UserEntity userEntity) {
+        this.productEntitySet = productEntitySet;
+        this.userEntity = userEntity;
+    }
 }

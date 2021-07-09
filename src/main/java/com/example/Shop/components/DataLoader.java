@@ -5,13 +5,17 @@ import com.example.Shop.entities.CategoryEntity;
 import com.example.Shop.entities.OrderEntity;
 import com.example.Shop.entities.ProductRelatedEntities.ProductDataEntity;
 import com.example.Shop.entities.ProductRelatedEntities.ProductEntity;
+import com.example.Shop.entities.UserRelatedEntities.UserAuthority;
 import com.example.Shop.entities.UserRelatedEntities.UserEntity;
+import com.example.Shop.entities.UserRelatedEntities.UserRole;
 import com.example.Shop.repos.*;
 import com.example.Shop.services.UserDetailsService;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Set;
 
 @Component
@@ -35,35 +39,43 @@ class DataLoader {
     @PostConstruct
     @Transactional
     private void loadData() {
-// херня, не работает, пишет detached entity passed to persist: <любой класс> , как я только не пытался связать все сущности между собой, не получается
-//        CategoryEntity categoryEntity = new CategoryEntity("Category name", "Category description");
-//        ProductEntity productEntity = new ProductEntity("Product name", "Product description", 245.0);
-//        ProductDataEntity productDataEntity = new ProductDataEntity("Color", 12, 12);
-//        UserEntity userEntity = new UserEntity("Mikhail", "Kuznetsov", "cyberic-icus", "1234");
-//        CartEntity cartEntity = new CartEntity();
-//        OrderEntity orderEntity = new OrderEntity();
+        UserEntity userEntity = new UserEntity("Mikhail", "Kuznetsov", "cyberic-icus", "1234");
+        CategoryEntity categoryEntity = new CategoryEntity("My category name", "Test description");
+
+//        UserAuthority userAuthority = new UserAuthority(UserRole.USER);
+//        UserAuthority userAuthority1 = new UserAuthority(UserRole.ADMIN);
+
+//        userEntity.iDontUnderstandGrantedAuthorityShit().add(userAuthority);
+//        userEntity.iDontUnderstandGrantedAuthorityShit().add(userAuthority1);
 //
-//
-//
-//        productDataEntity.setProductEntity(productEntity);
-//        productEntity.getSizesAndColors().add(productDataEntity);
-//        categoryEntity.getProductEntitySet().add(productEntity);
-//
-//        cartEntity.getProducts().add(productEntity);
-//        productEntity.setCartEntity(cartEntity);
-//        userEntity.setCartEntity(cartEntity);
-//
-//        orderEntity.getProductEntitySet().add(productEntity);
-//        productEntity.setOrderEntity(orderEntity);
-//        userEntity.setOrders(Set.of(orderEntity));
-//
-//
-//        productDataEntityRepository.save(productDataEntity);
-//        productEntityRepository.save(productEntity);
-//        categoryEntityRepository.save(categoryEntity);
-//        orderEntityRepository.save(orderEntity);
-//        cartEntityRepository.save(cartEntity);
-//        userDetailsService.saveUser(userEntity);
+//        userAuthority.setUser(userEntity);
+//        userAuthority1.setUser(userEntity);
+
+        CartEntity cartEntity = new CartEntity();
+        OrderEntity orderEntity = new OrderEntity();
+
+        ProductEntity productEntity = new ProductEntity("Product name", "Product description", 245.0);
+        ProductDataEntity productDataEntity = new ProductDataEntity("Some Color", 1233, 1332);
+
+        productDataEntity.setProductEntity(productEntity);
+        productEntity.getSizesAndColors().add(productDataEntity);
+
+        orderEntity.getProductEntitySet().add(productEntity);
+        productEntity.setOrderEntity(orderEntity);
+
+        cartEntity.getProducts().add(productEntity);
+        productEntity.setCartEntity(cartEntity);
+
+        categoryEntity.getProductEntitySet().add(productEntity);
+        productEntity.setCategoryEntity(categoryEntity);
+
+        userEntity.setCartEntity(cartEntity);
+        cartEntity.setUserEntity(userEntity);
+
+        userEntity.getOrders().add(orderEntity);
+        orderEntity.setUserEntity(userEntity);
+
+       userDetailsService.saveUser(userEntity);
 
 
     }

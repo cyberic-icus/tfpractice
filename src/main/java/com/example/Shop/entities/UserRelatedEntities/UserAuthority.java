@@ -24,13 +24,14 @@ public class UserAuthority implements GrantedAuthority {
 
     private UserRole authority;
 
-    @Override
-    public String getAuthority() {
-        return authority.toString();
-    }
+
 
     public UserAuthority(UserEntity user, UserRole authority) {
         this.user = user;
+        this.authority = authority;
+    }
+
+    public UserAuthority(UserRole authority) {
         this.authority = authority;
     }
 
@@ -46,4 +47,9 @@ public class UserAuthority implements GrantedAuthority {
         return user;
     }
 
+
+    @Override
+    public String getAuthority() {
+        return authority.toString();
+    }
 }

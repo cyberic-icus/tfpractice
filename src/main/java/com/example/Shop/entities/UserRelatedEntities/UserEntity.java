@@ -36,13 +36,14 @@ public class UserEntity implements UserDetails {
     private String password;
 
     @JsonManagedReference(value = "userauthorities-test")
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<UserAuthority> authorities = new HashSet<>();
 
     @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private Set<OrderEntity> orders = new HashSet<>();
 
+    @JsonManagedReference(value="usercart-test")
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn
     CartEntity cartEntity = new CartEntity();
@@ -61,9 +62,13 @@ public class UserEntity implements UserDetails {
         this.password = password;
     }
 
+
+    public Set<UserAuthority> iDontUnderstandGrantedAuthorityShit(){
+        return authorities;
+    }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return authorities;
     }
 
     @Override
@@ -78,22 +83,22 @@ public class UserEntity implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 
     public Set<OrderEntity> getOrders() {

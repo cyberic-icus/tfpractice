@@ -64,4 +64,9 @@ public class CategoryEntity {
         this.description = description;
     }
 
+    public CategoryEntity(String name, String description, Set<ProductEntity> productEntitySet) {
+        this.name = name;
+        this.description = description;
+        this.productEntitySet = productEntitySet;
+    }
 }

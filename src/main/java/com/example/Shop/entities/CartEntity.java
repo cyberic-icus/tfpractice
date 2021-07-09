@@ -26,8 +26,9 @@ public class CartEntity {
     @OneToMany(cascade = CascadeType.ALL)
     public Set<ProductEntity> products = new HashSet<>();
 
-
+    @JsonBackReference(value="usercart-test")
     @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn
     public UserEntity userEntity;
 
     public void setProducts(Set<ProductEntity> products) {
@@ -51,6 +52,11 @@ public class CartEntity {
     }
 
     public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
+    }
+
+    public CartEntity(Set<ProductEntity> products, UserEntity userEntity) {
+        this.products = products;
         this.userEntity = userEntity;
     }
 }

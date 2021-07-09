@@ -28,6 +28,13 @@ public class ProductDataEntity {
     @ManyToOne(cascade = CascadeType.ALL)
     public ProductEntity productEntity;
 
+    public ProductDataEntity(String color, int size, int quantity, ProductEntity productEntity) {
+        this.color = color;
+        this.size = size;
+        this.quantity = quantity;
+        this.productEntity = productEntity;
+    }
+
     public Long getId() {
         return id;
     }

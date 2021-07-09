@@ -50,16 +50,85 @@ public class ProductEntity {
     @ManyToOne(cascade = CascadeType.ALL)
     CartEntity cartEntity;
 
+    public ProductEntity(String name) {
+        this.name = name;
+    }
+
+    public ProductEntity(String name, String description) {
+        this(name);
+        this.description = description;
+    }
+
+    public ProductEntity(String name, String description, double price) {
+        this(name, description);
+        this.price = price;
+    }
+
+    public ProductEntity(String name, String description, double price, List<ProductDataEntity> sizesAndColors) {
+        this(name, description, price);
+        this.sizesAndColors = sizesAndColors;
+    }
+
+    public ProductEntity(String name, String description, double price, List<ProductDataEntity> sizesAndColors, CategoryEntity categoryEntity) {
+        this(name, description, price, sizesAndColors);
+        this.categoryEntity = categoryEntity;
+    }
+
+    public ProductEntity(String name, String description, double price, List<ProductDataEntity> sizesAndColors, CategoryEntity categoryEntity, CartEntity cartEntity) {
+        this(name, description, price, sizesAndColors, categoryEntity);
+        this.cartEntity = cartEntity;
+    }
+
+    public ProductEntity(String name, String description, double price, List<ProductDataEntity> sizesAndColors, OrderEntity orderEntity, CategoryEntity categoryEntity, CartEntity cartEntity) {
+        this(name, description, price, sizesAndColors, categoryEntity, cartEntity);
+        this.orderEntity = orderEntity;
+
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public Instant getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Instant createdDate) {
+        this.createdDate = createdDate;
+    }
+
     public List<ProductDataEntity> getSizesAndColors() {
         return sizesAndColors;
     }
 
-
-    public ProductEntity(String name, String description, double price) {
-        this.name = name;
-        this.description = description;
-        this.price = price;
-    }
     public void setSizesAndColors(List<ProductDataEntity> sizesAndColors) {
         this.sizesAndColors = sizesAndColors;
     }
@@ -87,54 +156,4 @@ public class ProductEntity {
     public void setCartEntity(CartEntity cartEntity) {
         this.cartEntity = cartEntity;
     }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public Instant getCreatedDate() {
-        return createdDate;
-    }
-
-
-//    public CategoryEntity getCategoryEntity() {
-//        return categoryEntity;
-//    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public void setCreatedDate(Instant createdDate) {
-        this.createdDate = createdDate;
-    }
-
-
-//    public void setCategoryEntity(CategoryEntity categoryEntity) {
-//        this.categoryEntity = categoryEntity;
-//    }
 }
