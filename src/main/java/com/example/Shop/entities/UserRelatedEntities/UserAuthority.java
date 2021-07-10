@@ -2,6 +2,8 @@ package com.example.Shop.entities.UserRelatedEntities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -23,12 +25,12 @@ public class UserAuthority implements GrantedAuthority {
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<UserEntity> users = new HashSet<>();
 
-    private UserRole role;
+    private UserRole authority;
 
 
-    public UserAuthority(Set<UserEntity> users, UserRole role) {
+    public UserAuthority(Set<UserEntity> users, UserRole authority) {
         this.users = users;
-        this.role = role;
+        this.authority = authority;
     }
 
     public Long getId() {
@@ -47,23 +49,19 @@ public class UserAuthority implements GrantedAuthority {
         this.users = users;
     }
 
-    public UserAuthority(UserRole role) {
-        this.role = role;
+    public UserAuthority(UserRole authority) {
+        this.authority = authority;
     }
 
 
-    public void setRole(UserRole role) {
-        this.role = role;
+    public void setAuthority(UserRole authority) {
+        this.authority = authority;
     }
 
 
-
-    public String getRole() {
-        return role.toString();
-    }
 
     @Override
     public String getAuthority() {
-        return null;
+        return authority.toString();
     }
 }
