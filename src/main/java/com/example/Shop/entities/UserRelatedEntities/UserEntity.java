@@ -51,7 +51,7 @@ public class UserEntity implements UserDetails {
     @JsonProperty("user_roles_list")
     @JsonManagedReference(value = "userauthorities-test")
     @JoinTable
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.EAGER)
     private Set<UserAuthority> roles = new HashSet<>();
 
     @JsonProperty("user_orders_list")
