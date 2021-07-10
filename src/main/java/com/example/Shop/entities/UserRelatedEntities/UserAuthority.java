@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -17,11 +18,12 @@ import java.util.Set;
 public class UserAuthority implements GrantedAuthority {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     public Long id;
 
     @JsonBackReference(value = "userauthorities-test")
     @ManyToMany(fetch = FetchType.LAZY)
-    private Set<UserEntity> users;
+    private Set<UserEntity> users = new HashSet<>();
 
     private UserRole authority;
 

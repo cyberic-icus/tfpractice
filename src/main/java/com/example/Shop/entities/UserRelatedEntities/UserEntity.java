@@ -23,7 +23,7 @@ import java.util.*;
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 @EntityListeners(AuditingEntityListener.class)
-@JsonPropertyOrder({"user_id", "user_firstname", "user_lastname", "user_username","user_email", "user_phone_number", "user_order_dist","user_date_joined","user_authorities_list", "user_cart", "user_orders_list", "user_orders_history_list", "enabled", "accountNonExpired","accountNonLocked","credentialsNonExpired"})
+@JsonPropertyOrder({"user_id", "user_firstname", "user_lastname", "user_username","user_email", "user_phone_number", "user_order_dist","user_date_joined","user_roles_list", "user_cart", "user_orders_list", "user_orders_history_list", "enabled", "accountNonExpired","accountNonLocked","credentialsNonExpired"})
 public class UserEntity implements UserDetails {
 
     @Id
@@ -48,10 +48,11 @@ public class UserEntity implements UserDetails {
     @JsonProperty("user_order_dist")
     private String location;
 
-    @JsonProperty("user_authorities_list")
+    @JsonProperty("user_roles_list")
     @JsonManagedReference(value = "userauthorities-test")
+    @JoinTable
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<UserAuthority> authorities = new HashSet<>();
+    private Set<UserAuthority> roles = new HashSet<>();
 
     @JsonProperty("user_orders_list")
     @JsonManagedReference
@@ -69,13 +70,6 @@ public class UserEntity implements UserDetails {
     @JoinColumn
     CartEntity cartEntity = new CartEntity();
 
-    public void grantRole(UserAuthority userAuthority) {
-        if (authorities == null) {
-            authorities = new HashSet<UserAuthority>();
-        }
-        userAuthority.getUsers().add(this);
-        authorities.add(userAuthority);
-    }
 
     public UserEntity(String firstName, String lastName, String username, String password) {
         this.firstName = firstName;
@@ -85,12 +79,18 @@ public class UserEntity implements UserDetails {
     }
 
 
-    public Set<UserAuthority> iDontUnderstandGrantedAuthorityShit(){
-        return authorities;
+
+    public Set<UserAuthority> getRoles() {
+        return roles;
     }
+
+    public void setRoles(Set<UserAuthority> roles) {
+        this.roles = roles;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
+        return null;
     }
 
     @Override
@@ -173,10 +173,6 @@ public class UserEntity implements UserDetails {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public void setAuthorities(Set<UserAuthority> authorities) {
-        this.authorities = authorities;
     }
 
     public void setUsername(String username) {

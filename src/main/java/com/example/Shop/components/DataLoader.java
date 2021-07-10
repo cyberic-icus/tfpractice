@@ -52,6 +52,9 @@ class DataLoader {
         userAuthority.getUsers().add(userEntity);
         userAuthority1.getUsers().add(userEntity);
 
+        userEntity.getRoles().add(userAuthority);
+        userEntity.getRoles().add(userAuthority1);
+
         CartEntity cartEntity = new CartEntity();
         OrderEntity orderEntity = new OrderEntity();
 
@@ -77,6 +80,7 @@ class DataLoader {
         orderEntity.setUserEntity(userEntity);
 
        userDetailsService.saveUser(userEntity);
+       userAuthorityRepository.saveAll(List.of(userAuthority, userAuthority1));
 
 
     }
