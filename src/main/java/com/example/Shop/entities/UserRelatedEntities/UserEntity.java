@@ -6,6 +6,7 @@ import com.example.Shop.entities.OrderEntity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -24,6 +25,7 @@ import java.util.Set;
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 @EntityListeners(AuditingEntityListener.class)
+@JsonPropertyOrder({"user_id", "user_firstname", "user_lastname", "user_date_joined","user_authorities_list", "user_cart", "user_orders_list", "enabled", "accountNonExpired","accountNonLocked","credentialsNonExpired"})
 public class UserEntity implements UserDetails {
 
     @Id
