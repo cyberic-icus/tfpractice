@@ -75,7 +75,7 @@ public class UserEntityController {
     public Iterable<UserAuthority> getUserAuthorityAll(@PathVariable Long uid) {
         Optional<UserEntity> userEntity = userDetailsService.getUserById(uid);
         if (userEntity.isPresent()) {
-            return (Iterable<UserAuthority>) userEntity.get().getAuthorities();
+            return (Iterable<UserAuthority>) userEntity.get().getRoles();
         } else return null;
 
     }
@@ -310,7 +310,7 @@ public class UserEntityController {
         Optional<UserEntity> userEntity = userDetailsService.getUserById(uid);
         Optional<UserAuthority> userAuthority = userAuthorityService.getUserAuthorityById(aid);
         if ((userEntity.isPresent()) && userAuthority.isPresent()) {
-            Iterable<UserAuthority> userAuthorities = (Iterable<UserAuthority>) userEntity.get().getAuthorities();
+            Iterable<UserAuthority> userAuthorities = (Iterable<UserAuthority>) userEntity.get().getRoles();
             Optional<UserAuthority> userAuthority1 = userAuthority.stream().filter(auth -> userAuthority.get().equals(auth)).findAny();
             if (userAuthority1.isPresent()) {
                 return userAuthority1.get();
@@ -321,6 +321,5 @@ public class UserEntityController {
 
     }
 
-    //@GetMapping("/{uid}/")
 
 }

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AccountStatusUserDetailsChecker;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,16 +24,6 @@ public class UserDetailsService implements org.springframework.security.core.use
 
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-
-    @Override
-    public final UserEntity loadUserByUsername(String username) throws UsernameNotFoundException {
-        final UserEntity user = userEntityRepository.findByUsername(username);
-        if (user == null) {
-            throw new UsernameNotFoundException("User not found");
-        }
-        detailsChecker.check(user);
-        return user;
-    }
 
     public Iterable<UserEntity> getUsersAll(){
         return userEntityRepository.findAll();
@@ -73,6 +64,8 @@ public class UserDetailsService implements org.springframework.security.core.use
     }
 
 
-
-
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return null;
+    }
 }
