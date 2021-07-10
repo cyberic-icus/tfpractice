@@ -49,9 +49,8 @@ class DataLoader {
 //        userEntity.iDontUnderstandGrantedAuthorityShit().add(userAuthority);
 //        userEntity.iDontUnderstandGrantedAuthorityShit().add(userAuthority1);
 //
-
-        userEntity.grantRole(userAuthority);
-        userEntity.grantRole(userAuthority1);
+        userAuthority.getUsers().add(userEntity);
+        userAuthority1.getUsers().add(userEntity);
 
         CartEntity cartEntity = new CartEntity();
         OrderEntity orderEntity = new OrderEntity();
