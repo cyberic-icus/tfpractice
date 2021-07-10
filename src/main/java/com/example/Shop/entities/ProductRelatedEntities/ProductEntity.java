@@ -39,6 +39,9 @@ public class ProductEntity {
     @JsonProperty("product_created_on")
     @CreatedDate public Instant createdDate;
 
+    @JsonProperty("product_image_url")
+    public String imageUrl;
+
     @JsonProperty("sizes_and_colors_list")
     @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
@@ -157,6 +160,22 @@ public class ProductEntity {
 
     public CartEntity getCartEntity() {
         return cartEntity;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+
+    public ProductEntity(String name, String description, double price, String imageUrl) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.imageUrl = imageUrl;
     }
 
     public void setCartEntity(CartEntity cartEntity) {

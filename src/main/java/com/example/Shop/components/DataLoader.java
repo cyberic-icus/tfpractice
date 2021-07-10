@@ -56,7 +56,7 @@ class DataLoader {
         CartEntity cartEntity = new CartEntity();
         OrderEntity orderEntity = new OrderEntity();
 
-        ProductEntity productEntity = new ProductEntity("Product name", "Product description", 245.0);
+        ProductEntity productEntity = new ProductEntity("Product name", "Product description", 245.0, "http://someurl.com/someimage.jpg");
         ProductDataEntity productDataEntity = new ProductDataEntity("Some Color", 1233, 1332);
 
         productDataEntity.setProductEntity(productEntity);
