@@ -5,6 +5,7 @@ import com.example.Shop.entities.CartEntity;
 import com.example.Shop.entities.OrderEntity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -27,22 +28,31 @@ public class UserEntity implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty("user_id")
     public Long id;
+    @JsonProperty("user_firstname")
     public String firstName;
+    @JsonProperty("user_lastname")
     public String lastName;
+    @JsonProperty("user_username")
     public String username;
 
+    @JsonProperty("user_date_joined")
     @CreatedDate public Instant dateJoined;
+
     private String password;
 
+    @JsonProperty("user_authorities_list")
     @JsonManagedReference(value = "userauthorities-test")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<UserAuthority> authorities = new HashSet<>();
 
+    @JsonProperty("user_orders_list")
     @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private Set<OrderEntity> orders = new HashSet<>();
 
+    @JsonProperty("user_cart")
     @JsonManagedReference(value="usercart-test")
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn

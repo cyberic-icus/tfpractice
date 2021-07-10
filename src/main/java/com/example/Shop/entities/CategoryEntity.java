@@ -3,6 +3,7 @@ package com.example.Shop.entities;
 import com.example.Shop.entities.ProductRelatedEntities.ProductEntity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -18,10 +19,14 @@ import java.util.Set;
 public class CategoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty("category_id")
     public Long id;
+    @JsonProperty("category_name")
     public String name;
+    @JsonProperty("category_description")
     public String description;
 
+    @JsonProperty("category_products_list")
     @JsonManagedReference(value="category-test")
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     Set<ProductEntity> productEntitySet = new HashSet<>();

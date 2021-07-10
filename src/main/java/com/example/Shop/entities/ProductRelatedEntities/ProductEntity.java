@@ -9,6 +9,7 @@ import com.example.Shop.entities.OrderEntity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -28,12 +29,18 @@ import java.util.Set;
 public class ProductEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty("product_id")
     public Long id;
+    @JsonProperty("product_name")
     public String name;
+    @JsonProperty("product_description")
     public String description;
+    @JsonProperty("product_price")
     public double price;
+    @JsonProperty("product_created_on")
     @CreatedDate public Instant createdDate;
 
+    @JsonProperty("sizes_and_colors_list")
     @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     List<ProductDataEntity> sizesAndColors = new ArrayList<>();

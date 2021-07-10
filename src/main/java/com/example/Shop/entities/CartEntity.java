@@ -6,6 +6,7 @@ import com.example.Shop.entities.UserRelatedEntities.UserEntity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -20,8 +21,10 @@ import java.util.Set;
 public class CartEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty("cart_id")
     public Long id;
 
+    @JsonProperty("cart_products_list")
     @JsonManagedReference(value="cart-test")
     @OneToMany(cascade = CascadeType.ALL)
     public Set<ProductEntity> products = new HashSet<>();

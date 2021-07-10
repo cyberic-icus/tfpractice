@@ -7,6 +7,7 @@ import com.example.Shop.entities.UserRelatedEntities.UserEntity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -22,8 +23,10 @@ import java.util.Set;
 public class OrderEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty("order_id")
     public Long id;
 
+    @JsonProperty("order_products_list")
     @JsonManagedReference(value="order-test")
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     Set<ProductEntity> productEntitySet = new HashSet<>();
