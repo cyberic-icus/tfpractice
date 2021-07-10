@@ -16,16 +16,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.time.Instant;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 @EntityListeners(AuditingEntityListener.class)
-@JsonPropertyOrder({"user_id", "user_firstname", "user_lastname", "user_username", "user_date_joined","user_authorities_list", "user_cart", "user_orders_list", "enabled", "accountNonExpired","accountNonLocked","credentialsNonExpired"})
+@JsonPropertyOrder({"user_id", "user_firstname", "user_lastname", "user_username","user_email", "user_phone_number", "user_order_dist","user_date_joined","user_authorities_list", "user_cart", "user_orders_list", "user_orders_history_list", "enabled", "accountNonExpired","accountNonLocked","credentialsNonExpired"})
 public class UserEntity implements UserDetails {
 
     @Id
@@ -43,6 +41,12 @@ public class UserEntity implements UserDetails {
     @CreatedDate public Instant dateJoined;
 
     private String password;
+    @JsonProperty("user_email")
+    private String email;
+    @JsonProperty("user_phone_number")
+    private String phoneNumber;
+    @JsonProperty("user_order_dist")
+    private String location;
 
     @JsonProperty("user_authorities_list")
     @JsonManagedReference(value = "userauthorities-test")
@@ -53,6 +57,11 @@ public class UserEntity implements UserDetails {
     @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private Set<OrderEntity> orders = new HashSet<>();
+
+    @JsonProperty("user_orders_history_list")
+    @JsonManagedReference
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    private List<OrderEntity> orders_history = new ArrayList<>();
 
     @JsonProperty("user_cart")
     @JsonManagedReference(value="usercart-test")
@@ -171,5 +180,47 @@ public class UserEntity implements UserDetails {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public List<OrderEntity> getOrders_history() {
+        return orders_history;
+    }
+
+    public void setOrders_history(List<OrderEntity> orders_history) {
+        this.orders_history = orders_history;
+    }
+
+    public UserEntity(String firstName, String lastName, String username, String password, String email, String phoneNumber, String location) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.location = location;
     }
 }

@@ -45,7 +45,7 @@ public class ProductEntity {
     List<ProductDataEntity> sizesAndColors = new ArrayList<>();
 
     @JsonBackReference(value="order-test")
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL) //manytomany
     OrderEntity orderEntity;
 
     @JsonBackReference(value="category-test")
@@ -53,7 +53,7 @@ public class ProductEntity {
     CategoryEntity categoryEntity;
 
     @JsonBackReference(value="cart-test")
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL) //manytomany
     CartEntity cartEntity;
 
     public ProductEntity(String name) {

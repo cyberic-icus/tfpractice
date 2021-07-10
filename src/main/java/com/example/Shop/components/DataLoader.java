@@ -11,6 +11,7 @@ import com.example.Shop.entities.UserRelatedEntities.UserRole;
 import com.example.Shop.repos.*;
 import com.example.Shop.services.UserDetailsService;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -39,17 +40,18 @@ class DataLoader {
     @PostConstruct
     @Transactional
     private void loadData() {
-        UserEntity userEntity = new UserEntity("Mikhail", "Kuznetsov", "cyberic-icus", "1234");
+        UserEntity userEntity = new UserEntity("Mikhail", "Kuznetsov", "cyberic-icus", "1234", "Test@email.com","+00000000000", "My Dest");
         CategoryEntity categoryEntity = new CategoryEntity("My category name", "Test description");
 
-//        UserAuthority userAuthority = new UserAuthority(UserRole.USER);
-//        UserAuthority userAuthority1 = new UserAuthority(UserRole.ADMIN);
+        UserAuthority userAuthority = new UserAuthority(UserRole.USER);
+        UserAuthority userAuthority1 = new UserAuthority(UserRole.ADMIN);
 
 //        userEntity.iDontUnderstandGrantedAuthorityShit().add(userAuthority);
 //        userEntity.iDontUnderstandGrantedAuthorityShit().add(userAuthority1);
 //
-//        userAuthority.setUser(userEntity);
-//        userAuthority1.setUser(userEntity);
+
+        userEntity.grantRole(UserRole.USER);
+        userEntity.grantRole(UserRole.ADMIN);
 
         CartEntity cartEntity = new CartEntity();
         OrderEntity orderEntity = new OrderEntity();
