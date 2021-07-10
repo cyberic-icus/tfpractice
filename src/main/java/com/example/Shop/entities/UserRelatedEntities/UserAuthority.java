@@ -22,7 +22,7 @@ public class UserAuthority implements GrantedAuthority {
     public Long id;
 
     @JsonBackReference(value = "userauthorities-test")
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<UserEntity> users = new HashSet<>();
 
     private UserRole authority;
