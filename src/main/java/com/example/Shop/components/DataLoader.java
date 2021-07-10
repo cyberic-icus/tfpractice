@@ -50,8 +50,8 @@ class DataLoader {
 //        userEntity.iDontUnderstandGrantedAuthorityShit().add(userAuthority1);
 //
 
-        userEntity.grantRole(UserRole.USER);
-        userEntity.grantRole(UserRole.ADMIN);
+        userEntity.grantRole(userAuthority);
+        userEntity.grantRole(userAuthority1);
 
         CartEntity cartEntity = new CartEntity();
         OrderEntity orderEntity = new OrderEntity();

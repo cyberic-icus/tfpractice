@@ -50,7 +50,7 @@ public class UserEntity implements UserDetails {
 
     @JsonProperty("user_authorities_list")
     @JsonManagedReference(value = "userauthorities-test")
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<UserAuthority> authorities = new HashSet<>();
 
     @JsonProperty("user_orders_list")
@@ -69,11 +69,12 @@ public class UserEntity implements UserDetails {
     @JoinColumn
     CartEntity cartEntity = new CartEntity();
 
-    public void grantRole(UserRole role) {
+    public void grantRole(UserAuthority userAuthority) {
         if (authorities == null) {
             authorities = new HashSet<UserAuthority>();
         }
-        authorities.add(new UserAuthority(this, role));
+        userAuthority.getUsers().add(this);
+        authorities.add(userAuthority);
     }
 
     public UserEntity(String firstName, String lastName, String username, String password) {
