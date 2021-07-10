@@ -25,7 +25,7 @@ import java.util.Set;
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 @EntityListeners(AuditingEntityListener.class)
-@JsonPropertyOrder({"user_id", "user_firstname", "user_lastname", "user_date_joined","user_authorities_list", "user_cart", "user_orders_list", "enabled", "accountNonExpired","accountNonLocked","credentialsNonExpired"})
+@JsonPropertyOrder({"user_id", "user_firstname", "user_lastname", "user_username", "user_date_joined","user_authorities_list", "user_cart", "user_orders_list", "enabled", "accountNonExpired","accountNonLocked","credentialsNonExpired"})
 public class UserEntity implements UserDetails {
 
     @Id
