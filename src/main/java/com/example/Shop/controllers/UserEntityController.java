@@ -1,12 +1,12 @@
 package com.example.Shop.controllers;
 
-import com.example.Shop.entities.CartEntity;
-import com.example.Shop.entities.OrderEntity;
-import com.example.Shop.entities.ProductRelatedEntities.ProductDataEntity;
-import com.example.Shop.entities.ProductRelatedEntities.ProductEntity;
-import com.example.Shop.entities.UserRelatedEntities.UserAuthority;
-import com.example.Shop.entities.UserRelatedEntities.UserEntity;
-import com.example.Shop.repos.OrderEntityRepository;
+import com.example.Shop.db.entities.ProductRelatedEntities.CartEntity;
+import com.example.Shop.db.entities.ProductRelatedEntities.OrderEntity;
+import com.example.Shop.db.entities.ProductRelatedEntities.ProductDataEntity;
+import com.example.Shop.db.entities.ProductRelatedEntities.ProductEntity;
+import com.example.Shop.db.entities.UserRelatedEntities.UserAuthority;
+import com.example.Shop.db.entities.UserRelatedEntities.UserEntity;
+import com.example.Shop.db.repos.OrderEntityRepository;
 import com.example.Shop.services.ProductDataEntityService;
 import com.example.Shop.services.ProductEntityService;
 import com.example.Shop.services.UserAuthorityService;
@@ -14,9 +14,9 @@ import com.example.Shop.services.UserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/users")
@@ -57,6 +57,7 @@ public class UserEntityController {
         } else return null;
     }
 
+    @Transactional
     @DeleteMapping("/{id}")
     public void deleteUserById(@PathVariable Long id) {
         Optional<UserEntity> userEntity = userDetailsService.getUserById(id);

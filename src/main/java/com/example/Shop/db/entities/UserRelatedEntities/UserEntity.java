@@ -1,8 +1,8 @@
-package com.example.Shop.entities.UserRelatedEntities;
+package com.example.Shop.db.entities.UserRelatedEntities;
 
 
-import com.example.Shop.entities.CartEntity;
-import com.example.Shop.entities.OrderEntity;
+import com.example.Shop.db.entities.ProductRelatedEntities.CartEntity;
+import com.example.Shop.db.entities.ProductRelatedEntities.OrderEntity;
 import com.fasterxml.jackson.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -16,10 +16,11 @@ import javax.validation.constraints.Size;
 import java.time.Instant;
 import java.util.*;
 
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonIgnoreProperties({"user_roles_list", "user_orders_list", "user_orders_history_list", "user_cart"})
 @EntityListeners(AuditingEntityListener.class)
 @JsonPropertyOrder({"user_id", "user_firstname", "user_lastname", "user_username","user_email", "user_phone_number", "user_order_dist","user_date_joined","user_roles_list", "user_cart", "user_orders_list", "user_orders_history_list", "enabled", "accountNonExpired","accountNonLocked","credentialsNonExpired"})
 public class UserEntity{
@@ -68,30 +69,37 @@ public class UserEntity{
     @JsonProperty("user_order_dist")
     private String location;
 
+
     @NotNull
     @JsonProperty("user_roles_list")
     @JsonManagedReference(value = "userauthorities-test")
     @JoinColumn
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Set<UserAuthority> roles = new HashSet<>();
+
 
     @NotNull
     @JsonProperty("user_orders_list")
     @JsonManagedReference
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Set<OrderEntity> orders = new HashSet<>();
+
 
     @NotNull
     @JsonProperty("user_orders_history_list")
     @JsonManagedReference
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private List<OrderEntity> orders_history = new ArrayList<>();
 
     @NotNull
     @JsonProperty("user_cart")
     @JsonManagedReference(value="usercart-test")
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private CartEntity cartEntity = new CartEntity();
 
 

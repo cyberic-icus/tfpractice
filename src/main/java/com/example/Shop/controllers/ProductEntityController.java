@@ -1,17 +1,14 @@
 package com.example.Shop.controllers;
 
 
-import com.example.Shop.entities.CategoryEntity;
-import com.example.Shop.entities.ProductRelatedEntities.ProductEntity;
-import com.example.Shop.repos.ProductEntityRepository;
+import com.example.Shop.db.entities.ProductRelatedEntities.CategoryEntity;
+import com.example.Shop.db.entities.ProductRelatedEntities.ProductEntity;
 import com.example.Shop.services.CategoryEntityService;
 import com.example.Shop.services.ProductEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController

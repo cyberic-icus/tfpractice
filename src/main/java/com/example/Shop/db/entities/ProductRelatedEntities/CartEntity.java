@@ -1,8 +1,8 @@
-package com.example.Shop.entities;
+package com.example.Shop.db.entities.ProductRelatedEntities;
 
 
-import com.example.Shop.entities.ProductRelatedEntities.ProductEntity;
-import com.example.Shop.entities.UserRelatedEntities.UserEntity;
+import com.example.Shop.db.entities.ProductRelatedEntities.ProductEntity;
+import com.example.Shop.db.entities.UserRelatedEntities.UserEntity;
 import com.fasterxml.jackson.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -14,7 +14,7 @@ import java.util.Set;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonIgnoreProperties({"cart_products_list"})
 @JsonPropertyOrder({"cart_id", "cart_products_list"})
 public class CartEntity {
     @Id
@@ -24,12 +24,14 @@ public class CartEntity {
 
     @JsonProperty("cart_products_list")
     @JsonManagedReference(value="cart-test")
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     public Set<ProductEntity> products = new HashSet<>();
 
     @JsonBackReference(value="usercart-test")
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinColumn
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     public UserEntity userEntity;
 
     public void setProducts(Set<ProductEntity> products) {

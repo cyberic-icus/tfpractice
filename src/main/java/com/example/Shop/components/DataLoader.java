@@ -1,23 +1,20 @@
 package com.example.Shop.components;
 
-import com.example.Shop.entities.CartEntity;
-import com.example.Shop.entities.CategoryEntity;
-import com.example.Shop.entities.OrderEntity;
-import com.example.Shop.entities.ProductRelatedEntities.ProductDataEntity;
-import com.example.Shop.entities.ProductRelatedEntities.ProductEntity;
-import com.example.Shop.entities.UserRelatedEntities.UserAuthority;
-import com.example.Shop.entities.UserRelatedEntities.UserEntity;
-import com.example.Shop.entities.UserRelatedEntities.UserRole;
-import com.example.Shop.repos.*;
+import com.example.Shop.db.entities.ProductRelatedEntities.CartEntity;
+import com.example.Shop.db.entities.ProductRelatedEntities.CategoryEntity;
+import com.example.Shop.db.entities.ProductRelatedEntities.OrderEntity;
+import com.example.Shop.db.entities.ProductRelatedEntities.ProductDataEntity;
+import com.example.Shop.db.entities.ProductRelatedEntities.ProductEntity;
+import com.example.Shop.db.entities.UserRelatedEntities.UserAuthority;
+import com.example.Shop.db.entities.UserRelatedEntities.UserEntity;
+import com.example.Shop.db.entities.UserRelatedEntities.UserRole;
+import com.example.Shop.db.repos.*;
 import com.example.Shop.services.UserDetailsService;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Set;
 
 @Component
 class DataLoader {

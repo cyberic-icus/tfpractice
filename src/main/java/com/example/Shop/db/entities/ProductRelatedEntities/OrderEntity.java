@@ -1,9 +1,8 @@
-package com.example.Shop.entities;
+package com.example.Shop.db.entities.ProductRelatedEntities;
 
 
-import com.example.Shop.entities.ProductRelatedEntities.ProductEntity;
-import com.example.Shop.entities.UserRelatedEntities.UserAuthority;
-import com.example.Shop.entities.UserRelatedEntities.UserEntity;
+import com.example.Shop.db.entities.ProductRelatedEntities.ProductEntity;
+import com.example.Shop.db.entities.UserRelatedEntities.UserEntity;
 import com.fasterxml.jackson.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -16,7 +15,7 @@ import java.util.Set;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonIgnoreProperties({"order_products_list"})
 @JsonPropertyOrder({"order_id", "order_products_list"})
 public class OrderEntity {
     @Id
@@ -26,11 +25,13 @@ public class OrderEntity {
 
     @JsonProperty("order_products_list")
     @JsonManagedReference(value="order-test")
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY, orphanRemoval = true)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     Set<ProductEntity> productEntitySet = new HashSet<>();
 
     @JsonBackReference
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     UserEntity userEntity;
 
 

@@ -1,11 +1,8 @@
 package com.example.Shop.services;
 
-import com.example.Shop.entities.ProductRelatedEntities.ProductEntity;
-import com.example.Shop.entities.UserRelatedEntities.UserEntity;
-import com.example.Shop.repos.UserEntityRepository;
+import com.example.Shop.db.entities.UserRelatedEntities.UserEntity;
+import com.example.Shop.db.repos.UserEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AccountStatusUserDetailsChecker;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

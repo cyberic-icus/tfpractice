@@ -1,14 +1,10 @@
-package com.example.Shop.entities.ProductRelatedEntities;
+package com.example.Shop.db.entities.ProductRelatedEntities;
 
 import com.fasterxml.jackson.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @NoArgsConstructor
@@ -25,7 +21,8 @@ public class ProductDataEntity {
     public int quantity;
 
     @JsonBackReference
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     public ProductEntity productEntity;
 
     public ProductDataEntity(String color, int size, int quantity, ProductEntity productEntity) {

@@ -1,10 +1,6 @@
-package com.example.Shop.entities.UserRelatedEntities;
+package com.example.Shop.db.entities.UserRelatedEntities;
 
 import org.springframework.security.core.GrantedAuthority;
-
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import java.util.Set;
 
 public enum UserRole implements GrantedAuthority {
     USER,

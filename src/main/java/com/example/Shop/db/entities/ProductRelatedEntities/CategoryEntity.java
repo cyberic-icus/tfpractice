@@ -1,6 +1,6 @@
-package com.example.Shop.entities;
+package com.example.Shop.db.entities.ProductRelatedEntities;
 
-import com.example.Shop.entities.ProductRelatedEntities.ProductEntity;
+import com.example.Shop.db.entities.ProductRelatedEntities.ProductEntity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -16,7 +16,7 @@ import java.util.Set;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonIgnoreProperties({"category_products_list"})
 @JsonPropertyOrder({"category_id","category_name","category_description","category_products_list"})
 public class CategoryEntity {
     @Id
@@ -30,7 +30,8 @@ public class CategoryEntity {
 
     @JsonProperty("category_products_list")
     @JsonManagedReference(value="category-test")
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY, orphanRemoval = true)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     Set<ProductEntity> productEntitySet = new HashSet<>();
 
 

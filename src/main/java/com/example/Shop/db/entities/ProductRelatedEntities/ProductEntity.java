@@ -1,11 +1,5 @@
-package com.example.Shop.entities.ProductRelatedEntities;
+package com.example.Shop.db.entities.ProductRelatedEntities;
 
-
-//import com.example.Shop.entities.CartEntity;
-//import com.example.Shop.entities.CategoryEntity;
-import com.example.Shop.entities.CartEntity;
-import com.example.Shop.entities.CategoryEntity;
-import com.example.Shop.entities.OrderEntity;
 import com.fasterxml.jackson.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -13,16 +7,14 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.net.URL;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonIgnoreProperties({"sizes_and_colors_list"})
 @EntityListeners(AuditingEntityListener.class)
 @JsonPropertyOrder({"product_id", "product_name", "product_description", "product_price", "product_created_on", "sizes_and_colors_list" })
 public class ProductEntity {
@@ -44,19 +36,23 @@ public class ProductEntity {
 
     @JsonProperty("sizes_and_colors_list")
     @JsonManagedReference
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY, orphanRemoval = true)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     List<ProductDataEntity> sizesAndColors = new ArrayList<>();
 
     @JsonBackReference(value="order-test")
-    @ManyToOne(cascade = CascadeType.ALL) //manytomany
+    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     OrderEntity orderEntity;
 
     @JsonBackReference(value="category-test")
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     CategoryEntity categoryEntity;
 
     @JsonBackReference(value="cart-test")
-    @ManyToOne(cascade = CascadeType.ALL) //manytomany
+    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     CartEntity cartEntity;
 
     public ProductEntity(String name) {

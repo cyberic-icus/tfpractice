@@ -1,8 +1,7 @@
 package com.example.Shop.services;
 
-import com.example.Shop.entities.CategoryEntity;
-import com.example.Shop.entities.ProductRelatedEntities.ProductEntity;
-import com.example.Shop.repos.CategoryEntityRepository;
+import com.example.Shop.db.entities.ProductRelatedEntities.CategoryEntity;
+import com.example.Shop.db.repos.CategoryEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

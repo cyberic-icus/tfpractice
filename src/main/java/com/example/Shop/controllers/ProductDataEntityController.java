@@ -1,7 +1,7 @@
 package com.example.Shop.controllers;
 
-import com.example.Shop.entities.ProductRelatedEntities.ProductDataEntity;
-import com.example.Shop.entities.ProductRelatedEntities.ProductEntity;
+import com.example.Shop.db.entities.ProductRelatedEntities.ProductDataEntity;
+import com.example.Shop.db.entities.ProductRelatedEntities.ProductEntity;
 import com.example.Shop.services.ProductDataEntityService;
 import com.example.Shop.services.ProductEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
