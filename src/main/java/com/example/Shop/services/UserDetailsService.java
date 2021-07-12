@@ -55,15 +55,6 @@ public class UserDetailsService implements org.springframework.security.core.use
         }
     }
 
-    public ResponseEntity<UserEntity> putProduct(Long id, UserEntity userEntity){
-        return
-                (userEntityRepository.existsById(id))
-                        ? new ResponseEntity<>(userEntityRepository.save(userEntity), HttpStatus.CREATED)
-                        : new ResponseEntity<>(userEntityRepository.save(userEntity),
-                        HttpStatus.OK);
-    }
-
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return null;
