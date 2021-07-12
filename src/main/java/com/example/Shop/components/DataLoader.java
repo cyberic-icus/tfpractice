@@ -40,7 +40,7 @@ class DataLoader {
     @PostConstruct
     @Transactional
     private void loadData() {
-        UserEntity userEntity = new UserEntity("Mikhail", "Kuznetsov", "cyberic-icus", "1234", "Test@email.com","+00000000000", "My Dest");
+        UserEntity userEntity = new UserEntity("Mikhail", "Kuznetsov", "cyberic-icus", "12344", "Test@email.com","+00000000000", "My Dest");
         CategoryEntity categoryEntity = new CategoryEntity("My category name", "Test description");
 
         UserAuthority userAuthority = new UserAuthority(UserRole.USER);

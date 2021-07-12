@@ -3,18 +3,16 @@ package com.example.Shop.entities.UserRelatedEntities;
 
 import com.example.Shop.entities.CartEntity;
 import com.example.Shop.entities.OrderEntity;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.Instant;
 import java.util.*;
 
@@ -29,52 +27,78 @@ public class UserEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonProperty("user_id")
-    public Long id;
+    private Long id;
+
+    @NotNull
+    @Size(min = 3, max = 15, message = "firstname too short(big)!(3<x<15)")
     @JsonProperty("user_firstname")
-    public String firstName;
+    private String firstName;
+
+    @NotNull
+    @Size(min = 3, max = 15, message = "lastname too short(big)!(3<x<15)")
     @JsonProperty("user_lastname")
-    public String lastName;
+    private String lastName;
+
+    @NotNull
+    @Size(min = 3, max = 15, message = "Username too short(big)!(3<x<15)")
     @JsonProperty("user_username")
-    public String username;
+    private String username;
 
     @JsonProperty("user_date_joined")
-    @CreatedDate public Instant dateJoined;
+    @CreatedDate
+    private Instant dateJoined;
 
+
+    @NotNull
+    @JsonIgnore
     private String password;
+
+    @NotNull
+    @Size(min = 3, max = 15, message = "Username too short(big)!(3<x<15)")
     @JsonProperty("user_email")
+    @Email
     private String email;
+
+    @NotNull
+    @Size(min = 12, max = 13, message = "Correct phone number pls")
     @JsonProperty("user_phone_number")
     private String phoneNumber;
+
+    @NotNull
     @JsonProperty("user_order_dist")
     private String location;
 
+    @NotNull
     @JsonProperty("user_roles_list")
     @JsonManagedReference(value = "userauthorities-test")
     @JoinColumn
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<UserAuthority> roles = new HashSet<>();
 
+    @NotNull
     @JsonProperty("user_orders_list")
     @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private Set<OrderEntity> orders = new HashSet<>();
 
+    @NotNull
     @JsonProperty("user_orders_history_list")
     @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private List<OrderEntity> orders_history = new ArrayList<>();
 
+    @NotNull
     @JsonProperty("user_cart")
     @JsonManagedReference(value="usercart-test")
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn
-    CartEntity cartEntity = new CartEntity();
+    private CartEntity cartEntity = new CartEntity();
 
 
     public UserEntity(String firstName, String lastName, String username, String password) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.username = username;
+        this.setFirstName(firstName);
+        this.setLastName(lastName);
+        this.setUsername(username);
         this.password = password;
     }
 
@@ -184,9 +208,9 @@ public class UserEntity{
     }
 
     public UserEntity(String firstName, String lastName, String username, String password, String email, String phoneNumber, String location) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.username = username;
+        this.setFirstName(firstName);
+        this.setLastName(lastName);
+        this.setUsername(username);
         this.password = password;
         this.email = email;
         this.phoneNumber = phoneNumber;
