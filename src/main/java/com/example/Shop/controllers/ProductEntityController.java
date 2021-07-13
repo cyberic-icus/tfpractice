@@ -5,12 +5,14 @@ import com.example.Shop.db.entities.ProductRelatedEntities.CategoryEntity;
 import com.example.Shop.db.entities.ProductRelatedEntities.ProductEntity;
 import com.example.Shop.services.CategoryEntityService;
 import com.example.Shop.services.ProductEntityService;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
+@Api
 @RestController
 @RequestMapping("category/{CID}/products")
 public class ProductEntityController {

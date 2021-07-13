@@ -11,6 +11,8 @@ import com.example.Shop.services.ProductDataEntityService;
 import com.example.Shop.services.ProductEntityService;
 import com.example.Shop.services.UserAuthorityService;
 import com.example.Shop.services.UserDetailsService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +22,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
+@Api
 public class UserEntityController {
     @Autowired
     UserDetailsService userDetailsService;
