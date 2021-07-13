@@ -1,16 +1,19 @@
 package com.example.Shop.controllers;
 
+import com.example.Shop.db.dto.ProductDataEntityDTO;
 import com.example.Shop.db.entities.ProductRelatedEntities.ProductDataEntity;
 import com.example.Shop.db.entities.ProductRelatedEntities.ProductEntity;
 import com.example.Shop.services.ProductDataEntityService;
 import com.example.Shop.services.ProductEntityService;
 import io.swagger.annotations.Api;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Api
 @RestController
@@ -21,34 +24,45 @@ public class ProductDataEntityController {
     @Autowired
     private ProductEntityService productEntityService;
 
+    @Autowired
+    ModelMapper modelMapper;
+
+    public ProductDataEntityDTO EntityToDTO(ProductDataEntity productDataEntity){
+        return modelMapper.map(productDataEntity, ProductDataEntityDTO.class);
+    }
+
+    public ProductDataEntity DTOToEntity(ProductDataEntityDTO productDataEntityDTO){
+        return modelMapper.map(productDataEntityDTO, ProductDataEntity.class);
+    }
+
     @GetMapping
-    Iterable<ProductDataEntity> getProductDataEntities(@PathVariable Long ProductID){
+    List<ProductDataEntityDTO> getProductDataEntities(@PathVariable Long ProductID){
         Optional<ProductEntity> productEntity = productEntityService.getProductById(ProductID);
         if(productEntity.isPresent()){
-            return productEntity.get().getSizesAndColors();
+            return productEntity.get().getSizesAndColors().stream()
+                    .map(this::EntityToDTO)
+                    .collect(Collectors.toList());
         } else return List.of();
     }
 
     @GetMapping("/{ID}/")
-    Optional<ProductDataEntity> getProductDataEntities(@PathVariable Long ProductID, @PathVariable Long ID){
+    ProductDataEntityDTO getProductDataEntities(@PathVariable Long ProductID, @PathVariable Long ID){
         Optional<ProductEntity> productEntity = productEntityService.getProductById(ProductID);
         if(productEntity.isPresent()){
-            return productDataEntityService.getProductById(ID);
-        } else return Optional.empty();
+            return EntityToDTO(productDataEntityService.getProductById(ID).get());
+        } else return null;
     }
 
 
     @PostMapping
-    ProductDataEntity postProductDataEntity(@RequestBody ProductDataEntity productDataEntity, @PathVariable Long ProductID){
-        productDataEntityService.saveProductData(ProductID, productDataEntity);
-        return productDataEntity;
+    ProductDataEntityDTO postProductDataEntity(@RequestBody ProductDataEntityDTO productDataEntityDTO, @PathVariable Long ProductID){
+        productDataEntityService.saveProductData(ProductID, DTOToEntity(productDataEntityDTO));
+        return productDataEntityDTO;
     }
 
     @PutMapping("/{ID}/")
-    ResponseEntity<ProductDataEntity> putProductDataEntity(@PathVariable Long ID,
-                                                           @RequestBody ProductDataEntity productDataEntity){
-
-        return productDataEntityService.putProductData(ID,productDataEntity);
+    void putProductDataEntity(@PathVariable Long ID, @RequestBody ProductDataEntityDTO productDataEntityDTO){
+        productDataEntityService.putProductData(ID,DTOToEntity(productDataEntityDTO));
     }
 
     @DeleteMapping("/{ID}/")

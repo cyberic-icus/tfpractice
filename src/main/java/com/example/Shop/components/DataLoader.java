@@ -43,9 +43,7 @@ class DataLoader {
         UserAuthority userAuthority = new UserAuthority(UserRole.USER);
         UserAuthority userAuthority1 = new UserAuthority(UserRole.ADMIN);
 
-//        userEntity.iDontUnderstandGrantedAuthorityShit().add(userAuthority);
-//        userEntity.iDontUnderstandGrantedAuthorityShit().add(userAuthority1);
-//
+
         userAuthority.getUsers().add(userEntity);
         userAuthority1.getUsers().add(userEntity);
 

@@ -13,8 +13,4 @@ public class MVCConfig implements WebMvcConfigurer {
 //        registry.addViewController("/login").setViewName("login");
 //    }
 
-    @Bean
-    public InternalResourceViewResolver defaultViewResolver() {
-        return new InternalResourceViewResolver();
-    }
 }
