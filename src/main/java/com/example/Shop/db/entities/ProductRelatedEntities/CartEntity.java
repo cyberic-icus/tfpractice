@@ -30,7 +30,6 @@ public class CartEntity {
 
     @JsonBackReference(value="usercart-test")
     @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    @JoinColumn
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     public UserEntity userEntity;
 
