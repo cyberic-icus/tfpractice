@@ -14,5 +14,5 @@ public class ProductEntityDTO {
     public String name;
     public String description;
     public String imageUrl;
-
+    public Double price;
 }
