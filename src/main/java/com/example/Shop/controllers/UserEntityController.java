@@ -23,6 +23,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/users")
 @Api
+@CrossOrigin(origins = {"http://localhost:4200/","https://summer-practy.herokuapp.com/"}, maxAge = 3600)
 public class UserEntityController {
     @Autowired
     UserDetailsService userDetailsService;

@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 @Api
 @RestController
 @RequestMapping("category/{CID}/products/{ProductID}/avail/")
+@CrossOrigin(origins = {"http://localhost:4200/","https://summer-practy.herokuapp.com/"}, maxAge = 3600)
 public class ProductDataEntityController {
     @Autowired
     private ProductDataEntityService productDataEntityService;
