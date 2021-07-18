@@ -1,6 +1,6 @@
 package com.example.Shop.services;
 
-import com.example.Shop.db.entities.ProductRelatedEntities.CategoryEntity;
+import com.example.Shop.db.entities.CategoryRelatedEntities.CategoryEntity;
 import com.example.Shop.db.repos.CategoryEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,31 +11,32 @@ import java.util.Optional;
 
 @Service
 public class CategoryEntityService {
+    @Autowired
+    CategoryEntityRepository categoryEntityRepository;
+
     public CategoryEntityService(CategoryEntityRepository categoryEntityRepository) {
         this.categoryEntityRepository = categoryEntityRepository;
     }
 
-    @Autowired
-    CategoryEntityRepository categoryEntityRepository;
-
-
-    public void saveCategoryEntity(CategoryEntity categoryEntity){
-        if(categoryEntity!=null){
+    public void saveCategoryEntity(CategoryEntity categoryEntity) {
+        if (categoryEntity != null) {
             categoryEntityRepository.save(categoryEntity);
         }
     }
 
-    public Optional<CategoryEntity> getCategoryById(Long id){
+    public Optional<CategoryEntity> getCategoryById(Long id) {
         return categoryEntityRepository.findById(id);
     }
 
-    public Iterable<CategoryEntity> getCategoryAll(){
+    public Iterable<CategoryEntity> getCategoryAll() {
         return categoryEntityRepository.findAll();
     }
-    public void deleteCategory(Long id){
+
+    public void deleteCategory(Long id) {
         categoryEntityRepository.deleteById(id);
     }
-    public ResponseEntity<CategoryEntity> putCategory(Long id,CategoryEntity categoryEntity){
+
+    public ResponseEntity<CategoryEntity> putCategory(Long id, CategoryEntity categoryEntity) {
         return
                 (categoryEntityRepository.existsById(id))
                         ? new ResponseEntity<>(categoryEntityRepository.save(categoryEntity), HttpStatus.CREATED)

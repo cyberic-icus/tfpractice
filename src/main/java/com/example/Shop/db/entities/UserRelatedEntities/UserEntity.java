@@ -1,8 +1,6 @@
 package com.example.Shop.db.entities.UserRelatedEntities;
 
 
-import com.example.Shop.db.entities.ProductRelatedEntities.CartEntity;
-import com.example.Shop.db.entities.ProductRelatedEntities.OrderEntity;
 import com.fasterxml.jackson.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -14,7 +12,10 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.Instant;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 
 @Entity
@@ -22,8 +23,8 @@ import java.util.*;
 @AllArgsConstructor
 @JsonIgnoreProperties({"user_roles_list", "user_orders_list", "user_orders_history_list", "user_cart"})
 @EntityListeners(AuditingEntityListener.class)
-@JsonPropertyOrder({"user_id", "user_firstname", "user_lastname", "user_username","user_email", "user_phone_number", "user_order_dist","user_date_joined","user_roles_list", "user_cart", "user_orders_list", "user_orders_history_list", "enabled", "accountNonExpired","accountNonLocked","credentialsNonExpired"})
-public class UserEntity{
+@JsonPropertyOrder({"user_id", "user_firstname", "user_lastname", "user_username", "user_email", "user_phone_number", "user_order_dist", "user_date_joined", "user_roles_list", "user_cart", "user_orders_list", "user_orders_history_list", "enabled", "accountNonExpired", "accountNonLocked", "credentialsNonExpired"})
+public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -70,35 +71,30 @@ public class UserEntity{
     private String location;
 
 
-    @NotNull
     @JsonProperty("user_roles_list")
     @JsonManagedReference(value = "userauthorities-test")
-    @JoinColumn
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Set<UserAuthority> roles = new HashSet<>();
 
 
-    @NotNull
     @JsonProperty("user_orders_list")
     @JsonManagedReference
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY, orphanRemoval = true)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Set<OrderEntity> orders = new HashSet<>();
 
 
-    @NotNull
     @JsonProperty("user_orders_history_list")
     @JsonManagedReference
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY, orphanRemoval = true)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private List<OrderEntity> orders_history = new ArrayList<>();
 
-    @NotNull
+
     @JsonProperty("user_cart")
-    @JsonManagedReference(value="usercart-test")
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn
+    @JsonManagedReference(value = "usercart-test")
+    @OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private CartEntity cartEntity = new CartEntity();
 
@@ -110,12 +106,31 @@ public class UserEntity{
         this.password = password;
     }
 
+
+    public UserEntity(String firstName, String lastName, String username, String password, String email, String phoneNumber, String location) {
+        this.setFirstName(firstName);
+        this.setLastName(lastName);
+        this.setUsername(username);
+        this.password = password;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.location = location;
+    }
+
     public String getUsername() {
         return username;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public String getPassword() {
         return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Set<UserAuthority> getRoles() {
@@ -125,7 +140,6 @@ public class UserEntity{
     public void setRoles(Set<UserAuthority> roles) {
         this.roles = roles;
     }
-
 
     public Set<OrderEntity> getOrders() {
         return orders;
@@ -147,40 +161,32 @@ public class UserEntity{
         return id;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public Instant getDateJoined() {
-        return dateJoined;
-    }
-
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getFirstName() {
+        return firstName;
     }
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
+    public String getLastName() {
+        return lastName;
+    }
+
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
+    public Instant getDateJoined() {
+        return dateJoined;
+    }
+
     public void setDateJoined(Instant dateJoined) {
         this.dateJoined = dateJoined;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getEmail() {
@@ -213,15 +219,5 @@ public class UserEntity{
 
     public void setOrders_history(List<OrderEntity> orders_history) {
         this.orders_history = orders_history;
-    }
-
-    public UserEntity(String firstName, String lastName, String username, String password, String email, String phoneNumber, String location) {
-        this.setFirstName(firstName);
-        this.setLastName(lastName);
-        this.setUsername(username);
-        this.password = password;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.location = location;
     }
 }

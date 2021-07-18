@@ -1,7 +1,6 @@
 package com.example.Shop.services;
 
-import com.example.Shop.db.entities.ProductRelatedEntities.ProductDataEntity;
-import com.example.Shop.db.entities.ProductRelatedEntities.ProductEntity;
+import com.example.Shop.db.entities.CategoryRelatedEntities.ProductDataEntity;
 import com.example.Shop.db.repos.ProductDataEntityRepository;
 import com.example.Shop.db.repos.ProductEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,24 +13,18 @@ import java.util.Optional;
 @Service
 public class ProductDataEntityService {
 
+    @Autowired
+    private final ProductDataEntityRepository productDataEntityRepository;
+    @Autowired
+    private final ProductEntityRepository productEntityRepository;
     public ProductDataEntityService(ProductDataEntityRepository productDataEntityRepository, ProductEntityRepository productEntityRepository) {
         this.productDataEntityRepository = productDataEntityRepository;
         this.productEntityRepository = productEntityRepository;
     }
 
-    @Autowired
-    private final ProductDataEntityRepository productDataEntityRepository;
-    @Autowired
-    private final ProductEntityRepository productEntityRepository;
-
-
-    public void saveProductData(Long PID, ProductDataEntity productDataEntity) {
-        Optional<ProductEntity> productEntity = productEntityRepository.findById(PID);
-        if ((productDataEntity != null) && (productEntity.isPresent())) {
-            productDataEntity.setProductEntity(productEntity.get());
-            productEntity.get().getSizesAndColors().add(productDataEntity);
-            productEntityRepository.save(productEntity.get());
-            //productDataEntityRepository.save(productDataEntity);
+    public void saveProductData(ProductDataEntity productDataEntity) {
+        if (productDataEntity != null) {
+            productDataEntityRepository.save(productDataEntity);
         }
     }
 
@@ -43,13 +36,11 @@ public class ProductDataEntityService {
         return productDataEntityRepository.findAll();
     }
 
-    public void deleteProductDataById(Long PID, Long id) {
-        Optional<ProductEntity> productEntity = productEntityRepository.findById(PID);
+    public void deleteProductDataById( Long id) {
         Optional<ProductDataEntity> productDataEntity = productDataEntityRepository.findById(id);
-        if ((productEntity.isPresent()) && productDataEntity.isPresent()) {
-            productEntity.get().getSizesAndColors().remove(productDataEntity.get());
+        if (productDataEntity.isPresent()) {
             productDataEntityRepository.deleteById(id);
-            productEntityRepository.save(productEntity.get());
+
 
         }
     }

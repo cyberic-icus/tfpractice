@@ -22,6 +22,7 @@ public class SwaggerConfig implements WebMvcConfigurer {
                 .paths(PathSelectors.any()).build().pathMapping("/")
                 .apiInfo(apiInfo()).useDefaultResponseMessages(false);
     }
+
     @Bean
     public ApiInfo apiInfo() {
         final ApiInfoBuilder builder = new ApiInfoBuilder();
@@ -29,6 +30,7 @@ public class SwaggerConfig implements WebMvcConfigurer {
                 .description("List of all the APIs of My Application App through Swagger UI");
         return builder.build();
     }
+
     @Bean
     public InternalResourceViewResolver defaultViewResolver() {
         return new InternalResourceViewResolver();

@@ -1,20 +1,11 @@
 package com.example.Shop.components;
 
-import com.example.Shop.db.entities.ProductRelatedEntities.CartEntity;
-import com.example.Shop.db.entities.ProductRelatedEntities.CategoryEntity;
-import com.example.Shop.db.entities.ProductRelatedEntities.OrderEntity;
-import com.example.Shop.db.entities.ProductRelatedEntities.ProductDataEntity;
-import com.example.Shop.db.entities.ProductRelatedEntities.ProductEntity;
-import com.example.Shop.db.entities.UserRelatedEntities.UserAuthority;
-import com.example.Shop.db.entities.UserRelatedEntities.UserEntity;
-import com.example.Shop.db.entities.UserRelatedEntities.UserRole;
 import com.example.Shop.db.repos.*;
 import com.example.Shop.services.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
-import java.util.List;
 
 @Component
 class DataLoader {
@@ -25,7 +16,8 @@ class DataLoader {
     private final UserAuthorityRepository userAuthorityRepository;
     private final OrderEntityRepository orderEntityRepository;
     private final CartEntityRepository cartEntityRepository;
-    public DataLoader(ProductEntityRepository productEntityRepository, ProductDataEntityRepository productDataEntityRepository, CategoryEntityRepository categoryEntityRepository, UserDetailsService userDetailsService, UserAuthorityRepository userAuthorityRepository, OrderEntityRepository orderEntityRepository, CartEntityRepository cartEntityRepository){
+
+    public DataLoader(ProductEntityRepository productEntityRepository, ProductDataEntityRepository productDataEntityRepository, CategoryEntityRepository categoryEntityRepository, UserDetailsService userDetailsService, UserAuthorityRepository userAuthorityRepository, OrderEntityRepository orderEntityRepository, CartEntityRepository cartEntityRepository) {
         this.productEntityRepository = productEntityRepository;
         this.productDataEntityRepository = productDataEntityRepository;
         this.categoryEntityRepository = categoryEntityRepository;
@@ -34,47 +26,48 @@ class DataLoader {
         this.orderEntityRepository = orderEntityRepository;
         this.cartEntityRepository = cartEntityRepository;
     }
+
     @PostConstruct
     @Transactional
     private void loadData() {
-//        UserEntity userEntity = new UserEntity("Mikhail", "Kuznetsov", "cyberic-icus", "12344", "Test@email.com","+00000000000", "My Dest");
-//        CategoryEntity categoryEntity = new CategoryEntity("My category name", "Test description");
+//        UserEntity cartUserEntity = new UserEntity("Mikhail", "Kuznetsov", "cyberic-icus", "12344", "Test@email.com","+00000000000", "My Dest");
+//        CategoryEntity productCategories = new CategoryEntity("My category categoryName", "Test categoryDescription");
 //
 //        UserAuthority userAuthority = new UserAuthority(UserRole.USER);
 //        UserAuthority userAuthority1 = new UserAuthority(UserRole.ADMIN);
 //
 //
-//        userAuthority.getUsers().add(userEntity);
-//        userAuthority1.getUsers().add(userEntity);
+//        userAuthority.getUsers().add(cartUserEntity);
+//        userAuthority1.getUsers().add(cartUserEntity);
 //
-//        userEntity.getRoles().add(userAuthority);
-//        userEntity.getRoles().add(userAuthority1);
+//        cartUserEntity.getRoles().add(userAuthority);
+//        cartUserEntity.getRoles().add(userAuthority1);
 //
-//        CartEntity cartEntity = new CartEntity();
-//        OrderEntity orderEntity = new OrderEntity();
+//        CartEntity productCarts = new CartEntity();
+//        OrderEntity productOrders = new OrderEntity();
 //
-//        ProductEntity productEntity = new ProductEntity("Product name", "Product description", 245.0, "http://someurl.com/someimage.jpg");
+//        ProductEntity productEntity = new ProductEntity("Product categoryName", "Product categoryDescription", 245.0, "http://someurl.com/someimage.jpg");
 //        ProductDataEntity productDataEntity = new ProductDataEntity("Some Color", 1233, 1332);
 //
 //        productDataEntity.setProductEntity(productEntity);
 //        productEntity.getSizesAndColors().add(productDataEntity);
 //
-//        orderEntity.getProductEntitySet().add(productEntity);
-//        productEntity.setOrderEntity(orderEntity);
+//        productOrders.getCategoryProductEntitySet().add(productEntity);
+//        productEntity.setProductOrders(productOrders);
 //
-//        cartEntity.getProducts().add(productEntity);
-//        productEntity.setCartEntity(cartEntity);
+//        productCarts.getCartProducts().add(productEntity);
+//        productEntity.setProductCarts(productCarts);
 //
-//        categoryEntity.getProductEntitySet().add(productEntity);
-//        productEntity.setCategoryEntity(categoryEntity);
+//        productCategories.getCategoryProductEntitySet().add(productEntity);
+//        productEntity.setProductCategories(productCategories);
 //
-//        userEntity.setCartEntity(cartEntity);
-//        cartEntity.setUserEntity(userEntity);
+//        cartUserEntity.setProductCarts(productCarts);
+//        productCarts.setCartUserEntity(cartUserEntity);
 //
-//        userEntity.getOrders().add(orderEntity);
-//        orderEntity.setUserEntity(userEntity);
+//        cartUserEntity.getOrders().add(productOrders);
+//        productOrders.setCartUserEntity(cartUserEntity);
 //
-//       userDetailsService.saveUser(userEntity);
+//       userDetailsService.saveUser(cartUserEntity);
 //       userAuthorityRepository.saveAll(List.of(userAuthority, userAuthority1));
 
 

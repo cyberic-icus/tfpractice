@@ -21,8 +21,9 @@ public class UserAuthority implements GrantedAuthority {
     public Long id;
 
     @JsonBackReference(value = "userauthorities-test")
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @JoinColumn
     private Set<UserEntity> users = new HashSet<>();
 
 
@@ -31,6 +32,10 @@ public class UserAuthority implements GrantedAuthority {
 
     public UserAuthority(Set<UserEntity> users, UserRole authority) {
         this.users = users;
+        this.authority = authority;
+    }
+
+    public UserAuthority(UserRole authority) {
         this.authority = authority;
     }
 
@@ -50,19 +55,12 @@ public class UserAuthority implements GrantedAuthority {
         this.users = users;
     }
 
-    public UserAuthority(UserRole authority) {
-        this.authority = authority;
-    }
-
-
-    public void setAuthority(UserRole authority) {
-        this.authority = authority;
-    }
-
-
-
     @Override
     public String getAuthority() {
         return authority.toString();
+    }
+
+    public void setAuthority(UserRole authority) {
+        this.authority = authority;
     }
 }

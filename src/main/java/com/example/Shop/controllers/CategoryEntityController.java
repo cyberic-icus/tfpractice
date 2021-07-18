@@ -1,22 +1,23 @@
 package com.example.Shop.controllers;
 
-import com.example.Shop.db.dto.CategoryEntityDTO;
-import com.example.Shop.db.entities.ProductRelatedEntities.CategoryEntity;
+import com.example.Shop.db.dto.CategoryRelatedDTO.CategoryEntityDTO;
+import com.example.Shop.db.entities.CategoryRelatedEntities.CategoryEntity;
 import com.example.Shop.services.CategoryEntityService;
 import io.swagger.annotations.Api;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Api
 @RestController
 @RequestMapping("/category")
-@CrossOrigin(origins = {"http://localhost:4200/","https://summer-practy.herokuapp.com/"}, maxAge = 3600)
+@CrossOrigin(origins = {"http://localhost:4200/", "https://summer-practy.herokuapp.com/"}, maxAge = 3600)
 public class CategoryEntityController {
     @Autowired
     CategoryEntityService categoryEntityService;
@@ -32,17 +33,15 @@ public class CategoryEntityController {
         return modelMapper.map(categoryEntityDTO, CategoryEntity.class);
     }
 
-
     @GetMapping
     List<CategoryEntityDTO> getCategoryEntityAll() {
-        List<CategoryEntity> categoryEntities = (List<CategoryEntity>) categoryEntityService.getCategoryAll();
-        return categoryEntities.stream()
+        return StreamSupport.stream(categoryEntityService.getCategoryAll().spliterator(), false)
                 .map(this::EntityToDTO)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    CategoryEntityDTO getCategoryEntityById(@PathVariable Long id){
+    CategoryEntityDTO getCategoryEntityById(@PathVariable Long id) {
         Optional<CategoryEntity> categoryEntity = categoryEntityService.getCategoryById(id);
         if(categoryEntity.isPresent()){
             return EntityToDTO(categoryEntity.get());
@@ -51,21 +50,28 @@ public class CategoryEntityController {
     }
 
     @PostMapping
-    CategoryEntityDTO postCategoryEntity(@RequestBody CategoryEntityDTO categoryEntityDTO){
+    CategoryEntityDTO postCategoryEntity(@Valid @RequestBody CategoryEntityDTO categoryEntityDTO) {
         categoryEntityService.saveCategoryEntity(DTOToEntity(categoryEntityDTO));
         return categoryEntityDTO;
     }
 
-
     @DeleteMapping("/{id}")
-    void deleteCategory(@PathVariable Long id){
+    void deleteCategory(@PathVariable Long id) {
         categoryEntityService.deleteCategory(id);
     }
 
     @PutMapping("/{id}")
-    void putCategoryEntity(@PathVariable Long id, @RequestBody CategoryEntityDTO categoryEntityDTO){
-        categoryEntityService.putCategory(id, DTOToEntity(categoryEntityDTO));
+    CategoryEntityDTO putCategoryEntity(@PathVariable Long id, @Valid @RequestBody CategoryEntityDTO categoryEntityDTO) {
+        Optional<CategoryEntity> categoryEntity = categoryEntityService.getCategoryById(id);
+        CategoryEntity newCategory = DTOToEntity(categoryEntityDTO);
+        if(categoryEntity.isPresent()){
+            CategoryEntity oldCategory = categoryEntity.get();
+
+            oldCategory.setCategoryName(newCategory.getCategoryName());
+            oldCategory.setCategoryDescription(newCategory.getCategoryDescription());
+
+            return categoryEntityDTO;
+        } else categoryEntityService.saveCategoryEntity(newCategory);
+        return null;
     }
-
-
 }

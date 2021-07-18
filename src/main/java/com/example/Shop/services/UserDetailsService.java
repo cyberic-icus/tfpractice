@@ -14,40 +14,41 @@ import java.util.Optional;
 @Service
 public class UserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {
 
+    private final AccountStatusUserDetailsChecker detailsChecker = new AccountStatusUserDetailsChecker();
+    @Autowired
+    BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
     @Autowired
     private UserEntityRepository userEntityRepository;
 
-    private final AccountStatusUserDetailsChecker detailsChecker = new AccountStatusUserDetailsChecker();
-
-    @Autowired
-    BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-
-    public Iterable<UserEntity> getUsersAll(){
+    public Iterable<UserEntity> getUsersAll() {
         return userEntityRepository.findAll();
     }
 
-    public Optional<UserEntity> getUserById(Long id){
+    public Optional<UserEntity> getUserById(Long id) {
         Optional<UserEntity> userEntity = userEntityRepository.findById(id);
-        if(userEntity.isPresent()){
+        if (userEntity.isPresent()) {
             return userEntity;
         } else return Optional.empty();
 
     }
-    public void saveUser(UserEntity userEntity){
-        if(userEntity!=null){
+
+    public void saveUser(UserEntity userEntity) {
+        if (userEntity != null) {
             userEntity.setPassword(bCryptPasswordEncoder.encode(userEntity.getPassword()));
             userEntityRepository.save(userEntity);
         }
 
     }
-    public void deleteUser(UserEntity userEntity){
-        if(userEntity!=null){
+
+    public void deleteUser(UserEntity userEntity) {
+        if (userEntity != null) {
             userEntityRepository.delete(userEntity);
         }
     }
-    public void deleteUserById(Long id){
+
+    public void deleteUserById(Long id) {
         Optional<UserEntity> userEntity = userEntityRepository.findById(id);
-        if(userEntity.isPresent()){
+        if (userEntity.isPresent()) {
             userEntityRepository.delete(userEntity.get());
         }
     }

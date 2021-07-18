@@ -12,7 +12,7 @@ public class UserAuthorityService {
     @Autowired
     UserAuthorityRepository userAuthorityRepository;
 
-    public Optional<UserAuthority> getUserAuthorityById(Long id){
+    public Optional<UserAuthority> getUserAuthorityById(Long id) {
         return userAuthorityRepository.findById(id);
     }
 }

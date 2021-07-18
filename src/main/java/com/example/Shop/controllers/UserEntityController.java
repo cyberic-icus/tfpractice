@@ -1,9 +1,9 @@
 package com.example.Shop.controllers;
 
-import com.example.Shop.db.entities.ProductRelatedEntities.CartEntity;
-import com.example.Shop.db.entities.ProductRelatedEntities.OrderEntity;
-import com.example.Shop.db.entities.ProductRelatedEntities.ProductDataEntity;
-import com.example.Shop.db.entities.ProductRelatedEntities.ProductEntity;
+import com.example.Shop.db.entities.UserRelatedEntities.CartEntity;
+import com.example.Shop.db.entities.UserRelatedEntities.OrderEntity;
+import com.example.Shop.db.entities.CategoryRelatedEntities.ProductDataEntity;
+import com.example.Shop.db.entities.CategoryRelatedEntities.ProductEntity;
 import com.example.Shop.db.entities.UserRelatedEntities.UserAuthority;
 import com.example.Shop.db.entities.UserRelatedEntities.UserEntity;
 import com.example.Shop.db.repos.OrderEntityRepository;
@@ -12,7 +12,6 @@ import com.example.Shop.services.ProductEntityService;
 import com.example.Shop.services.UserAuthorityService;
 import com.example.Shop.services.UserDetailsService;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +22,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/users")
 @Api
-@CrossOrigin(origins = {"http://localhost:4200/","https://summer-practy.herokuapp.com/"}, maxAge = 3600)
+@CrossOrigin(origins = {"http://localhost:4200/", "https://summer-practy.herokuapp.com/"}, maxAge = 3600)
 public class UserEntityController {
     @Autowired
     UserDetailsService userDetailsService;
@@ -73,7 +72,7 @@ public class UserEntityController {
     @PutMapping("/{id}")
     public void putUserById(@PathVariable Long id, @RequestBody UserEntity userEntity1) {
         Optional<UserEntity> userEntity = userDetailsService.getUserById(id);
-        if ((userEntity.isPresent())&&(userEntity1!=null)) {
+        if ((userEntity.isPresent()) && (userEntity1 != null)) {
             UserEntity user1 = userEntity.get();
             UserEntity user2 = userEntity1;
             user1.setOrders(user2.getOrders());
@@ -90,7 +89,7 @@ public class UserEntityController {
             user1.setPhoneNumber(user2.getPhoneNumber());
             userDetailsService.saveUser(user1);
 
-        } else if(userEntity1!=null) {
+        } else if (userEntity1 != null) {
             userDetailsService.saveUser(userEntity1);
         }
     }
@@ -99,7 +98,7 @@ public class UserEntityController {
     public Iterable<UserAuthority> getUserAuthorityAll(@PathVariable Long uid) {
         Optional<UserEntity> userEntity = userDetailsService.getUserById(uid);
         if (userEntity.isPresent()) {
-            return (Iterable<UserAuthority>) userEntity.get().getRoles();
+            return userEntity.get().getRoles();
         } else return null;
 
     }
@@ -117,7 +116,7 @@ public class UserEntityController {
         Optional<UserEntity> userEntity = userDetailsService.getUserById(uid);
         if (userEntity.isPresent()) {
             userEntity.get().getOrders().add(orderEntity);
-            orderEntity.setUserEntity(userEntity.get());
+            orderEntity.setOrderUserEntity(userEntity.get());
             orderEntityRepository.save(orderEntity);
             return orderEntity;
         }
@@ -138,17 +137,17 @@ public class UserEntityController {
     }
 
     @PutMapping("/{uid}/orders/{oid}")
-    public void putUserOrder(@PathVariable Long uid, @PathVariable Long oid, @RequestBody OrderEntity orderEntity){
+    public void putUserOrder(@PathVariable Long uid, @PathVariable Long oid, @RequestBody OrderEntity orderEntity) {
         Optional<UserEntity> userEntity = userDetailsService.getUserById(uid);
-        if ((userEntity.isPresent())&&(orderEntity!=null)) {
+        if ((userEntity.isPresent()) && (orderEntity != null)) {
             Optional<OrderEntity> orderEntity1 = userEntity.get().getOrders().stream().filter(oe -> oe.getId().equals(oid)).findAny();
-            if(orderEntity1.isPresent()){
-                orderEntity1.get().setProductEntitySet(orderEntity.getProductEntitySet());
+            if (orderEntity1.isPresent()) {
+                orderEntity1.get().setOrderProductEntitySet(orderEntity.getOrderProductEntitySet());
                 orderEntityRepository.save(orderEntity1.get());
             }
-        } else if((userEntity.isPresent())&& orderEntity == null){
+        } else if ((userEntity.isPresent()) && orderEntity == null) {
             userEntity.get().getOrders().add(orderEntity);
-            orderEntity.setUserEntity(userEntity.get());
+            orderEntity.setOrderUserEntity(userEntity.get());
             userDetailsService.saveUser(userEntity.get());
 
         }
@@ -158,33 +157,34 @@ public class UserEntityController {
     public Optional<OrderEntity> getUserOrder(@PathVariable Long uid, @PathVariable Long oid) {
         Optional<UserEntity> userEntity = userDetailsService.getUserById(uid);
         if (userEntity.isPresent()) {
-            //System.out.println(userEntity.get().getOrders().toString());
+            //System.out.println(cartUserEntity.get().getOrders().toString());
             return userEntity.get().getOrders().stream().filter(oe -> oe.getId().equals(oid)).findAny();
 
         }
         return null;
     }
 
-    @GetMapping("/{uid}/orders/{oid}/products")
+    @GetMapping("/{uid}/orders/{oid}/cartProducts")
     public Iterable<ProductEntity> getUserOrdersProducts(@PathVariable Long uid, @PathVariable Long oid) {
         Optional<UserEntity> userEntity = userDetailsService.getUserById(uid);
         if (userEntity.isPresent()) {
             Optional<OrderEntity> orderEntity = userEntity.get().getOrders().stream().filter(oe -> oe.getId().equals(oid)).findAny();
             if (orderEntity.isPresent()) {
-                return orderEntity.get().getProductEntitySet();
+                return orderEntity.get().getOrderProductEntitySet();
             }
 
         }
         return null;
     }
-    @PostMapping("/{uid}/orders/{oid}/products")
+
+    @PostMapping("/{uid}/orders/{oid}/cartProducts")
     public ProductEntity postProductToOrder(@PathVariable Long uid, @PathVariable Long oid, @RequestBody ProductEntity productEntity) {
         Optional<UserEntity> userEntity = userDetailsService.getUserById(uid);
         if (userEntity.isPresent()) {
             Optional<OrderEntity> orderEntity = userEntity.get().getOrders().stream().filter(oe -> oe.getId().equals(oid)).findAny();
             if (orderEntity.isPresent()) {
-                orderEntity.get().getProductEntitySet().add(productEntity);
-                productEntity.setOrderEntity(orderEntity.get());
+                orderEntity.get().getOrderProductEntitySet().add(productEntity);
+                productEntity.getProductOrders().add(orderEntity.get());
                 productEntityService.saveProduct(productEntity);
                 return productEntity;
             }
@@ -194,27 +194,27 @@ public class UserEntityController {
     }
 
 
-    @GetMapping("/{uid}/orders/{oid}/products/{pid}")
+    @GetMapping("/{uid}/orders/{oid}/cartProducts/{pid}")
     public Optional<ProductEntity> getUserOrdersProduct(@PathVariable Long uid, @PathVariable Long oid, @PathVariable Long pid) {
         Optional<UserEntity> userEntity = userDetailsService.getUserById(uid);
         if (userEntity.isPresent()) {
             Optional<OrderEntity> orderEntity = userEntity.get().getOrders().stream().filter(oe -> oe.getId().equals(oid)).findAny();
             if (orderEntity.isPresent()) {
-                return orderEntity.get().getProductEntitySet().stream().filter(pe -> pe.getId().equals(pid)).findAny();
+                return orderEntity.get().getOrderProductEntitySet().stream().filter(pe -> pe.getId().equals(pid)).findAny();
             }
 
         }
         return null;
     }
 
-    @DeleteMapping("/{uid}/orders/{oid}/products/{pid}")
+    @DeleteMapping("/{uid}/orders/{oid}/cartProducts/{pid}")
     public void deleteUserOrderProduct(@PathVariable Long uid, @PathVariable Long oid, @PathVariable Long pid) {
         Optional<UserEntity> userEntity = userDetailsService.getUserById(uid);
         if (userEntity.isPresent()) {
             Optional<OrderEntity> orderEntity = userEntity.get().getOrders().stream().filter(oe -> oe.getId().equals(oid)).findAny();
             if (orderEntity.isPresent()) {
-                Optional<ProductEntity> productEntity = orderEntity.get().getProductEntitySet().stream().filter(pe -> pe.getId().equals(pid)).findAny();
-                if(productEntity.isPresent()){
+                Optional<ProductEntity> productEntity = orderEntity.get().getOrderProductEntitySet().stream().filter(pe -> pe.getId().equals(pid)).findAny();
+                if (productEntity.isPresent()) {
                     productEntityService.deleteProductById(pid);
                 }
             }
@@ -222,22 +222,22 @@ public class UserEntityController {
         }
     }
 
-    @PutMapping("/{uid}/orders/{oid}/products/{pid}")
+    @PutMapping("/{uid}/orders/{oid}/cartProducts/{pid}")
     public void putUserOrderProduct(@PathVariable Long uid, @PathVariable Long oid, @PathVariable Long pid, @RequestBody ProductEntity productEntity) {
         Optional<UserEntity> userEntity = userDetailsService.getUserById(uid);
         if (userEntity.isPresent()) {
             Optional<OrderEntity> orderEntity = userEntity.get().getOrders().stream().filter(oe -> oe.getId().equals(oid)).findAny();
             if (orderEntity.isPresent()) {
-                Optional<ProductEntity> productEntity1 = orderEntity.get().getProductEntitySet().stream().filter(pe -> pe.getId().equals(pid)).findAny();
-                if(productEntity1.isPresent()){
-                    productEntity1.get().setDescription(productEntity.getDescription());
+                Optional<ProductEntity> productEntity1 = orderEntity.get().getOrderProductEntitySet().stream().filter(pe -> pe.getId().equals(pid)).findAny();
+                if (productEntity1.isPresent()) {
+                    productEntity1.get().setProductDescription(productEntity.getProductDescription());
                     productEntity1.get().setImageUrl(productEntity.getImageUrl());
-                    productEntity1.get().setName(productEntity.getName());
+                    productEntity1.get().setProductName(productEntity.getProductName());
                     productEntity1.get().setPrice(productEntity.getPrice());
                     productEntity1.get().setSizesAndColors(productEntity.getSizesAndColors());
                 } else {
-                    orderEntity.get().getProductEntitySet().add(productEntity);
-                    productEntity.setOrderEntity(orderEntity.get());
+                    orderEntity.get().getOrderProductEntitySet().add(productEntity);
+                    productEntity.getProductOrders().add(orderEntity.get());
                     orderEntityRepository.save(orderEntity.get());
                 }
             }
@@ -246,15 +246,13 @@ public class UserEntityController {
     }
 
 
-
-
-    @GetMapping("/{uid}/orders/{oid}/products/{pid}/info")
+    @GetMapping("/{uid}/orders/{oid}/cartProducts/{pid}/info")
     public Iterable<ProductDataEntity> getUserOrdersProductsDataEntities(@PathVariable Long uid, @PathVariable Long oid, @PathVariable Long pid) {
         Optional<UserEntity> userEntity = userDetailsService.getUserById(uid);
         if (userEntity.isPresent()) {
             Optional<OrderEntity> orderEntity = userEntity.get().getOrders().stream().filter(oe -> oe.getId().equals(oid)).findAny();
             if (orderEntity.isPresent()) {
-                Optional<ProductEntity> productEntity = orderEntity.get().getProductEntitySet().stream().filter(pe -> pe.getId().equals(pid)).findAny();
+                Optional<ProductEntity> productEntity = orderEntity.get().getOrderProductEntitySet().stream().filter(pe -> pe.getId().equals(pid)).findAny();
                 if (productEntity.isPresent()) {
                     return productEntity.get().getSizesAndColors();
                 }
@@ -265,15 +263,15 @@ public class UserEntityController {
         return null;
     }
 
-    @PostMapping("/{uid}/orders/{oid}/products/{pid}/info")
+    @PostMapping("/{uid}/orders/{oid}/cartProducts/{pid}/info")
     public ProductDataEntity getUserOrdersProductsDataEntities(@PathVariable Long uid, @PathVariable Long oid, @PathVariable Long pid, @RequestBody ProductDataEntity productDataEntity) {
         Optional<UserEntity> userEntity = userDetailsService.getUserById(uid);
         if (userEntity.isPresent()) {
             Optional<OrderEntity> orderEntity = userEntity.get().getOrders().stream().filter(oe -> oe.getId().equals(oid)).findAny();
             if (orderEntity.isPresent()) {
-                Optional<ProductEntity> productEntity = orderEntity.get().getProductEntitySet().stream().filter(pe -> pe.getId().equals(pid)).findAny();
+                Optional<ProductEntity> productEntity = orderEntity.get().getOrderProductEntitySet().stream().filter(pe -> pe.getId().equals(pid)).findAny();
                 if (productEntity.isPresent()) {
-                    productDataEntityService.saveProductData(pid, productDataEntity);
+                    productDataEntityService.saveProductData(productDataEntity);
                 }
 
             }
@@ -282,13 +280,13 @@ public class UserEntityController {
         return null;
     }
 
-    @GetMapping("/{uid}/orders/{oid}/products/{pid}/info/{prid}")
+    @GetMapping("/{uid}/orders/{oid}/cartProducts/{pid}/info/{prid}")
     public Optional<ProductDataEntity> getUserOrdersProductsDataEntity(@PathVariable Long uid, @PathVariable Long oid, @PathVariable Long pid, @PathVariable Long prid) {
         Optional<UserEntity> userEntity = userDetailsService.getUserById(uid);
         if (userEntity.isPresent()) {
             Optional<OrderEntity> orderEntity = userEntity.get().getOrders().stream().filter(oe -> oe.getId().equals(oid)).findAny();
             if (orderEntity.isPresent()) {
-                Optional<ProductEntity> productEntity = orderEntity.get().getProductEntitySet().stream().filter(pe -> pe.getId().equals(pid)).findAny();
+                Optional<ProductEntity> productEntity = orderEntity.get().getOrderProductEntitySet().stream().filter(pe -> pe.getId().equals(pid)).findAny();
                 if (productEntity.isPresent()) {
                     // Optional<ProductDataEntity> productDataEntity = productEntity.get().getSizesAndColors().stream().filter(pde -> pde.getId().equals(prid)).findAny();
                     return productEntity.get().getSizesAndColors().stream().filter(pde -> pde.getId().equals(prid)).findAny();
@@ -299,17 +297,18 @@ public class UserEntityController {
         }
         return null;
     }
-    @DeleteMapping("/{uid}/orders/{oid}/products/{pid}/info/{prid}")
+
+    @DeleteMapping("/{uid}/orders/{oid}/cartProducts/{pid}/info/{prid}")
     public void deleteUserOrderProductData(@PathVariable Long uid, @PathVariable Long oid, @PathVariable Long pid, @PathVariable Long prid) {
         Optional<UserEntity> userEntity = userDetailsService.getUserById(uid);
         if (userEntity.isPresent()) {
             Optional<OrderEntity> orderEntity = userEntity.get().getOrders().stream().filter(oe -> oe.getId().equals(oid)).findAny();
             if (orderEntity.isPresent()) {
-                Optional<ProductEntity> productEntity = orderEntity.get().getProductEntitySet().stream().filter(pe -> pe.getId().equals(pid)).findAny();
+                Optional<ProductEntity> productEntity = orderEntity.get().getOrderProductEntitySet().stream().filter(pe -> pe.getId().equals(pid)).findAny();
                 if (productEntity.isPresent()) {
                     Optional<ProductDataEntity> productDataEntity = productEntity.get().getSizesAndColors().stream().filter(pde -> pde.getId().equals(prid)).findAny();
-                    if(productDataEntity.isPresent()){
-                        productDataEntityService.deleteProductDataById(pid, prid);
+                    if (productDataEntity.isPresent()) {
+                        productDataEntityService.deleteProductDataById(prid);
                     }
                 }
 
@@ -318,20 +317,20 @@ public class UserEntityController {
         }
     }
 
-    @PutMapping("/{uid}/orders/{oid}/products/{pid}/info/{prid}")
+    @PutMapping("/{uid}/orders/{oid}/cartProducts/{pid}/info/{prid}")
     public void putUserProductData(@PathVariable Long uid, @PathVariable Long oid, @PathVariable Long pid, @PathVariable Long prid, @RequestBody ProductDataEntity productDataEntity) {
         Optional<UserEntity> userEntity = userDetailsService.getUserById(uid);
         if (userEntity.isPresent()) {
             Optional<OrderEntity> orderEntity = userEntity.get().getOrders().stream().filter(oe -> oe.getId().equals(oid)).findAny();
             if (orderEntity.isPresent()) {
-                Optional<ProductEntity> productEntity = orderEntity.get().getProductEntitySet().stream().filter(pe -> pe.getId().equals(pid)).findAny();
+                Optional<ProductEntity> productEntity = orderEntity.get().getOrderProductEntitySet().stream().filter(pe -> pe.getId().equals(pid)).findAny();
                 if (productEntity.isPresent()) {
                     Optional<ProductDataEntity> productDataEntity1 = productEntity.get().getSizesAndColors().stream().filter(pde -> pde.getId().equals(prid)).findAny();
-                    if(productDataEntity1.isPresent()){
+                    if (productDataEntity1.isPresent()) {
                         productDataEntity1.get().setColor(productDataEntity.getColor());
                         productDataEntity1.get().setQuantity(productDataEntity.getQuantity());
                         productDataEntity1.get().setSize(productDataEntity.getSize());
-                        productDataEntityService.saveProductData(pid, productDataEntity1.get());
+                        productDataEntityService.saveProductData(productDataEntity1.get());
                     }
                 }
 
@@ -354,8 +353,8 @@ public class UserEntityController {
     public ProductEntity getUserCart(@PathVariable Long uid, @RequestBody ProductEntity productEntity) {
         Optional<UserEntity> userEntity = userDetailsService.getUserById(uid);
         if (userEntity.isPresent()) {
-            userEntity.get().getCartEntity().getProducts().add(productEntity);
-            productEntity.setCartEntity(userEntity.get().getCartEntity());
+            userEntity.get().getCartEntity().getCartProducts().add(productEntity);
+            productEntity.getProductCarts().add(userEntity.get().getCartEntity());
             userDetailsService.saveUser(userEntity.get());
         }
         return null;
@@ -366,7 +365,7 @@ public class UserEntityController {
         Optional<UserEntity> userEntity = userDetailsService.getUserById(uid);
         if (userEntity.isPresent()) {
             CartEntity cartEntity1 = userEntity.get().getCartEntity();
-            cartEntity1.setProducts(cartEntity.getProducts());
+            cartEntity1.setCartProducts(cartEntity.getCartProducts());
             userDetailsService.saveUser(userEntity.get());
         }
         return null;
@@ -377,7 +376,7 @@ public class UserEntityController {
         Optional<UserEntity> userEntity = userDetailsService.getUserById(uid);
         if (userEntity.isPresent()) {
             CartEntity cartEntity = userEntity.get().getCartEntity();
-            cartEntity.setProducts(new HashSet<>());
+            cartEntity.setCartProducts(new HashSet<>());
         }
     }
 
@@ -385,18 +384,18 @@ public class UserEntityController {
     public Iterable<ProductEntity> getUserCartProducts(@PathVariable Long uid) {
         Optional<UserEntity> userEntity = userDetailsService.getUserById(uid);
         if (userEntity.isPresent()) {
-            return userEntity.get().getCartEntity().getProducts();
+            return userEntity.get().getCartEntity().getCartProducts();
         }
         return null;
     }
 
 //    @PostMapping("/{uid}/cart/prods")
 //    public ProductEntity postUserCartProduct(@PathVariable Long uid, @RequestBody ProductEntity productEntity) {
-//        Optional<UserEntity> userEntity = userDetailsService.getUserById(uid);
-//        if (userEntity.isPresent()) {
-//            userEntity.get().getCartEntity().getProducts().add(productEntity);
-//            productEntity.setCartEntity(userEntity.get().getCartEntity());
-//            userDetailsService.saveUser(userEntity.get());
+//        Optional<UserEntity> cartUserEntity = userDetailsService.getUserById(uid);
+//        if (cartUserEntity.isPresent()) {
+//            cartUserEntity.get().getProductCarts().getCartProducts().add(productEntity);
+//            productEntity.setProductCarts(cartUserEntity.get().getProductCarts());
+//            userDetailsService.saveUser(cartUserEntity.get());
 //        }
 //        return null;
 //    }
@@ -405,14 +404,14 @@ public class UserEntityController {
     public ProductEntity putUserCartProduct(@PathVariable Long uid, @PathVariable Long pid, @RequestBody ProductEntity productEntity) {
         Optional<UserEntity> userEntity = userDetailsService.getUserById(uid);
         if (userEntity.isPresent()) {
-            Optional<ProductEntity> productEntity1 = userEntity.get().getCartEntity().getProducts().stream().filter(pe -> pe.getId().equals(pid)).findAny();
-            if(productEntity1.isPresent()){
+            Optional<ProductEntity> productEntity1 = userEntity.get().getCartEntity().getCartProducts().stream().filter(pe -> pe.getId().equals(pid)).findAny();
+            if (productEntity1.isPresent()) {
                 productEntity1.get().setPrice(productEntity.getPrice());
-                productEntity1.get().setName(productEntity.getName());
+                productEntity1.get().setProductName(productEntity.getProductName());
                 productEntity1.get().setImageUrl(productEntity.getImageUrl());
                 productEntity1.get().setSizesAndColors(productEntity.getSizesAndColors());
                 productEntity1.get().setCreatedDate(productEntity.getCreatedDate());
-                productEntity1.get().setDescription(productEntity.getDescription());
+                productEntity1.get().setProductDescription(productEntity.getProductDescription());
                 userDetailsService.saveUser(userEntity.get());
             }
         }
@@ -423,8 +422,8 @@ public class UserEntityController {
     public void deleteUserCartProdcut(@PathVariable Long uid, @PathVariable Long pid) {
         Optional<UserEntity> userEntity = userDetailsService.getUserById(uid);
         if (userEntity.isPresent()) {
-            Optional<ProductEntity> productEntity1 = userEntity.get().getCartEntity().getProducts().stream().filter(pe -> pe.getId().equals(pid)).findAny();
-            if(productEntity1.isPresent()){
+            Optional<ProductEntity> productEntity1 = userEntity.get().getCartEntity().getCartProducts().stream().filter(pe -> pe.getId().equals(pid)).findAny();
+            if (productEntity1.isPresent()) {
                 productEntityService.deleteProductById(pid);
                 userDetailsService.saveUser(userEntity.get());
             }
@@ -432,13 +431,12 @@ public class UserEntityController {
     }
 
 
-
     @GetMapping("/{uid}/auths/{aid}/")
     public Optional<UserAuthority> getUserAuthority(@PathVariable Long uid, @PathVariable Long aid) {
         Optional<UserEntity> userEntity = userDetailsService.getUserById(uid);
         Optional<UserAuthority> userAuthority = userAuthorityService.getUserAuthorityById(aid);
         if ((userEntity.isPresent()) && userAuthority.isPresent()) {
-            Iterable<UserAuthority> userAuthorities = (Iterable<UserAuthority>) userEntity.get().getRoles();
+            Iterable<UserAuthority> userAuthorities = userEntity.get().getRoles();
             Optional<UserAuthority> userAuthority1 = userAuthority.stream().filter(auth -> userAuthority.get().equals(auth)).findAny();
             return userAuthority1;
 
@@ -452,9 +450,9 @@ public class UserEntityController {
         Optional<UserEntity> userEntity = userDetailsService.getUserById(uid);
         Optional<UserAuthority> userAuthority = userAuthorityService.getUserAuthorityById(aid);
         if ((userEntity.isPresent()) && userAuthority.isPresent()) {
-            Iterable<UserAuthority> userAuthorities = (Iterable<UserAuthority>) userEntity.get().getRoles();
+            Iterable<UserAuthority> userAuthorities = userEntity.get().getRoles();
             Optional<UserAuthority> userAuthority1 = userAuthority.stream().filter(auth -> userAuthority.get().equals(auth)).findAny();
-            if(userAuthority1.isPresent()){
+            if (userAuthority1.isPresent()) {
                 userEntity.get().getRoles().remove(userAuthority1.get());
                 userDetailsService.saveUser(userEntity.get());
             }
@@ -464,13 +462,14 @@ public class UserEntityController {
     }
 
     @PostMapping("/{uid}/auths/")
-    public UserAuthority postUserAuthority(@PathVariable Long uid, @RequestBody UserAuthority userAuthority){
+    public UserAuthority postUserAuthority(@PathVariable Long uid, @RequestBody UserAuthority userAuthority) {
         Optional<UserEntity> userEntity = userDetailsService.getUserById(uid);
-        if(userEntity.isPresent()){
+        if (userEntity.isPresent()) {
             userEntity.get().getRoles().add(userAuthority);
             userDetailsService.saveUser(userEntity.get());
             return userAuthority;
-        } return null;
+        }
+        return null;
     }
 
     @PutMapping("/{uid}/auths/{aid}/")
@@ -478,9 +477,9 @@ public class UserEntityController {
         Optional<UserEntity> userEntity = userDetailsService.getUserById(uid);
         Optional<UserAuthority> userAuthority = userAuthorityService.getUserAuthorityById(aid);
         if ((userEntity.isPresent()) && userAuthority.isPresent()) {
-            Iterable<UserAuthority> userAuthorities = (Iterable<UserAuthority>) userEntity.get().getRoles();
+            Iterable<UserAuthority> userAuthorities = userEntity.get().getRoles();
             Optional<UserAuthority> userAuthority1 = userAuthority.stream().filter(auth -> userAuthority.get().equals(auth)).findAny();
-            if(userAuthority1.isPresent()){
+            if (userAuthority1.isPresent()) {
                 userEntity.get().getRoles().remove(userAuthority1.get());
                 userDetailsService.saveUser(userEntity.get());
             }
