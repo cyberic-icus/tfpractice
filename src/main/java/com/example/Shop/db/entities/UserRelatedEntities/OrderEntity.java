@@ -16,12 +16,15 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties({"order_products_list"})
-@JsonPropertyOrder({"order_id", "order_products_list"})
+@JsonPropertyOrder({"orderId", "order_products_list"})
 public class OrderEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonProperty("order_id")
+    @JsonProperty("orderId")
     public Long id;
+
+    @JsonProperty("orderDestination")
+    public String destination;
 
     @JsonProperty("order_products_list")
     @JsonManagedReference(value = "order-test")

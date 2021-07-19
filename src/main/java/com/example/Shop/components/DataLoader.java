@@ -1,7 +1,7 @@
 package com.example.Shop.components;
 
 import com.example.Shop.db.repos.*;
-import com.example.Shop.services.UserDetailsService;
+import com.example.Shop.services.UserEntityService;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -12,17 +12,15 @@ class DataLoader {
     private final ProductEntityRepository productEntityRepository;
     private final ProductDataEntityRepository productDataEntityRepository;
     private final CategoryEntityRepository categoryEntityRepository;
-    private final UserDetailsService userDetailsService;
-    private final UserAuthorityRepository userAuthorityRepository;
+    private final UserEntityService userEntityService;
     private final OrderEntityRepository orderEntityRepository;
     private final CartEntityRepository cartEntityRepository;
 
-    public DataLoader(ProductEntityRepository productEntityRepository, ProductDataEntityRepository productDataEntityRepository, CategoryEntityRepository categoryEntityRepository, UserDetailsService userDetailsService, UserAuthorityRepository userAuthorityRepository, OrderEntityRepository orderEntityRepository, CartEntityRepository cartEntityRepository) {
+    public DataLoader(ProductEntityRepository productEntityRepository, ProductDataEntityRepository productDataEntityRepository, CategoryEntityRepository categoryEntityRepository, UserEntityService userEntityService, OrderEntityRepository orderEntityRepository, CartEntityRepository cartEntityRepository) {
         this.productEntityRepository = productEntityRepository;
         this.productDataEntityRepository = productDataEntityRepository;
         this.categoryEntityRepository = categoryEntityRepository;
-        this.userDetailsService = userDetailsService;
-        this.userAuthorityRepository = userAuthorityRepository;
+        this.userEntityService = userEntityService;
         this.orderEntityRepository = orderEntityRepository;
         this.cartEntityRepository = cartEntityRepository;
     }
@@ -67,7 +65,7 @@ class DataLoader {
 //        cartUserEntity.getOrders().add(productOrders);
 //        productOrders.setCartUserEntity(cartUserEntity);
 //
-//       userDetailsService.saveUser(cartUserEntity);
+//       userEntityService.saveUser(cartUserEntity);
 //       userAuthorityRepository.saveAll(List.of(userAuthority, userAuthority1));
 
 

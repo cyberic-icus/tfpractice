@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Setter
 @Getter
@@ -22,11 +23,13 @@ public class CategoryEntityDTO {
 
     @NotNull
     @NotBlank
+    @Size(min = 3, max = 15, message = "Too big or too small category name!")
     @JsonProperty("categoryName")
     public String categoryName;
 
     @NotNull
     @NotBlank
+    @Size(min = 3, max = 100, message = "Too big or too small category description!")
     @JsonProperty("categoryDescription")
     public String categoryDescription;
 

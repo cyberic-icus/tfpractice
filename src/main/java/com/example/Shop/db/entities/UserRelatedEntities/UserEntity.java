@@ -3,28 +3,31 @@ package com.example.Shop.db.entities.UserRelatedEntities;
 
 import com.fasterxml.jackson.annotation.*;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 @Entity
+@Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties({"user_roles_list", "user_orders_list", "user_orders_history_list", "user_cart"})
 @EntityListeners(AuditingEntityListener.class)
 @JsonPropertyOrder({"user_id", "user_firstname", "user_lastname", "user_username", "user_email", "user_phone_number", "user_order_dist", "user_date_joined", "user_roles_list", "user_cart", "user_orders_list", "user_orders_history_list", "enabled", "accountNonExpired", "accountNonLocked", "credentialsNonExpired"})
-public class UserEntity {
+public class UserEntity implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,7 +55,7 @@ public class UserEntity {
 
 
     @NotNull
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @NotNull
@@ -66,16 +69,12 @@ public class UserEntity {
     @JsonProperty("user_phone_number")
     private String phoneNumber;
 
-    @NotNull
-    @JsonProperty("user_order_dist")
-    private String location;
-
 
     @JsonProperty("user_roles_list")
     @JsonManagedReference(value = "userauthorities-test")
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    private Set<UserAuthority> roles = new HashSet<>();
+    private Set<RoleEntity> roles = new HashSet<RoleEntity>();
 
 
     @JsonProperty("user_orders_list")
@@ -99,125 +98,38 @@ public class UserEntity {
     private CartEntity cartEntity = new CartEntity();
 
 
-    public UserEntity(String firstName, String lastName, String username, String password) {
-        this.setFirstName(firstName);
-        this.setLastName(lastName);
-        this.setUsername(username);
-        this.password = password;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles;
     }
 
-
-    public UserEntity(String firstName, String lastName, String username, String password, String email, String phoneNumber, String location) {
-        this.setFirstName(firstName);
-        this.setLastName(lastName);
-        this.setUsername(username);
-        this.password = password;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.location = location;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
+    @Override
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    @Override
+    public String getUsername() {
+        return username;
     }
 
-    public Set<UserAuthority> getRoles() {
-        return roles;
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
     }
 
-    public void setRoles(Set<UserAuthority> roles) {
-        this.roles = roles;
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
     }
 
-    public Set<OrderEntity> getOrders() {
-        return orders;
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
     }
 
-    public void setOrders(Set<OrderEntity> orders) {
-        this.orders = orders;
-    }
-
-    public CartEntity getCartEntity() {
-        return cartEntity;
-    }
-
-    public void setCartEntity(CartEntity cartEntity) {
-        this.cartEntity = cartEntity;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public Instant getDateJoined() {
-        return dateJoined;
-    }
-
-    public void setDateJoined(Instant dateJoined) {
-        this.dateJoined = dateJoined;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public List<OrderEntity> getOrders_history() {
-        return orders_history;
-    }
-
-    public void setOrders_history(List<OrderEntity> orders_history) {
-        this.orders_history = orders_history;
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

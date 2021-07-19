@@ -39,6 +39,7 @@ public class ProductEntityDTO {
     public String productDescription;
 
     @NotNull
+    @NotBlank
     @JsonProperty("productPrice")
     public double price;
 

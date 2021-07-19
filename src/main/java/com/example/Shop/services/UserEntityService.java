@@ -1,5 +1,6 @@
 package com.example.Shop.services;
 
+import com.example.Shop.db.entities.UserRelatedEntities.RoleEntity;
 import com.example.Shop.db.entities.UserRelatedEntities.UserEntity;
 import com.example.Shop.db.repos.UserEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +10,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {
+public class UserEntityService implements org.springframework.security.core.userdetails.UserDetailsService {
 
     private final AccountStatusUserDetailsChecker detailsChecker = new AccountStatusUserDetailsChecker();
     @Autowired
@@ -20,20 +23,17 @@ public class UserDetailsService implements org.springframework.security.core.use
     @Autowired
     private UserEntityRepository userEntityRepository;
 
-    public Iterable<UserEntity> getUsersAll() {
+    public List<UserEntity> getUsersAll() {
         return userEntityRepository.findAll();
     }
 
     public Optional<UserEntity> getUserById(Long id) {
-        Optional<UserEntity> userEntity = userEntityRepository.findById(id);
-        if (userEntity.isPresent()) {
-            return userEntity;
-        } else return Optional.empty();
-
+        return userEntityRepository.findById(id);
     }
 
     public void saveUser(UserEntity userEntity) {
         if (userEntity != null) {
+            userEntity.setRoles(Collections.singleton(new RoleEntity("USER")));
             userEntity.setPassword(bCryptPasswordEncoder.encode(userEntity.getPassword()));
             userEntityRepository.save(userEntity);
         }
