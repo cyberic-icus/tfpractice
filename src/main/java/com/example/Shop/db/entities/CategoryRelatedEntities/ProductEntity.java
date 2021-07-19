@@ -30,7 +30,6 @@ public class ProductEntity {
     public double price;
     public String imageUrl;
 
-
     @CreatedDate
     public Instant createdDate;
 

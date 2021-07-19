@@ -23,7 +23,7 @@ public class RoleEntity implements GrantedAuthority {
     private String name;
 
     @Transient
-    @ManyToMany(mappedBy = "roles")
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private Set<UserEntity> users;
 
     @Override

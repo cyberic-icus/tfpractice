@@ -24,79 +24,39 @@ import java.util.*;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonIgnoreProperties({"user_roles_list", "user_orders_list", "user_orders_history_list", "user_cart"})
 @EntityListeners(AuditingEntityListener.class)
-@JsonPropertyOrder({"user_id", "user_firstname", "user_lastname", "user_username", "user_email", "user_phone_number", "user_order_dist", "user_date_joined", "user_roles_list", "user_cart", "user_orders_list", "user_orders_history_list", "enabled", "accountNonExpired", "accountNonLocked", "credentialsNonExpired"})
 public class UserEntity implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonProperty("user_id")
     private Long id;
-
-    @NotNull
-    @Size(min = 3, max = 15, message = "firstname too short(big)!(3<x<15)")
-    @JsonProperty("user_firstname")
     private String firstName;
-
-    @NotNull
-    @Size(min = 3, max = 15, message = "lastname too short(big)!(3<x<15)")
-    @JsonProperty("user_lastname")
     private String lastName;
-
-    @NotNull
-    @Size(min = 3, max = 15, message = "Username too short(big)!(3<x<15)")
-    @JsonProperty("user_username")
     private String username;
-
-    @JsonProperty("user_date_joined")
-    @CreatedDate
-    private Instant dateJoined;
-
-
-    @NotNull
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
+    private String phoneNumber;
 
-    @NotNull
-    @Size(min = 3, max = 15, message = "Username too short(big)!(3<x<15)")
-    @JsonProperty("user_email")
     @Email
     private String email;
 
-    @NotNull
-    @Size(min = 12, max = 13, message = "Correct phone number pls")
-    @JsonProperty("user_phone_number")
-    private String phoneNumber;
+    @CreatedDate
+    private Instant dateJoined;
 
-
-    @JsonProperty("user_roles_list")
     @JsonManagedReference(value = "userauthorities-test")
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Set<RoleEntity> roles = new HashSet<RoleEntity>();
 
-
-    @JsonProperty("user_orders_list")
     @JsonManagedReference
     @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Set<OrderEntity> orders = new HashSet<>();
 
-
-    @JsonProperty("user_orders_history_list")
     @JsonManagedReference
     @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private List<OrderEntity> orders_history = new ArrayList<>();
 
-
-    @JsonProperty("user_cart")
     @JsonManagedReference(value = "usercart-test")
     @OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private CartEntity cartEntity = new CartEntity();
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
