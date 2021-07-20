@@ -33,4 +33,5 @@ public class OrderEntity {
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     UserEntity orderUserEntity;
 
+
 }
