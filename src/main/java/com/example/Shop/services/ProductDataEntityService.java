@@ -3,7 +3,6 @@ package com.example.Shop.services;
 import com.example.Shop.db.entities.CategoryRelatedEntities.ProductDataEntity;
 import com.example.Shop.db.repos.ProductDataEntityRepository;
 import com.example.Shop.db.repos.ProductEntityRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -13,10 +12,9 @@ import java.util.Optional;
 @Service
 public class ProductDataEntityService {
 
-    @Autowired
     private final ProductDataEntityRepository productDataEntityRepository;
-    @Autowired
     private final ProductEntityRepository productEntityRepository;
+
     public ProductDataEntityService(ProductDataEntityRepository productDataEntityRepository, ProductEntityRepository productEntityRepository) {
         this.productDataEntityRepository = productDataEntityRepository;
         this.productEntityRepository = productEntityRepository;
@@ -36,7 +34,7 @@ public class ProductDataEntityService {
         return productDataEntityRepository.findAll();
     }
 
-    public void deleteProductDataById( Long id) {
+    public void deleteProductDataById(Long id) {
         Optional<ProductDataEntity> productDataEntity = productDataEntityRepository.findById(id);
         if (productDataEntity.isPresent()) {
             productDataEntityRepository.deleteById(id);

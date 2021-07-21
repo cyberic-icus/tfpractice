@@ -1,4 +1,5 @@
-package com.example.Shop.db.entities.CategoryRelatedEntities;
+package com.example.Shop.db.entities.OrderRelatedEntites;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,16 +13,14 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductDataEntity {
+public class ProductQuantityEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
-    public String color;
-    public Long size;
+    public Long dataId;
     public Long quantity;
 
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinColumn
-    public ProductEntity productEntity;
-
+    OrderEntity order;
 }

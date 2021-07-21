@@ -1,17 +1,15 @@
-package com.example.Shop.db.entities.UserRelatedEntities;
+package com.example.Shop.db.entities.OrderRelatedEntites;
 
 
-import com.example.Shop.db.entities.CategoryRelatedEntities.ProductEntity;
 import com.example.Shop.db.entities.UserRelatedEntities.UserEntity;
-import com.fasterxml.jackson.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -24,14 +22,12 @@ public class OrderEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
     public String destination;
-
-    @JsonManagedReference(value = "order-test")
-    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
-    Set<ProductEntity> orderProductEntitySet = new HashSet<>();
-
-    @JsonBackReference
+    public Long price;
+    public Boolean completed = false;
+    @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    List<ProductQuantityEntity> orderProductQuantityEntityList = new ArrayList<>();
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @JoinColumn
     UserEntity orderUserEntity;
-
 
 }

@@ -18,7 +18,7 @@ import javax.validation.constraints.Size;
 @JsonPropertyOrder({"categoryId", "categoryName", "categoryDescription"})
 public class CategoryEntityDTO {
 
-    @JsonProperty("categoryId")
+    @JsonProperty(value = "categoryId", access = JsonProperty.Access.READ_ONLY)
     public Long id;
 
     @NotNull

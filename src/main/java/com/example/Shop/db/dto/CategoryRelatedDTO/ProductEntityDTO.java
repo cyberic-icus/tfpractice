@@ -25,7 +25,7 @@ import java.time.Instant;
 @JsonPropertyOrder({"productId", "productName", "productDescription", "productPrice", "productCreatedOn"})
 public class ProductEntityDTO {
 
-    @JsonProperty("productId")
+    @JsonProperty(value = "productId", access = JsonProperty.Access.READ_ONLY)
     public Long id;
 
     @NotNull
@@ -38,12 +38,10 @@ public class ProductEntityDTO {
     @JsonProperty("productDescription")
     public String productDescription;
 
-    @NotNull
-    @NotBlank
     @JsonProperty("productPrice")
-    public double price;
+    public Long price;
 
-    @JsonProperty("productCreatedOn")
+    @JsonProperty(value = "productCreatedOn", access = JsonProperty.Access.READ_ONLY)
     @CreatedDate
     public Instant createdDate;
 

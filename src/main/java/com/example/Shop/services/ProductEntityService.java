@@ -2,7 +2,6 @@ package com.example.Shop.services;
 
 import com.example.Shop.db.entities.CategoryRelatedEntities.ProductEntity;
 import com.example.Shop.db.repos.ProductEntityRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -11,7 +10,6 @@ import java.util.Optional;
 
 @Service
 public class ProductEntityService {
-    @Autowired
     private final ProductEntityRepository productEntityRepository;
 
     public ProductEntityService(ProductEntityRepository productEntityRepository) {

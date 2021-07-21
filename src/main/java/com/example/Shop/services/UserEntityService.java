@@ -18,10 +18,13 @@ import java.util.Optional;
 public class UserEntityService implements org.springframework.security.core.userdetails.UserDetailsService {
 
     private final AccountStatusUserDetailsChecker detailsChecker = new AccountStatusUserDetailsChecker();
+    final private UserEntityRepository userEntityRepository;
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-    @Autowired
-    private UserEntityRepository userEntityRepository;
+
+    public UserEntityService(UserEntityRepository userEntityRepository) {
+        this.userEntityRepository = userEntityRepository;
+    }
 
     public List<UserEntity> getUsersAll() {
         return userEntityRepository.findAll();

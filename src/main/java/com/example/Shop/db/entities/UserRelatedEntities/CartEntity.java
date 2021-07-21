@@ -2,8 +2,6 @@ package com.example.Shop.db.entities.UserRelatedEntities;
 
 
 import com.example.Shop.db.entities.CategoryRelatedEntities.ProductEntity;
-import com.example.Shop.db.entities.UserRelatedEntities.UserEntity;
-import com.fasterxml.jackson.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,11 +21,10 @@ public class CartEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
 
-    @JsonManagedReference(value = "cart-test")
     @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @JoinColumn
     public Set<ProductEntity> cartProducts = new HashSet<>();
 
-    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    @JoinColumn
-    public UserEntity cartUserEntity;
+//    @JoinColumn
+//    public UserEntity cartUserEntity;
 }

@@ -8,7 +8,6 @@ import com.example.Shop.services.CategoryEntityService;
 import com.example.Shop.services.ProductEntityService;
 import io.swagger.annotations.Api;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -21,19 +20,21 @@ import java.util.stream.Collectors;
 @RequestMapping("category/{categoryId}/products")
 @CrossOrigin(origins = {"http://localhost:4200/", "https://summer-practy.herokuapp.com/"}, maxAge = 3600)
 public class ProductEntityController {
-    @Autowired
-    private ProductEntityService productEntityService;
-    @Autowired
-    private CategoryEntityService categoryEntityService;
+    final private ProductEntityService productEntityService;
+    final private CategoryEntityService categoryEntityService;
+    final private ModelMapper modelMapper;
 
-    @Autowired
-    ModelMapper modelMapper;
+    public ProductEntityController(ProductEntityService productEntityService, CategoryEntityService categoryEntityService, ModelMapper modelMapper) {
+        this.productEntityService = productEntityService;
+        this.categoryEntityService = categoryEntityService;
+        this.modelMapper = modelMapper;
+    }
 
-    public ProductEntityDTO EntityToDTO(ProductEntity productEntity){
+    public ProductEntityDTO EntityToDTO(ProductEntity productEntity) {
         return modelMapper.map(productEntity, ProductEntityDTO.class);
     }
 
-    public ProductEntity DTOToEntity(ProductEntityDTO productEntityDTO){
+    public ProductEntity DTOToEntity(ProductEntityDTO productEntityDTO) {
         return modelMapper.map(productEntityDTO, ProductEntity.class);
     }
 
@@ -55,10 +56,11 @@ public class ProductEntityController {
             Optional<ProductEntity> productEntity = categoryEntity.get().getCategoryProductEntitySet().stream().
                     filter(ce -> ce.getId().equals(id)).
                     findAny();
-            if(productEntity.isPresent()){
+            if (productEntity.isPresent()) {
                 return EntityToDTO(productEntity.get());
             }
-        } return null;
+        }
+        return null;
     }
 
     @PostMapping
@@ -77,15 +79,15 @@ public class ProductEntityController {
 
     @PutMapping("/{id}")
     ProductEntityDTO putProductEntity(@PathVariable Long id,
-                                   @Valid @RequestBody ProductEntityDTO productEntityDTO,
-                                   @PathVariable Long categoryId) {
+                                      @Valid @RequestBody ProductEntityDTO productEntityDTO,
+                                      @PathVariable Long categoryId) {
         Optional<CategoryEntity> categoryEntity = categoryEntityService.getCategoryById(categoryId);
         if (categoryEntity.isPresent()) {
             Optional<ProductEntity> productEntity = categoryEntity.get().getCategoryProductEntitySet().stream().
                     filter(ce -> ce.getId().equals(id)).
                     findAny();
             ProductEntity newProduct = DTOToEntity(productEntityDTO);
-            if(productEntity.isPresent()){
+            if (productEntity.isPresent()) {
                 ProductEntity oldProduct = productEntity.get();
                 oldProduct.setProductName(newProduct.getProductName());
                 oldProduct.setProductDescription(newProduct.getProductDescription());
@@ -94,7 +96,8 @@ public class ProductEntityController {
                 oldProduct.setCreatedDate(newProduct.getCreatedDate());
                 return EntityToDTO(productEntity.get());
             } else productEntityService.saveProduct(newProduct);
-        } return null;
+        }
+        return null;
     }
 
     @DeleteMapping("/{id}")

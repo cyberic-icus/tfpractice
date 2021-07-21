@@ -5,7 +5,6 @@ import com.example.Shop.db.entities.CategoryRelatedEntities.CategoryEntity;
 import com.example.Shop.services.CategoryEntityService;
 import io.swagger.annotations.Api;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -19,17 +18,20 @@ import java.util.stream.StreamSupport;
 @RequestMapping("/category")
 @CrossOrigin(origins = {"http://localhost:4200/", "https://summer-practy.herokuapp.com/"}, maxAge = 3600)
 public class CategoryEntityController {
-    @Autowired
-    CategoryEntityService categoryEntityService;
 
-    @Autowired
-    private ModelMapper modelMapper;
+    final CategoryEntityService categoryEntityService;
+    final private ModelMapper modelMapper;
 
-    public CategoryEntityDTO EntityToDTO(CategoryEntity categoryEntity){
+    public CategoryEntityController(CategoryEntityService categoryEntityService, ModelMapper modelMapper) {
+        this.categoryEntityService = categoryEntityService;
+        this.modelMapper = modelMapper;
+    }
+
+    public CategoryEntityDTO EntityToDTO(CategoryEntity categoryEntity) {
         return modelMapper.map(categoryEntity, CategoryEntityDTO.class);
     }
 
-    public CategoryEntity DTOToEntity(CategoryEntityDTO categoryEntityDTO){
+    public CategoryEntity DTOToEntity(CategoryEntityDTO categoryEntityDTO) {
         return modelMapper.map(categoryEntityDTO, CategoryEntity.class);
     }
 
@@ -43,7 +45,7 @@ public class CategoryEntityController {
     @GetMapping("/{id}")
     CategoryEntityDTO getCategoryEntityById(@PathVariable Long id) {
         Optional<CategoryEntity> categoryEntity = categoryEntityService.getCategoryById(id);
-        if(categoryEntity.isPresent()){
+        if (categoryEntity.isPresent()) {
             return EntityToDTO(categoryEntity.get());
         }
         return null;
@@ -64,7 +66,7 @@ public class CategoryEntityController {
     CategoryEntityDTO putCategoryEntity(@PathVariable Long id, @Valid @RequestBody CategoryEntityDTO categoryEntityDTO) {
         Optional<CategoryEntity> categoryEntity = categoryEntityService.getCategoryById(id);
         CategoryEntity newCategory = DTOToEntity(categoryEntityDTO);
-        if(categoryEntity.isPresent()){
+        if (categoryEntity.isPresent()) {
             CategoryEntity oldCategory = categoryEntity.get();
 
             oldCategory.setCategoryName(newCategory.getCategoryName());

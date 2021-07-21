@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.apache.catalina.User;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
@@ -23,15 +22,19 @@ public class RoleEntity implements GrantedAuthority {
     private String name;
 
     @Transient
-    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    }, fetch = FetchType.LAZY)
+    @JoinColumn
     private Set<UserEntity> users;
-
-    @Override
-    public String getAuthority() {
-        return "ROLE_"+name;
-    }
 
     public RoleEntity(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String getAuthority() {
+        return "ROLE_" + name;
     }
 }

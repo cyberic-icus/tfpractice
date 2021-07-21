@@ -1,7 +1,7 @@
 package com.example.Shop.db.entities.UserRelatedEntities;
 
 
-import com.fasterxml.jackson.annotation.*;
+import com.example.Shop.db.entities.OrderRelatedEntites.OrderEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,9 +12,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.time.Instant;
 import java.util.*;
 
@@ -35,28 +32,25 @@ public class UserEntity implements UserDetails {
     private String username;
     private String password;
     private String phoneNumber;
-
-    @Email
     private String email;
 
     @CreatedDate
     private Instant dateJoined;
 
-    @JsonManagedReference(value = "userauthorities-test")
-    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    }, fetch = FetchType.LAZY)
     private Set<RoleEntity> roles = new HashSet<RoleEntity>();
 
-    @JsonManagedReference
     @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY, orphanRemoval = true)
     private Set<OrderEntity> orders = new HashSet<>();
 
-    @JsonManagedReference
     @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<OrderEntity> orders_history = new ArrayList<>();
 
-    @JsonManagedReference(value = "usercart-test")
-    @OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
-    private CartEntity cartEntity = new CartEntity();
+//    @OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+//    private CartEntity cartEntity = new CartEntity();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

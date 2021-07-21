@@ -9,7 +9,6 @@ import com.example.Shop.services.ProductDataEntityService;
 import com.example.Shop.services.ProductEntityService;
 import io.swagger.annotations.Api;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -22,30 +21,32 @@ import java.util.stream.Collectors;
 @RequestMapping("category/{categoryId}/products/{productId}/info/")
 @CrossOrigin(origins = {"http://localhost:4200/", "https://summer-practy.herokuapp.com/"}, maxAge = 3600)
 public class ProductDataEntityController {
-    @Autowired
-    private ProductDataEntityService productDataEntityService;
-    @Autowired
-    private ProductEntityService productEntityService;
-    @Autowired
-    private CategoryEntityService categoryEntityService;
+    final private ProductDataEntityService productDataEntityService;
+    final private ProductEntityService productEntityService;
+    final private CategoryEntityService categoryEntityService;
+    final private ModelMapper modelMapper;
 
-    @Autowired
-    ModelMapper modelMapper;
+    public ProductDataEntityController(ProductDataEntityService productDataEntityService, ProductEntityService productEntityService, CategoryEntityService categoryEntityService, ModelMapper modelMapper) {
+        this.productDataEntityService = productDataEntityService;
+        this.productEntityService = productEntityService;
+        this.categoryEntityService = categoryEntityService;
+        this.modelMapper = modelMapper;
+    }
 
-    public ProductDataEntityDTO EntityToDTO(ProductDataEntity productDataEntity){
+    public ProductDataEntityDTO EntityToDTO(ProductDataEntity productDataEntity) {
         return modelMapper.map(productDataEntity, ProductDataEntityDTO.class);
     }
 
-    public ProductDataEntity DTOToEntity(ProductDataEntityDTO productDataEntityDTO){
+    public ProductDataEntity DTOToEntity(ProductDataEntityDTO productDataEntityDTO) {
         return modelMapper.map(productDataEntityDTO, ProductDataEntity.class);
     }
 
     @GetMapping
     List<ProductDataEntityDTO> getProductDataEntities(@PathVariable Long categoryId, @PathVariable Long productId) {
         Optional<CategoryEntity> categoryEntity = categoryEntityService.getCategoryById(categoryId);
-        if(categoryEntity.isPresent()){
+        if (categoryEntity.isPresent()) {
             Optional<ProductEntity> productEntity = productEntityService.getProductById(productId);
-            if(productEntity.isPresent()){
+            if (productEntity.isPresent()) {
                 return productEntity.get().getSizesAndColors().stream()
                         .map(this::EntityToDTO)
                         .collect(Collectors.toList());
@@ -92,9 +93,9 @@ public class ProductDataEntityController {
 
     @PutMapping("/{ID}/")
     ProductDataEntityDTO putProductDataEntity(@PathVariable Long categoryId,
-                              @PathVariable Long productId,
-                              @PathVariable Long ID,
-                              @Valid @RequestBody ProductDataEntityDTO productDataEntityDTO) {
+                                              @PathVariable Long productId,
+                                              @PathVariable Long ID,
+                                              @Valid @RequestBody ProductDataEntityDTO productDataEntityDTO) {
         Optional<CategoryEntity> categoryEntity = categoryEntityService.getCategoryById(categoryId);
         if (categoryEntity.isPresent()) {
             Optional<ProductEntity> productEntity = categoryEntity.get().getCategoryProductEntitySet().stream()
