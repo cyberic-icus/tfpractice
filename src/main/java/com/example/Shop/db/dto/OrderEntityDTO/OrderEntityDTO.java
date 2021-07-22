@@ -32,9 +32,10 @@ public class OrderEntityDTO {
     @NotNull
     public UserEntityDTO customer;
 
-    @NotNull
+
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     public Long price;
+
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     public Boolean completed = false;
     @NotNull
