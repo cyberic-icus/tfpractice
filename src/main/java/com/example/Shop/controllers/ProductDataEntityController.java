@@ -85,6 +85,7 @@ public class ProductDataEntityController {
                 ProductDataEntity productDataEntity = DTOToEntity(productDataEntityDTO);
                 productEntity.get().getSizesAndColors().add(productDataEntity);
                 productDataEntityService.saveProductData(productDataEntity);
+                productEntityService.saveProduct(productEntity.get());
                 return productDataEntity;
             }
         }

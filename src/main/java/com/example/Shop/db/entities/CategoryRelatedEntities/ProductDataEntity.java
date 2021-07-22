@@ -20,8 +20,7 @@ public class ProductDataEntity {
     public Long size;
     public Long quantity;
 
-    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
-    @JoinColumn
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     public ProductEntity productEntity;
 
 }

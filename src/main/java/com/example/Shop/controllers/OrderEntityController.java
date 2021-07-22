@@ -4,6 +4,8 @@ package com.example.Shop.controllers;
 import com.example.Shop.db.dto.OrderEntityDTO.OrderEntityDTO;
 import com.example.Shop.db.dto.OrderEntityDTO.ProductQuantityDTO;
 import com.example.Shop.db.dto.UserRelatedDTO.UserEntityDTO;
+import com.example.Shop.db.entities.CategoryRelatedEntities.ProductDataEntity;
+import com.example.Shop.db.entities.CategoryRelatedEntities.ProductEntity;
 import com.example.Shop.db.entities.OrderRelatedEntites.OrderEntity;
 import com.example.Shop.db.entities.OrderRelatedEntites.ProductQuantityEntity;
 import com.example.Shop.db.entities.UserRelatedEntities.UserEntity;
@@ -103,8 +105,12 @@ public class OrderEntityController {
 
         Long price = 0L;
         for(ProductQuantityEntity pq: productQuantityEntities){
-            if(productDataEntityRepository.findById(pq.getDataId()).isPresent()){
-                price = price + productDataEntityRepository.findById(pq.getDataId()).get().getProductEntity().getPrice()*pq.getQuantity();
+            Optional<ProductDataEntity> productDataEntity = productDataEntityRepository.findById(pq.getDataId());
+            if(productDataEntity.isPresent()){
+                ProductEntity productEntity = productDataEntity.get().getProductEntity();
+                if(productEntity!=null){
+                    price = price + productDataEntity.get().getProductEntity().getPrice()*pq.getQuantity();
+                }
             }
         }
         orderEntity.setPrice(price);

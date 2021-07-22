@@ -31,7 +31,7 @@ public class ProductEntity {
     @CreatedDate
     public Instant createdDate;
 
-    @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     List<ProductDataEntity> sizesAndColors = new ArrayList<>();
 
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
