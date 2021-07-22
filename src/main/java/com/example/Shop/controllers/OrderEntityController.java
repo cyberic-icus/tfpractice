@@ -100,12 +100,12 @@ public class OrderEntityController {
                 .collect(Collectors.toList());
         orderEntity.setOrderProductQuantityEntityList(productQuantityEntities);
         orderEntity.setOrderUserEntity(userEntity);
-        orderEntity.setPrice(
-                orderEntity.getOrderProductQuantityEntityList().stream()
-                        .flatMapToLong(pq -> LongStream.of(
-                                productDataEntityRepository.findById(pq.getDataId()).get().getProductEntity().getPrice()))
-                        .sum()
-        );
+
+        Long price = 0L;
+        for(ProductQuantityEntity pq: productQuantityEntities){
+            price = price + productDataEntityRepository.findById(pq.getDataId()).get().getProductEntity().getPrice();
+        }
+        orderEntity.setPrice(price);
         productQuantityService.saveProductQuantityAll(orderEntity.getOrderProductQuantityEntityList());
         userEntityService.saveUser(userEntity);
         orderEntityService.saveOrder(orderEntity);
