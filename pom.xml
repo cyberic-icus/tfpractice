@@ -66,7 +66,7 @@
 					<assembleDirectory>target</assembleDirectory>
 					<programs>
 						<program>
-							<mainClass>com.example.ShopBot.ShopBotApplication</mainClass>
+							<mainClass>ShopBotApplication</mainClass>
 							<name>workerBot</name>
 						</program>
 					</programs>
