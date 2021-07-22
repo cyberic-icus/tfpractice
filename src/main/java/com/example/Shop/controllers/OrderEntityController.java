@@ -103,7 +103,9 @@ public class OrderEntityController {
 
         Long price = 0L;
         for(ProductQuantityEntity pq: productQuantityEntities){
-            price = price + productDataEntityRepository.findById(pq.getDataId()).get().getProductEntity().getPrice();
+            if(productDataEntityRepository.findById(pq.getDataId()).isPresent()){
+                price = price + productDataEntityRepository.findById(pq.getDataId()).get().getProductEntity().getPrice()*pq.getQuantity();
+            }
         }
         orderEntity.setPrice(price);
         productQuantityService.saveProductQuantityAll(orderEntity.getOrderProductQuantityEntityList());
