@@ -1,7 +1,7 @@
 package com.example.Shop.db.entities.UserRelatedEntities;
 
 
-import com.example.Shop.db.entities.CategoryRelatedEntities.ProductEntity;
+import com.example.Shop.db.entities.ProductRelatedEntities.ProductEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,11 +1,12 @@
 package com.example.Shop.services;
 
-import com.example.Shop.db.entities.CategoryRelatedEntities.ProductEntity;
+import com.example.Shop.db.entities.ProductRelatedEntities.ProductEntity;
 import com.example.Shop.db.repos.ProductEntityRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,8 +27,8 @@ public class ProductEntityService {
         return productEntityRepository.findById(id);
     }
 
-    public Iterable<ProductEntity> getProductAll() {
-        return productEntityRepository.findAll();
+    public List<ProductEntity> getProductAll() {
+        return (List<ProductEntity>) productEntityRepository.findAll();
     }
 
     public void deleteProductById(Long id) {

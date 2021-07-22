@@ -1,6 +1,6 @@
 package com.example.Shop.services;
 
-import com.example.Shop.db.entities.CategoryRelatedEntities.ProductEntity;
+import com.example.Shop.db.entities.ProductRelatedEntities.ProductEntity;
 import com.example.Shop.db.entities.UserRelatedEntities.CartEntity;
 import com.example.Shop.db.repos.CartEntityRepository;
 import org.springframework.stereotype.Service;

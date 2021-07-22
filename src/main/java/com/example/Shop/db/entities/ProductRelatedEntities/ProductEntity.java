@@ -1,4 +1,4 @@
-package com.example.Shop.db.entities.CategoryRelatedEntities;
+package com.example.Shop.db.entities.ProductRelatedEntities;
 
 import com.example.Shop.db.entities.UserRelatedEntities.CartEntity;
 import lombok.AllArgsConstructor;
@@ -33,10 +33,6 @@ public class ProductEntity {
 
     @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     List<ProductDataEntity> sizesAndColors = new ArrayList<>();
-
-    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
-    @JoinColumn
-    List<CategoryEntity> productCategories = new ArrayList<>();
 
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     List<CartEntity> productCarts = new ArrayList<>();

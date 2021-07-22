@@ -2,7 +2,7 @@ package com.example.Shop.services;
 
 import com.example.Shop.db.dto.OrderEntityDTO.OrderEntityDTO;
 import com.example.Shop.db.dto.OrderEntityDTO.ProductQuantityDTO;
-import com.example.Shop.db.entities.CategoryRelatedEntities.ProductDataEntity;
+import com.example.Shop.db.entities.ProductRelatedEntities.ProductDataEntity;
 import com.example.Shop.db.entities.OrderRelatedEntites.OrderEntity;
 import com.example.Shop.db.repos.OrderEntityRepository;
 import com.example.Shop.db.repos.ProductDataEntityRepository;

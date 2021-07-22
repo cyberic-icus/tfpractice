@@ -2,9 +2,7 @@ package com.example.Shop.controllers;
 
 
 import com.example.Shop.db.dto.CategoryRelatedDTO.ProductEntityDTO;
-import com.example.Shop.db.entities.CategoryRelatedEntities.CategoryEntity;
-import com.example.Shop.db.entities.CategoryRelatedEntities.ProductEntity;
-import com.example.Shop.services.CategoryEntityService;
+import com.example.Shop.db.entities.ProductRelatedEntities.ProductEntity;
 import com.example.Shop.services.ProductEntityService;
 import io.swagger.annotations.Api;
 import org.modelmapper.ModelMapper;
@@ -17,16 +15,14 @@ import java.util.stream.Collectors;
 
 @Api
 @RestController
-@RequestMapping("category/{categoryId}/products")
+@RequestMapping("api/products")
 @CrossOrigin(origins = {"http://localhost:4200/", "https://summer-practy.herokuapp.com/"}, maxAge = 3600)
 public class ProductEntityController {
     final private ProductEntityService productEntityService;
-    final private CategoryEntityService categoryEntityService;
     final private ModelMapper modelMapper;
 
-    public ProductEntityController(ProductEntityService productEntityService, CategoryEntityService categoryEntityService, ModelMapper modelMapper) {
+    public ProductEntityController(ProductEntityService productEntityService, ModelMapper modelMapper) {
         this.productEntityService = productEntityService;
-        this.categoryEntityService = categoryEntityService;
         this.modelMapper = modelMapper;
     }
 
@@ -39,51 +35,35 @@ public class ProductEntityController {
     }
 
     @GetMapping
-    List<ProductEntityDTO> getProducts(@PathVariable Long categoryId) {
-        Optional<CategoryEntity> categoryEntity = categoryEntityService.getCategoryById(categoryId);
-        if (categoryEntity.isPresent()) {
-            return categoryEntity.get().getCategoryProductEntitySet().stream()
+    List<ProductEntityDTO> getProduct() {
+            return productEntityService.getProductAll().stream()
                     .map(this::EntityToDTO)
                     .collect(Collectors.toList());
-        }
-        return null;
+
     }
 
     @GetMapping("/{id}")
-    ProductEntityDTO getProduct(@PathVariable Long categoryId, @PathVariable Long id) {
-        Optional<CategoryEntity> categoryEntity = categoryEntityService.getCategoryById(categoryId);
-        if (categoryEntity.isPresent()) {
-            Optional<ProductEntity> productEntity = categoryEntity.get().getCategoryProductEntitySet().stream().
+    ProductEntityDTO getProduct(@PathVariable Long id) {
+            Optional<ProductEntity> productEntity = productEntityService.getProductAll().stream().
                     filter(ce -> ce.getId().equals(id)).
                     findAny();
             if (productEntity.isPresent()) {
                 return EntityToDTO(productEntity.get());
             }
-        }
         return null;
     }
 
     @PostMapping
-    ProductEntityDTO postProduct(@PathVariable Long categoryId, @Valid @RequestBody ProductEntityDTO productEntityDTO) {
-        Optional<CategoryEntity> categoryEntity = categoryEntityService.getCategoryById(categoryId);
-        if (categoryEntity.isPresent()) {
+    void postProduct(@Valid @RequestBody ProductEntityDTO productEntityDTO) {
             ProductEntity productEntity = DTOToEntity(productEntityDTO);
-            categoryEntity.get().getCategoryProductEntitySet().add(productEntity);
-            productEntity.getProductCategories().add(categoryEntity.get());
+            productEntityService.getProductAll().add(productEntity);
             productEntityService.saveProduct(productEntity);
-            //categoryEntityService.saveCategoryEntity(productCategories.get());
-        }
-        return null;
-
     }
 
     @PutMapping("/{id}")
     ProductEntityDTO putProductEntity(@PathVariable Long id,
-                                      @Valid @RequestBody ProductEntityDTO productEntityDTO,
-                                      @PathVariable Long categoryId) {
-        Optional<CategoryEntity> categoryEntity = categoryEntityService.getCategoryById(categoryId);
-        if (categoryEntity.isPresent()) {
-            Optional<ProductEntity> productEntity = categoryEntity.get().getCategoryProductEntitySet().stream().
+                                      @Valid @RequestBody ProductEntityDTO productEntityDTO) {
+            Optional<ProductEntity> productEntity = productEntityService.getProductAll().stream().
                     filter(ce -> ce.getId().equals(id)).
                     findAny();
             ProductEntity newProduct = DTOToEntity(productEntityDTO);
@@ -96,19 +76,15 @@ public class ProductEntityController {
                 oldProduct.setCreatedDate(newProduct.getCreatedDate());
                 return EntityToDTO(productEntity.get());
             } else productEntityService.saveProduct(newProduct);
-        }
         return null;
     }
 
     @DeleteMapping("/{id}")
-    void deleteProductEntity(@PathVariable Long categoryId, @PathVariable Long id) {
-        Optional<CategoryEntity> categoryEntity = categoryEntityService.getCategoryById(categoryId);
-        if (categoryEntity.isPresent()) {
-            if (categoryEntity.get().getCategoryProductEntitySet().stream().anyMatch(ce -> ce.getId().equals(id))) {
+    void deleteProductEntity(@PathVariable Long id) {
+            if (productEntityService.getProductAll().stream().anyMatch(ce -> ce.getId().equals(id))) {
                 productEntityService.deleteProductById(id);
             }
         }
     }
 
 
-}

@@ -1,4 +1,4 @@
-package com.example.Shop.db.entities.CategoryRelatedEntities;
+package com.example.Shop.db.entities.ProductRelatedEntities;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

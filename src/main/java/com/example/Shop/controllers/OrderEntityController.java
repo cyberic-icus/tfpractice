@@ -4,8 +4,8 @@ package com.example.Shop.controllers;
 import com.example.Shop.db.dto.OrderEntityDTO.OrderEntityDTO;
 import com.example.Shop.db.dto.OrderEntityDTO.ProductQuantityDTO;
 import com.example.Shop.db.dto.UserRelatedDTO.UserEntityDTO;
-import com.example.Shop.db.entities.CategoryRelatedEntities.ProductDataEntity;
-import com.example.Shop.db.entities.CategoryRelatedEntities.ProductEntity;
+import com.example.Shop.db.entities.ProductRelatedEntities.ProductDataEntity;
+import com.example.Shop.db.entities.ProductRelatedEntities.ProductEntity;
 import com.example.Shop.db.entities.OrderRelatedEntites.OrderEntity;
 import com.example.Shop.db.entities.OrderRelatedEntites.ProductQuantityEntity;
 import com.example.Shop.db.entities.UserRelatedEntities.UserEntity;
@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.LongStream;
 
 @Api
 @RestController

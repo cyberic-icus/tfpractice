@@ -1,6 +1,6 @@
 package com.example.Shop.services;
 
-import com.example.Shop.db.entities.CategoryRelatedEntities.ProductDataEntity;
+import com.example.Shop.db.entities.ProductRelatedEntities.ProductDataEntity;
 import com.example.Shop.db.repos.ProductDataEntityRepository;
 import com.example.Shop.db.repos.ProductEntityRepository;
 import org.springframework.http.HttpStatus;
