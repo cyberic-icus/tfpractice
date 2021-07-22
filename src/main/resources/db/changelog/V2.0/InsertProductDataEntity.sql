@@ -1,0 +1,6 @@
+INSERT INTO ProductDataEntity VALUES (1, 'red', 5, 41)
+INSERT INTO ProductDataEntity VALUES (2, 'red', 3, 42)
+INSERT INTO ProductDataEntity VALUES (3, 'red', 2, 43)
+INSERT INTO ProductDataEntity VALUES (4, 'blue', 5, 41)
+INSERT INTO ProductDataEntity VALUES (5, 'blue', 3, 42)
+INSERT INTO ProductDataEntity VALUES (6, 'blue', 2, 43)
