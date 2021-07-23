@@ -115,7 +115,7 @@ public class Bot extends TelegramLongPollingBot {
                             orderMessage.append("Адрес доставки: ").append(orderModel.getOrderDestination()).append("\n");
                             orderMessage.append("Заказчик: ").append(orderModel.getCustomer().getUserFirstname()).append(" ").append(orderModel.getCustomer().getUserLastname()).append("\n");
                             orderMessage.append("Телефон: ").append(orderModel.getCustomer().getUserPhoneNumber()).append("\n");
-                            orderMessage.append("Email: ").append(orderModel.getCustomer().getUserEmail()).append("\n");
+                            orderMessage.append("Email: ").append(orderModel.getCustomer().getUserEmail()).append("\n").append("\n");
                             orderMessage.append("Товары: ").append("\n").append("\n");
                             for (ProductEndModel productEndModel : orderModel.getProductList()) {
                                 ProductModel productModel = productEndModel.getProduct();
