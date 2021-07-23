@@ -108,7 +108,9 @@ public class OrderEntityController {
                 ProductEntity productEntity = productDataEntity1.getProductEntity();
                 ProductEndResponseDTO productEndResponseDTO = new ProductEndResponseDTO();
                 productEndResponseDTO.setProduct(proEntityToDTO(productEntity));
-                products.add(productEndResponseDTO);
+                if(!products.contains(productEndResponseDTO)){
+                    products.add(productEndResponseDTO);
+                }
             }
         }
         for (ProductEndResponseDTO productEndResponseDTO : products) {
