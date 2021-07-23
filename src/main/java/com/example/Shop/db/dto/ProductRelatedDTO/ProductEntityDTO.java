@@ -1,4 +1,4 @@
-package com.example.Shop.db.dto.CategoryRelatedDTO;
+package com.example.Shop.db.dto.ProductRelatedDTO;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

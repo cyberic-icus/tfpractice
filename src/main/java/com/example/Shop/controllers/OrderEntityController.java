@@ -2,7 +2,11 @@ package com.example.Shop.controllers;
 
 
 import com.example.Shop.db.dto.OrderEntityDTO.OrderEntityDTO;
+import com.example.Shop.db.dto.OrderEntityDTO.OrderEntityResponseDTO;
+import com.example.Shop.db.dto.OrderEntityDTO.ProductEndResponseDTO;
 import com.example.Shop.db.dto.OrderEntityDTO.ProductQuantityDTO;
+import com.example.Shop.db.dto.ProductRelatedDTO.ProductDataEntityDTO;
+import com.example.Shop.db.dto.ProductRelatedDTO.ProductEntityDTO;
 import com.example.Shop.db.dto.UserRelatedDTO.UserEntityDTO;
 import com.example.Shop.db.entities.ProductRelatedEntities.ProductDataEntity;
 import com.example.Shop.db.entities.ProductRelatedEntities.ProductEntity;
@@ -11,6 +15,7 @@ import com.example.Shop.db.entities.OrderRelatedEntites.ProductQuantityEntity;
 import com.example.Shop.db.entities.UserRelatedEntities.UserEntity;
 import com.example.Shop.db.repos.ProductDataEntityRepository;
 import com.example.Shop.services.OrderEntityService;
+import com.example.Shop.services.ProductEntityService;
 import com.example.Shop.services.ProductQuantityService;
 import com.example.Shop.services.UserEntityService;
 import io.swagger.annotations.Api;
@@ -18,9 +23,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Api
@@ -34,13 +37,15 @@ public class OrderEntityController {
     final private UserEntityService userEntityService;
     final private ProductQuantityService productQuantityService;
     final private ProductDataEntityRepository productDataEntityRepository;
+    final private ProductEntityService productEntityService;
 
-    public OrderEntityController(OrderEntityService orderEntityService, ModelMapper modelMapper, UserEntityService userEntityService, ProductQuantityService productQuantityService, ProductDataEntityRepository productDataEntityRepository) {
+    public OrderEntityController(OrderEntityService orderEntityService, ModelMapper modelMapper, UserEntityService userEntityService, ProductQuantityService productQuantityService, ProductDataEntityRepository productDataEntityRepository, ProductEntityService productEntityService) {
         this.orderEntityService = orderEntityService;
         this.modelMapper = modelMapper;
         this.userEntityService = userEntityService;
         this.productQuantityService = productQuantityService;
         this.productDataEntityRepository = productDataEntityRepository;
+        this.productEntityService = productEntityService;
     }
 
     public OrderEntityDTO EntityToDTO(OrderEntity orderEntity) {
@@ -67,7 +72,65 @@ public class OrderEntityController {
         return modelMapper.map(userEntityDTO, UserEntity.class);
     }
 
-    @GetMapping
+
+    public ProductEntityDTO proEntityToDTO(ProductEntity productEntity) {
+        return modelMapper.map(productEntity, ProductEntityDTO.class);
+    }
+
+    public ProductEntity proDTOToEntity(ProductEntityDTO productEntityDTO) {
+        return modelMapper.map(productEntityDTO, ProductEntity.class);
+    }
+
+    public ProductDataEntityDTO pdEntityToDTO(ProductDataEntity productDataEntity) {
+        return modelMapper.map(productDataEntity, ProductDataEntityDTO.class);
+    }
+
+    public ProductDataEntity pdDTOToEntity(ProductDataEntityDTO productDataEntityDTO) {
+        return modelMapper.map(productDataEntityDTO, ProductDataEntity.class);
+    }
+
+    public OrderEntityResponseDTO convertToEndDTO(OrderEntity orderEntity){
+        OrderEntityResponseDTO order = new OrderEntityResponseDTO();
+        order.setId(orderEntity.getId());
+        order.setIsPaid(orderEntity.getIsPaid());
+        order.setDestination(orderEntity.getDestination());
+        order.setState(orderEntity.getState());
+        order.setCompleted(orderEntity.getCompleted());
+        order.setCustomer(userEntityToDTO(orderEntity.getOrderUserEntity()));
+        order.setPrice(orderEntity.getPrice());
+        order.setState(orderEntity.getState());
+        Set<ProductEndResponseDTO> products = new HashSet<>();
+
+        for(ProductQuantityEntity productQuantityEntity: orderEntity.getOrderProductQuantityEntityList()){
+            Optional<ProductDataEntity> productDataEntity = productDataEntityRepository.findById(productQuantityEntity.getDataId());
+            if(productDataEntity.isPresent()){
+                ProductDataEntity productDataEntity1 = productDataEntity.get();
+                ProductEntity productEntity = productDataEntity1.getProductEntity();
+                ProductEndResponseDTO productEndResponseDTO = new ProductEndResponseDTO();
+                productEndResponseDTO.setProduct(proEntityToDTO(productEntity));
+                products.add(productEndResponseDTO);
+            }
+        }
+        for(ProductEndResponseDTO productEndResponseDTO: products){
+            List<ProductDataEntityDTO> details = new ArrayList<>();
+            for(ProductQuantityEntity productQuantityEntity: orderEntity.getOrderProductQuantityEntityList()){
+                ProductDataEntity productDataEntity = productDataEntityRepository.findById(productQuantityEntity.getDataId()).get();
+                if(productDataEntity.getProductEntity().getId().equals(productEndResponseDTO.getProduct().getId())){
+                    ProductDataEntityDTO productDataEntityDTO = pdEntityToDTO(productDataEntity);
+                    productDataEntityDTO.setQuantity(productQuantityEntity.getQuantity());
+                    details.add(productDataEntityDTO);
+                }
+            }
+            productEndResponseDTO.setDetails(details);
+        }
+        ArrayList<ProductEndResponseDTO> productsList = new ArrayList<>();
+        productsList.addAll(products);
+        order.setProductList(productsList);
+
+        return order;
+    }
+
+    @GetMapping("/test")
     List<OrderEntityDTO> getCategoryEntityAll() {
         List<OrderEntityDTO> orders = new ArrayList<>();
         for (OrderEntity orderEntity : orderEntityService.getOrdersAll()) {
@@ -77,6 +140,20 @@ public class OrderEntityController {
             orders.add(orderEntityDTO);
         }
         return orders;
+    }
+
+    @GetMapping
+    List<OrderEntityResponseDTO> getCategoryEntityAllTest() {
+        List<OrderEntityDTO> orders = new ArrayList<>();
+        for (OrderEntity orderEntity : orderEntityService.getOrdersAll()) {
+            UserEntityDTO userEntityDTO = userEntityToDTO(orderEntity.getOrderUserEntity());
+            OrderEntityDTO orderEntityDTO = EntityToDTO(orderEntity);
+            orderEntityDTO.setCustomer(userEntityDTO);
+            orders.add(orderEntityDTO);
+        }
+        return orderEntityService.getOrdersAll().stream()
+                .map(this::convertToEndDTO)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
@@ -112,11 +189,15 @@ public class OrderEntityController {
                 }
             }
         }
-        orderEntity.setPrice(price);
-        productQuantityService.saveProductQuantityAll(orderEntity.getOrderProductQuantityEntityList());
-        userEntityService.saveUser(userEntity);
-        orderEntityService.saveOrder(orderEntity);
-        return orderEntityDTO;
+        if(price>0L){
+            orderEntity.setPrice(price);
+            productQuantityService.saveProductQuantityAll(orderEntity.getOrderProductQuantityEntityList());
+            userEntityService.saveUser(userEntity);
+            orderEntityService.saveOrder(orderEntity);
+            return orderEntityDTO;
+        }
+
+        return null;
     }
 
     @DeleteMapping("/{id}")

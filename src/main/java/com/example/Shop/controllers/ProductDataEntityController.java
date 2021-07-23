@@ -1,6 +1,6 @@
 package com.example.Shop.controllers;
 
-import com.example.Shop.db.dto.CategoryRelatedDTO.ProductDataEntityDTO;
+import com.example.Shop.db.dto.ProductRelatedDTO.ProductDataEntityDTO;
 import com.example.Shop.db.entities.ProductRelatedEntities.ProductDataEntity;
 import com.example.Shop.db.entities.ProductRelatedEntities.ProductEntity;
 import com.example.Shop.services.ProductDataEntityService;

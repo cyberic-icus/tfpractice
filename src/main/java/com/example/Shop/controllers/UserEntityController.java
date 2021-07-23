@@ -1,7 +1,7 @@
 package com.example.Shop.controllers;
 
-import com.example.Shop.db.dto.CategoryRelatedDTO.ProductDataEntityDTO;
-import com.example.Shop.db.dto.CategoryRelatedDTO.ProductEntityDTO;
+import com.example.Shop.db.dto.ProductRelatedDTO.ProductDataEntityDTO;
+import com.example.Shop.db.dto.ProductRelatedDTO.ProductEntityDTO;
 import com.example.Shop.db.dto.OrderEntityDTO.OrderEntityDTO;
 import com.example.Shop.db.dto.UserRelatedDTO.RoleEntityDTO;
 import com.example.Shop.db.dto.UserRelatedDTO.UserEntityDTO;

@@ -1,6 +1,5 @@
 package com.example.Shop.db.dto.OrderEntityDTO;
 
-
 import com.example.Shop.db.dto.UserRelatedDTO.UserEntityDTO;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -18,9 +17,8 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonPropertyOrder({"orderId", "orderState", "completed", "price", "orderDestination", "customer", "productList"})
-public class OrderEntityDTO {
-
+@JsonPropertyOrder({"orderId","isPaid", "orderState", "completed", "price", "orderDestination", "customer", "productList"})
+public class OrderEntityResponseDTO {
     @JsonProperty(value = "orderId", access = JsonProperty.Access.READ_ONLY)
     public Long id;
 
@@ -29,11 +27,14 @@ public class OrderEntityDTO {
     @JsonProperty("orderDestination")
     public String destination;
 
+
     @JsonProperty(value = "orderState", access = JsonProperty.Access.READ_ONLY)
-    public String state = "Ожидает оплаты.";
+    public String state;
+
 
     @NotNull
     public UserEntityDTO customer;
+
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     public Long price;
@@ -45,5 +46,5 @@ public class OrderEntityDTO {
     public Boolean isPaid = false;
 
     @NotNull
-    List<ProductQuantityDTO> productList = new ArrayList<>();
+    List<ProductEndResponseDTO> productList = new ArrayList<>();
 }

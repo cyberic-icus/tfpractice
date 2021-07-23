@@ -1,4 +1,4 @@
-package com.example.Shop.db.dto.CategoryRelatedDTO;
+package com.example.Shop.db.dto.ProductRelatedDTO;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -26,13 +26,11 @@ public class ProductDataEntityDTO {
     @JsonProperty("productDataColor")
     public String color;
 
-    @NotNull
     @JsonProperty("productDataSize")
-    public int size;
+    public Long size;
 
-    @NotNull
     @JsonProperty("productDataQuantity")
-    public int quantity;
+    public Long quantity;
 
 
 }

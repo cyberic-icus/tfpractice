@@ -1,7 +1,7 @@
 package com.example.Shop.controllers;
 
 
-import com.example.Shop.db.dto.CategoryRelatedDTO.ProductEntityDTO;
+import com.example.Shop.db.dto.ProductRelatedDTO.ProductEntityDTO;
 import com.example.Shop.db.entities.ProductRelatedEntities.ProductEntity;
 import com.example.Shop.services.ProductEntityService;
 import io.swagger.annotations.Api;
