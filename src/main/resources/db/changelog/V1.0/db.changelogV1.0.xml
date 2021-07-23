@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <include file="01changeSetCartEntity.xml" relativeToChangelogFile="true"/>
+    <include file="02changeSetCartEntityProducts.xml" relativeToChangelogFile="true"/>
+    <include file="03changeSetCategoryEntity.xml" relativeToChangelogFile="true"/>
+    <include file="04changeSetCategoryEntityProductEntitySet.xml" relativeToChangelogFile="true"/>
+    <include file="05changeSetOrderEntity.xml" relativeToChangelogFile="true"/>
+    <include file="06changeSetOrderEntityProductEntitySet.xml" relativeToChangelogFile="true"/>
+    <include file="07changeSetProductDataEntity.xml" relativeToChangelogFile="true"/>
+    <include file="08changeSetProductEntity.xml" relativeToChangelogFile="true"/>
+    <include file="09changeSetProductEntitySizesAndColors.xml" relativeToChangelogFile="true"/>
+    <include file="10changeSetUserAuthority.xml" relativeToChangelogFile="true"/>
+    <include file="11changeSetUserAuthorityUsers.xml" relativeToChangelogFile="true"/>
+    <include file="12changeSetUserEntity.xml" relativeToChangelogFile="true"/>
+    <include file="13changeSetUserEntityOrders.xml" relativeToChangelogFile="true"/>
+    <include file="14changeSetEntityOrdersHistory.xml" relativeToChangelogFile="true"/>
+    <include file="15changeSetUserEntityRoles.xml" relativeToChangelogFile="true"/>
+</databaseChangeLog>

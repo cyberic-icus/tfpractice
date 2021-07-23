@@ -1,0 +1,6 @@
+INSERT INTO ProductEntity VALUES (1, timestamp, 'test dress', 'url', 1000)
+INSERT INTO ProductEntity VALUES (2, timestamp, 'test dress', 'url', 1000)
+INSERT INTO ProductEntity VALUES (3, timestamp, 'test dress', 'url', 1000)
+INSERT INTO ProductEntity VALUES (4, timestamp, 'test dress', 'url', 1000)
+INSERT INTO ProductEntity VALUES (5, timestamp, 'test dress', 'url', 1000)
+INSERT INTO ProductEntity VALUES (6, timestamp, 'test dress', 'url', 1000)
