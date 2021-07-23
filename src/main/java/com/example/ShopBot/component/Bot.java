@@ -159,32 +159,22 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     public static SendMessage sendInlineKeyBoardMessage(String mes, String chatId) {
-        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
-        InlineKeyboardButton inlineKeyboardButton1 = new InlineKeyboardButton();
-        InlineKeyboardButton inlineKeyboardButton2 = new InlineKeyboardButton();
-        InlineKeyboardButton inlineKeyboardButton3 = new InlineKeyboardButton();
 
-        inlineKeyboardButton1.setText("Кнопка 1");
-        inlineKeyboardButton2.setText("Кнопка 1\"");
-        inlineKeyboardButton3.setText("Кнопка 1\"");
-
-        List<InlineKeyboardButton> keyboardButtonsRow1 = new ArrayList<>();
-        List<InlineKeyboardButton> keyboardButtonsRow2 = new ArrayList<>();
-
-        keyboardButtonsRow1.add(inlineKeyboardButton1);
-        keyboardButtonsRow1.add(inlineKeyboardButton3);
-        keyboardButtonsRow2.add(inlineKeyboardButton2);
-
-        List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
-        rowList.add(keyboardButtonsRow1);
-        rowList.add(keyboardButtonsRow2);
-        inlineKeyboardMarkup.setKeyboard(rowList);
-
+        InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
+        List<InlineKeyboardButton> rowInline = new ArrayList<>();
+        InlineKeyboardButton inlineKeyboardButton = new InlineKeyboardButton();
+        inlineKeyboardButton.setText("Some button");
+        rowInline.add(inlineKeyboardButton);
+        rowsInline.add(rowInline);
+        markupInline.setKeyboard(rowsInline);
 
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
         message.setText(mes);
-        message.setReplyMarkup(inlineKeyboardMarkup);
+        message.setReplyMarkup(markupInline);
+
+
         return message;
     }
 
