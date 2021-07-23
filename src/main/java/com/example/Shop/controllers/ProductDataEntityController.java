@@ -38,86 +38,86 @@ public class ProductDataEntityController {
     }
 
     @GetMapping
-    List<ProductDataEntityDTO> getProductDataEntities( @PathVariable Long productId) {
+    List<ProductDataEntityDTO> getProductDataEntities(@PathVariable Long productId) {
 
-            Optional<ProductEntity> productEntity = productEntityService.getProductById(productId);
-            if (productEntity.isPresent()) {
-                return productEntity.get().getSizesAndColors().stream()
-                        .map(this::EntityToDTO)
-                        .collect(Collectors.toList());
-            }
+        Optional<ProductEntity> productEntity = productEntityService.getProductById(productId);
+        if (productEntity.isPresent()) {
+            return productEntity.get().getSizesAndColors().stream()
+                    .map(this::EntityToDTO)
+                    .collect(Collectors.toList());
+        }
         return null;
     }
 
     @GetMapping("/{ID}/")
-    ProductDataEntityDTO getProductDataEntity( @PathVariable Long productId, @PathVariable Long ID) {
-            Optional<ProductEntity> productEntity = productEntityService.getProductAll().stream()
-                    .filter(pe -> pe.getId().equals(productId)).findAny();
-            if (productEntity.isPresent()) {
-                Optional<ProductDataEntity> productDataEntity = productEntity.get().getSizesAndColors().stream()
-                        .filter(pde -> pde.getId().equals(ID))
-                        .findAny();
-                if (productDataEntity.isPresent()) {
-                    return EntityToDTO(productDataEntity.get());
-                }
+    ProductDataEntityDTO getProductDataEntity(@PathVariable Long productId, @PathVariable Long ID) {
+        Optional<ProductEntity> productEntity = productEntityService.getProductAll().stream()
+                .filter(pe -> pe.getId().equals(productId)).findAny();
+        if (productEntity.isPresent()) {
+            Optional<ProductDataEntity> productDataEntity = productEntity.get().getSizesAndColors().stream()
+                    .filter(pde -> pde.getId().equals(ID))
+                    .findAny();
+            if (productDataEntity.isPresent()) {
+                return EntityToDTO(productDataEntity.get());
             }
+        }
         return null;
     }
 
 
     @PostMapping
-    ProductDataEntityDTO postProductDataEntity( @Valid @RequestBody ProductDataEntityDTO productDataEntityDTO, @PathVariable Long productId) {
-            Optional<ProductEntity> productEntity = productEntityService.getProductAll().stream()
-                    .filter(pe -> pe.getId().equals(productId)).findAny();
-            if (productEntity.isPresent()) {
-                ProductDataEntity productDataEntity = DTOToEntity(productDataEntityDTO);
-                ProductEntity productEntity1 = productEntity.get();
-                //productEntity1.getSizesAndColors().add(productDataEntity);
-                productDataEntity.setProductEntity(productEntity1);
-                productDataEntityService.saveProductData(productDataEntity);
-                //productEntityService.saveProduct(productEntity1);
-                return productDataEntityDTO;
-            }
+    ProductDataEntityDTO postProductDataEntity(@Valid @RequestBody ProductDataEntityDTO productDataEntityDTO, @PathVariable Long productId) {
+        Optional<ProductEntity> productEntity = productEntityService.getProductAll().stream()
+                .filter(pe -> pe.getId().equals(productId)).findAny();
+        if (productEntity.isPresent()) {
+            ProductDataEntity productDataEntity = DTOToEntity(productDataEntityDTO);
+            ProductEntity productEntity1 = productEntity.get();
+            //productEntity1.getSizesAndColors().add(productDataEntity);
+            productDataEntity.setProductEntity(productEntity1);
+            productDataEntityService.saveProductData(productDataEntity);
+            //productEntityService.saveProduct(productEntity1);
+            return productDataEntityDTO;
+        }
         return null;
     }
 
     @PutMapping("/{ID}/")
     ProductDataEntityDTO putProductDataEntity(
-                                              @PathVariable Long productId,
-                                              @PathVariable Long ID,
-                                              @Valid @RequestBody ProductDataEntityDTO productDataEntityDTO) {
-            Optional<ProductEntity> productEntity = productEntityService.getProductAll().stream()
-                    .filter(pe -> pe.getId().equals(productId)).findAny();
-            if (productEntity.isPresent()) {
-                Optional<ProductDataEntity> productDataEntity = productEntity.get().getSizesAndColors().stream()
-                        .filter(pde -> pde.getId().equals(ID))
-                        .findAny();
-                ProductDataEntity newProductData = DTOToEntity(productDataEntityDTO);
-                if (productDataEntity.isPresent()) {
-                    ProductDataEntity oldProductData = productDataEntity.get();
-                    oldProductData.setQuantity(newProductData.getQuantity());
-                    oldProductData.setColor(newProductData.getColor());
-                    oldProductData.setSize(newProductData.getSize());
-                    return productDataEntityDTO;
-                }
+            @PathVariable Long productId,
+            @PathVariable Long ID,
+            @Valid @RequestBody ProductDataEntityDTO productDataEntityDTO) {
+        Optional<ProductEntity> productEntity = productEntityService.getProductAll().stream()
+                .filter(pe -> pe.getId().equals(productId)).findAny();
+        if (productEntity.isPresent()) {
+            Optional<ProductDataEntity> productDataEntity = productEntity.get().getSizesAndColors().stream()
+                    .filter(pde -> pde.getId().equals(ID))
+                    .findAny();
+            ProductDataEntity newProductData = DTOToEntity(productDataEntityDTO);
+            if (productDataEntity.isPresent()) {
+                ProductDataEntity oldProductData = productDataEntity.get();
+                oldProductData.setQuantity(newProductData.getQuantity());
+                oldProductData.setColor(newProductData.getColor());
+                oldProductData.setSize(newProductData.getSize());
+                return productDataEntityDTO;
             }
+        }
         return null;
     }
 
     @DeleteMapping("/{ID}/")
     void deleteProductDataEntity(
-                                 @PathVariable Long productId,
-                                 @PathVariable Long ID) {
-            Optional<ProductEntity> productEntity = productEntityService.getProductAll().stream()
-                    .filter(pe -> pe.getId().equals(productId)).findAny();
-            if (productEntity.isPresent()) {
-                Optional<ProductDataEntity> productDataEntity = productEntity.get().getSizesAndColors().stream()
-                        .filter(pde -> pde.getId().equals(ID))
-                        .findAny();
-                if (productDataEntity.isPresent()) {
-                    productDataEntityService.deleteProductDataById(ID);
-                }
+            @PathVariable Long productId,
+            @PathVariable Long ID) {
+        Optional<ProductEntity> productEntity = productEntityService.getProductAll().stream()
+                .filter(pe -> pe.getId().equals(productId)).findAny();
+        if (productEntity.isPresent()) {
+            Optional<ProductDataEntity> productDataEntity = productEntity.get().getSizesAndColors().stream()
+                    .filter(pde -> pde.getId().equals(ID))
+                    .findAny();
+            if (productDataEntity.isPresent()) {
+                productDataEntityService.deleteProductDataById(ID);
             }
         }
     }
+}
 

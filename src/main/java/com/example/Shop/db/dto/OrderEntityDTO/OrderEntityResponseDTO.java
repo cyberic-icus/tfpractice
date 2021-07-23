@@ -17,7 +17,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonPropertyOrder({"orderId","isPaid", "orderState", "completed", "price", "orderDestination", "customer", "productList"})
+@JsonPropertyOrder({"orderId", "isPaid", "orderState", "completed", "price", "orderDestination", "customer", "productList"})
 public class OrderEntityResponseDTO {
     @JsonProperty(value = "orderId", access = JsonProperty.Access.READ_ONLY)
     public Long id;

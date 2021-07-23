@@ -8,10 +8,10 @@ import com.example.Shop.db.dto.OrderEntityDTO.ProductQuantityDTO;
 import com.example.Shop.db.dto.ProductRelatedDTO.ProductDataEntityDTO;
 import com.example.Shop.db.dto.ProductRelatedDTO.ProductEntityDTO;
 import com.example.Shop.db.dto.UserRelatedDTO.UserEntityDTO;
-import com.example.Shop.db.entities.ProductRelatedEntities.ProductDataEntity;
-import com.example.Shop.db.entities.ProductRelatedEntities.ProductEntity;
 import com.example.Shop.db.entities.OrderRelatedEntites.OrderEntity;
 import com.example.Shop.db.entities.OrderRelatedEntites.ProductQuantityEntity;
+import com.example.Shop.db.entities.ProductRelatedEntities.ProductDataEntity;
+import com.example.Shop.db.entities.ProductRelatedEntities.ProductEntity;
 import com.example.Shop.db.entities.UserRelatedEntities.UserEntity;
 import com.example.Shop.db.repos.ProductDataEntityRepository;
 import com.example.Shop.services.OrderEntityService;
@@ -89,7 +89,7 @@ public class OrderEntityController {
         return modelMapper.map(productDataEntityDTO, ProductDataEntity.class);
     }
 
-    public OrderEntityResponseDTO convertToEndDTO(OrderEntity orderEntity){
+    public OrderEntityResponseDTO convertToEndDTO(OrderEntity orderEntity) {
         OrderEntityResponseDTO order = new OrderEntityResponseDTO();
         order.setId(orderEntity.getId());
         order.setIsPaid(orderEntity.getIsPaid());
@@ -101,9 +101,9 @@ public class OrderEntityController {
         order.setState(orderEntity.getState());
         Set<ProductEndResponseDTO> products = new HashSet<>();
 
-        for(ProductQuantityEntity productQuantityEntity: orderEntity.getOrderProductQuantityEntityList()){
+        for (ProductQuantityEntity productQuantityEntity : orderEntity.getOrderProductQuantityEntityList()) {
             Optional<ProductDataEntity> productDataEntity = productDataEntityRepository.findById(productQuantityEntity.getDataId());
-            if(productDataEntity.isPresent()){
+            if (productDataEntity.isPresent()) {
                 ProductDataEntity productDataEntity1 = productDataEntity.get();
                 ProductEntity productEntity = productDataEntity1.getProductEntity();
                 ProductEndResponseDTO productEndResponseDTO = new ProductEndResponseDTO();
@@ -111,11 +111,11 @@ public class OrderEntityController {
                 products.add(productEndResponseDTO);
             }
         }
-        for(ProductEndResponseDTO productEndResponseDTO: products){
+        for (ProductEndResponseDTO productEndResponseDTO : products) {
             List<ProductDataEntityDTO> details = new ArrayList<>();
-            for(ProductQuantityEntity productQuantityEntity: orderEntity.getOrderProductQuantityEntityList()){
+            for (ProductQuantityEntity productQuantityEntity : orderEntity.getOrderProductQuantityEntityList()) {
                 ProductDataEntity productDataEntity = productDataEntityRepository.findById(productQuantityEntity.getDataId()).get();
-                if(productDataEntity.getProductEntity().getId().equals(productEndResponseDTO.getProduct().getId())){
+                if (productDataEntity.getProductEntity().getId().equals(productEndResponseDTO.getProduct().getId())) {
                     ProductDataEntityDTO productDataEntityDTO = pdEntityToDTO(productDataEntity);
                     productDataEntityDTO.setQuantity(productQuantityEntity.getQuantity());
                     details.add(productDataEntityDTO);
@@ -180,16 +180,16 @@ public class OrderEntityController {
         orderEntity.setOrderUserEntity(userEntity);
 
         Long price = 0L;
-        for(ProductQuantityEntity pq: productQuantityEntities){
+        for (ProductQuantityEntity pq : productQuantityEntities) {
             Optional<ProductDataEntity> productDataEntity = productDataEntityRepository.findById(pq.getDataId());
-            if(productDataEntity.isPresent()){
+            if (productDataEntity.isPresent()) {
                 ProductEntity productEntity = productDataEntity.get().getProductEntity();
-                if(productEntity!=null){
-                    price = price + productDataEntity.get().getProductEntity().getPrice()*pq.getQuantity();
+                if (productEntity != null) {
+                    price = price + productDataEntity.get().getProductEntity().getPrice() * pq.getQuantity();
                 }
             }
         }
-        if(price>0L){
+        if (price > 0L) {
             orderEntity.setPrice(price);
             productQuantityService.saveProductQuantityAll(orderEntity.getOrderProductQuantityEntityList());
             userEntityService.saveUser(userEntity);

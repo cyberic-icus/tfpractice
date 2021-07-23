@@ -2,7 +2,6 @@ package com.example.Shop.db.entities.OrderRelatedEntites;
 
 
 import com.example.Shop.db.entities.UserRelatedEntities.UserEntity;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

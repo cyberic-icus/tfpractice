@@ -1,13 +1,13 @@
 package com.example.Shop.controllers;
 
+import com.example.Shop.db.dto.OrderEntityDTO.OrderEntityDTO;
 import com.example.Shop.db.dto.ProductRelatedDTO.ProductDataEntityDTO;
 import com.example.Shop.db.dto.ProductRelatedDTO.ProductEntityDTO;
-import com.example.Shop.db.dto.OrderEntityDTO.OrderEntityDTO;
 import com.example.Shop.db.dto.UserRelatedDTO.RoleEntityDTO;
 import com.example.Shop.db.dto.UserRelatedDTO.UserEntityDTO;
+import com.example.Shop.db.entities.OrderRelatedEntites.OrderEntity;
 import com.example.Shop.db.entities.ProductRelatedEntities.ProductDataEntity;
 import com.example.Shop.db.entities.ProductRelatedEntities.ProductEntity;
-import com.example.Shop.db.entities.OrderRelatedEntites.OrderEntity;
 import com.example.Shop.db.entities.UserRelatedEntities.RoleEntity;
 import com.example.Shop.db.entities.UserRelatedEntities.UserEntity;
 import com.example.Shop.db.repos.OrderEntityRepository;

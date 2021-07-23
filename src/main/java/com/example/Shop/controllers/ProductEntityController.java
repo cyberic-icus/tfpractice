@@ -36,55 +36,55 @@ public class ProductEntityController {
 
     @GetMapping
     List<ProductEntityDTO> getProduct() {
-            return productEntityService.getProductAll().stream()
-                    .map(this::EntityToDTO)
-                    .collect(Collectors.toList());
+        return productEntityService.getProductAll().stream()
+                .map(this::EntityToDTO)
+                .collect(Collectors.toList());
 
     }
 
     @GetMapping("/{id}")
     ProductEntityDTO getProduct(@PathVariable Long id) {
-            Optional<ProductEntity> productEntity = productEntityService.getProductAll().stream().
-                    filter(ce -> ce.getId().equals(id)).
-                    findAny();
-            if (productEntity.isPresent()) {
-                return EntityToDTO(productEntity.get());
-            }
+        Optional<ProductEntity> productEntity = productEntityService.getProductAll().stream().
+                filter(ce -> ce.getId().equals(id)).
+                findAny();
+        if (productEntity.isPresent()) {
+            return EntityToDTO(productEntity.get());
+        }
         return null;
     }
 
     @PostMapping
     void postProduct(@Valid @RequestBody ProductEntityDTO productEntityDTO) {
-            ProductEntity productEntity = DTOToEntity(productEntityDTO);
-            productEntityService.getProductAll().add(productEntity);
-            productEntityService.saveProduct(productEntity);
+        ProductEntity productEntity = DTOToEntity(productEntityDTO);
+        productEntityService.getProductAll().add(productEntity);
+        productEntityService.saveProduct(productEntity);
     }
 
     @PutMapping("/{id}")
     ProductEntityDTO putProductEntity(@PathVariable Long id,
                                       @Valid @RequestBody ProductEntityDTO productEntityDTO) {
-            Optional<ProductEntity> productEntity = productEntityService.getProductAll().stream().
-                    filter(ce -> ce.getId().equals(id)).
-                    findAny();
-            ProductEntity newProduct = DTOToEntity(productEntityDTO);
-            if (productEntity.isPresent()) {
-                ProductEntity oldProduct = productEntity.get();
-                oldProduct.setProductName(newProduct.getProductName());
-                oldProduct.setProductDescription(newProduct.getProductDescription());
-                oldProduct.setPrice(newProduct.getPrice());
-                oldProduct.setImageUrl(newProduct.getImageUrl());
-                oldProduct.setCreatedDate(newProduct.getCreatedDate());
-                return EntityToDTO(productEntity.get());
-            } else productEntityService.saveProduct(newProduct);
+        Optional<ProductEntity> productEntity = productEntityService.getProductAll().stream().
+                filter(ce -> ce.getId().equals(id)).
+                findAny();
+        ProductEntity newProduct = DTOToEntity(productEntityDTO);
+        if (productEntity.isPresent()) {
+            ProductEntity oldProduct = productEntity.get();
+            oldProduct.setProductName(newProduct.getProductName());
+            oldProduct.setProductDescription(newProduct.getProductDescription());
+            oldProduct.setPrice(newProduct.getPrice());
+            oldProduct.setImageUrl(newProduct.getImageUrl());
+            oldProduct.setCreatedDate(newProduct.getCreatedDate());
+            return EntityToDTO(productEntity.get());
+        } else productEntityService.saveProduct(newProduct);
         return null;
     }
 
     @DeleteMapping("/{id}")
     void deleteProductEntity(@PathVariable Long id) {
-            if (productEntityService.getProductAll().stream().anyMatch(ce -> ce.getId().equals(id))) {
-                productEntityService.deleteProductById(id);
-            }
+        if (productEntityService.getProductAll().stream().anyMatch(ce -> ce.getId().equals(id))) {
+            productEntityService.deleteProductById(id);
         }
     }
+}
 
 
