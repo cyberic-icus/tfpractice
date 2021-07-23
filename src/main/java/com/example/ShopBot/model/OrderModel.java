@@ -9,10 +9,12 @@ import java.util.List;
 @Getter
 public class OrderModel {
     private Long orderId;
+    private Boolean isPaid;
+    private String orderState;
     private String orderDestination;
     private CustomerModel customer;
     private Long price;
     private Boolean completed;
-    private List<ProductQuantityModel> productList;
+    private List<ProductEndModel> productList;
 }
 

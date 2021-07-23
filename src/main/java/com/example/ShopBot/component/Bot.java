@@ -2,6 +2,8 @@ package com.example.ShopBot.component;
 
 import com.example.ShopBot.config.BotConfig;
 import com.example.ShopBot.model.OrderModel;
+import com.example.ShopBot.model.ProductEndModel;
+import com.example.ShopBot.model.ProductModel;
 import com.example.ShopBot.model.ProductQuantityModel;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
@@ -13,10 +15,13 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -31,104 +36,155 @@ public class Bot extends TelegramLongPollingBot {
 
     @SneakyThrows
     public void onUpdateReceived(Update update) {
-        update.getUpdateId();
-        SendMessage.SendMessageBuilder builder = SendMessage.builder();
-        String messageText;
-        String chatId;
-        if (update.getMessage() != null) {
-            chatId = update.getMessage().getChatId().toString();
-            builder.chatId(chatId);
-            messageText = update.getMessage().getText();
-        } else {
-            chatId = update.getChannelPost().getChatId().toString();
-            builder.chatId(chatId);
-            messageText = update.getChannelPost().getText();
-        }
-
-        if (messageText.contains("/hello")) {
-            builder.text("Привет");
-            try {
-                execute(builder.build());
-            } catch (TelegramApiException e) {
+        if(update.getMessage().hasText()){
+            update.getUpdateId();
+            SendMessage.SendMessageBuilder builder = SendMessage.builder();
+            String messageText;
+            String chatId;
+            if (update.getMessage() != null) {
+                chatId = update.getMessage().getChatId().toString();
+                builder.chatId(chatId);
+                messageText = update.getMessage().getText();
+            } else {
+                chatId = update.getChannelPost().getChatId().toString();
+                builder.chatId(chatId);
+                messageText = update.getChannelPost().getText();
             }
-        }
 
-        if (messageText.contains("/chartId")) {
-            builder.text("ID Канала : " + chatId);
-            try {
-                execute(builder.build());
-            } catch (TelegramApiException e) {
-            }
-        }
-        if (messageText.contains("/orders")) {
-            try {
 
-                URL url = new URL("https://tfpractice.herokuapp.com/order");
-
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setRequestMethod("GET");
-                conn.connect();
-
-                int responsecode = conn.getResponseCode();
-                builder.text(String.valueOf(conn.getResponseCode()));
+            if (messageText.contains("/hello")) {
+                builder.text("Привет");
                 try {
                     execute(builder.build());
                 } catch (TelegramApiException e) {
+                }
+            }
+
+            if (messageText.contains("/chartId")) {
+                builder.text("ID Канала : " + chatId);
+                try {
+                    execute(builder.build());
+                } catch (TelegramApiException e) {
+                }
+            }
+            if (messageText.contains("/orders")) {
+                try {
+
+                    URL url = new URL("https://tfpractice.herokuapp.com/order");
+
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("GET");
+                    conn.connect();
+
+                    int responsecode = conn.getResponseCode();
+                    if(responsecode == 200){
+                        builder.text("Ответ от сервера:");
+                    } else {
+                        builder.text("У сервера возникли проблемы.");
+                        builder.text(String.valueOf(conn.getResponseCode()));
+                    }
+                    try {
+                        execute(builder.build());
+                    } catch (TelegramApiException e) {
+                        builder.text("something went wrong");
+                        builder.text(e.getMessage());
+
+                    }
+                    if (responsecode == 200) {
+                        StringBuilder orderMessage = new StringBuilder();
+                        String inline = "";
+                        Scanner scanner = new Scanner(url.openStream());
+
+                        while (scanner.hasNext()) {
+                            inline += scanner.nextLine();
+                        }
+
+
+                        scanner.close();
+
+                        Gson g = new Gson();
+
+
+                        List<OrderModel> orderModelList = g.fromJson(inline, new TypeToken<List<OrderModel>>(){}.getType());
+                        for(OrderModel orderModel: orderModelList){
+                            System.out.println(orderModel.getPrice());
+                            orderMessage.append("Заказ №").append(orderModel.getOrderId()).append("\n");
+                            orderMessage.append("На сумму: ").append(orderModel.getPrice()).append(" руб.").append("\n");
+                            orderMessage.append("Состояние заказа: ").append(orderModel.getOrderState()).append("\n");
+                            orderMessage.append("Заказ выполнен: ").append(orderModel.getCompleted()).append("\n");
+                            orderMessage.append("Заказ оплачен: ").append(orderModel.getIsPaid()).append("\n");
+                            orderMessage.append("Адрес доставки: ").append(orderModel.getOrderDestination()).append("\n");
+                            orderMessage.append("Заказчик: ").append(orderModel.getCustomer().getUserFirstname()).append(" ").append(orderModel.getCustomer().getUserLastname()).append("\n");
+                            orderMessage.append("Телефон: ").append(orderModel.getCustomer().getUserPhoneNumber()).append("\n");
+                            orderMessage.append("Email: ").append(orderModel.getCustomer().getUserEmail()).append("\n");
+                            orderMessage.append("Товары: ").append(orderModel.getCustomer().getUserEmail()).append("\n").append("\n");
+                            for(ProductEndModel productEndModel: orderModel.getProductList()){
+                                ProductModel productModel = productEndModel.getProduct();
+                                orderMessage.append("Товар: ").append(productModel.getProductName()).append(" ID: ").append(productModel.getProductId()).append("\n");
+                                for(ProductQuantityModel productQuantityModel: productEndModel.getDetails()){
+                                    orderMessage.append("Цвет: ").append(productQuantityModel.getProductDataColor()).append("\n");
+                                    orderMessage.append("Размер: ").append(productQuantityModel.getProductDataSize()).append("\n");
+                                    orderMessage.append("Количество: ").append(productQuantityModel.getProductDataQuantity()).append("\n");
+                                }
+                            }
+                            builder.text(orderMessage.toString());
+                            try {
+                                execute(sendInlineKeyBoardMessage(orderMessage.toString(), chatId));
+                            } catch (TelegramApiException e) {
+                            }
+                        }
+
+
+                    }
+                } catch (Exception e) {
                     builder.text("something went wrong");
                     builder.text(e.getMessage());
 
-                }
-                if (responsecode == 200) {
-                    String inline = "";
-                    Scanner scanner = new Scanner(url.openStream());
-
-                    while (scanner.hasNext()) {
-                        inline += scanner.nextLine();
+                    try {
+                        execute(builder.build());
+                    } catch (TelegramApiException ee) {
+                        builder.text("something went wrong");
+                        builder.text(ee.getMessage());
+                        builder.text(ee.getCause().toString());
                     }
-
-
-                    scanner.close();
-
-                    Gson g = new Gson();
-
-
-                    List<OrderModel> orderModelList = g.fromJson(inline, new TypeToken<List<OrderModel>>(){}.getType());
-                    StringBuilder orderMessage = new StringBuilder();
-                    for(OrderModel orderModel: orderModelList){
-                        System.out.println(orderModel.getPrice());
-                        orderMessage.append("Заказ ").append(orderModel.getOrderId()).append("\n");
-                        orderMessage.append("На сумму: ").append(orderModel.getPrice()).append(" руб.").append("\n");
-                        orderMessage.append("Адрес доставки: ").append(orderModel.getOrderDestination()).append("\n");
-                        orderMessage.append("Заказ выполнен: ").append(orderModel.getCompleted()).append("\n");
-                        orderMessage.append("Заказчик: ").append(orderModel.getCustomer().getUserFirstname()).append(" ").append(orderModel.getCustomer().getUserLastname()).append("\n");
-                        orderMessage.append("Телефон: ").append(orderModel.getCustomer().getUserPhoneNumber()).append("\n");
-                        orderMessage.append("Email: ").append(orderModel.getCustomer().getUserEmail()).append("\n");
-                        for(ProductQuantityModel productQuantityModel: orderModel.getProductList()){
-                            orderMessage.append("Размер и цвет: ").append(String.valueOf(productQuantityModel.getProductDataId())).append("\n");
-                            orderMessage.append("Количество: ").append(String.valueOf(productQuantityModel.getQuantity())).append("\n");
-                        }
-                        builder.text(orderMessage.toString());
-                        try {
-                            execute(builder.build());
-                        } catch (TelegramApiException e) {
-                        }
-                    }
-
-
                 }
-            } catch (Exception e) {
-                builder.text("something went wrong");
-                builder.text(e.getMessage());
+            } else if(update.hasCallbackQuery()){
 
-                try {
-                    execute(builder.build());
-                } catch (TelegramApiException ee) {
-                    builder.text("something went wrong");
-                    builder.text(ee.getMessage());
-                    builder.text(ee.getCause().toString());
-                }
             }
         }
+    }
+
+    public static SendMessage sendInlineKeyBoardMessage(String mes, String chatId) {
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+        InlineKeyboardButton inlineKeyboardButton1 = new InlineKeyboardButton();
+        InlineKeyboardButton inlineKeyboardButton2 = new InlineKeyboardButton();
+        InlineKeyboardButton inlineKeyboardButton3 = new InlineKeyboardButton();
+
+        inlineKeyboardButton1.setText("Кнопка 1");
+        inlineKeyboardButton1.setCallbackData("Надо добавить функционал, только какой?");
+        inlineKeyboardButton2.setText("Кнопка 1\"");
+        inlineKeyboardButton2.setCallbackData("Надо добавить функционал, только какой?");
+        inlineKeyboardButton3.setText("Кнопка 1\"");
+        inlineKeyboardButton3.setCallbackData("Надо добавить функционал, только какой?");
+
+        List<InlineKeyboardButton> keyboardButtonsRow1 = new ArrayList<>();
+        List<InlineKeyboardButton> keyboardButtonsRow2 = new ArrayList<>();
+
+        keyboardButtonsRow1.add(inlineKeyboardButton1);
+        keyboardButtonsRow1.add(inlineKeyboardButton3);
+        keyboardButtonsRow2.add(inlineKeyboardButton2);
+
+        List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
+        rowList.add(keyboardButtonsRow1);
+        rowList.add(keyboardButtonsRow2);
+        inlineKeyboardMarkup.setKeyboard(rowList);
+
+
+        SendMessage message = new SendMessage();
+        message.setChatId(chatId);
+        message.setText(mes);
+        message.setReplyMarkup(inlineKeyboardMarkup);
+        return message;
     }
 
     @Override

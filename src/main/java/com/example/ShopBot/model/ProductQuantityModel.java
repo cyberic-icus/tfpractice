@@ -6,7 +6,8 @@ import lombok.Setter;
 @Setter
 @Getter
 public class ProductQuantityModel {
-    private Long productQuantityId;
     private Long productDataId;
-    private Long quantity;
+    private String productDataColor;
+    private Long productDataSize;
+    private Long productDataQuantity;
 }
