@@ -36,7 +36,7 @@ public class Bot extends TelegramLongPollingBot {
 
     @SneakyThrows
     public void onUpdateReceived(Update update) {
-        if (update.getMessage().hasText()) {
+
             update.getUpdateId();
             SendMessage.SendMessageBuilder builder = SendMessage.builder();
             String messageText;
@@ -119,7 +119,7 @@ public class Bot extends TelegramLongPollingBot {
                             orderMessage.append("Товары: ").append("\n").append("\n");
                             for (ProductEndModel productEndModel : orderModel.getProductList()) {
                                 ProductModel productModel = productEndModel.getProduct();
-                                orderMessage.append("Товар: ").append(productModel.getProductName()).append(" (ID: ").append(productModel.getProductId()).append(")").append("\n");
+                                orderMessage.append("Название: ").append(productModel.getProductName()).append(" (ID: ").append(productModel.getProductId()).append(")").append("\n");
                                 for (ProductQuantityModel productQuantityModel : productEndModel.getDetails()) {
                                     orderMessage.append("Цвет: ").append(productQuantityModel.getProductDataColor()).append("\n");
                                     orderMessage.append("Размер: ").append(productQuantityModel.getProductDataSize()).append("\n");
@@ -152,9 +152,6 @@ public class Bot extends TelegramLongPollingBot {
                         System.out.println(e.getCause().toString());
                     }
                 }
-            } else if (update.hasCallbackQuery()) {
-
-            }
         }
     }
 
