@@ -36,7 +36,7 @@ public class Bot extends TelegramLongPollingBot {
 
     @SneakyThrows
     public void onUpdateReceived(Update update) {
-        if(update.getMessage().hasText()){
+        if (update.getMessage().hasText()) {
             update.getUpdateId();
             SendMessage.SendMessageBuilder builder = SendMessage.builder();
             String messageText;
@@ -77,7 +77,7 @@ public class Bot extends TelegramLongPollingBot {
                     conn.connect();
 
                     int responsecode = conn.getResponseCode();
-                    if(responsecode == 200){
+                    if (responsecode == 200) {
                         builder.text("Ответ от сервера:");
                     } else {
                         builder.text("У сервера возникли проблемы.");
@@ -105,8 +105,9 @@ public class Bot extends TelegramLongPollingBot {
                         Gson g = new Gson();
 
 
-                        List<OrderModel> orderModelList = g.fromJson(inline, new TypeToken<List<OrderModel>>(){}.getType());
-                        for(OrderModel orderModel: orderModelList){
+                        List<OrderModel> orderModelList = g.fromJson(inline, new TypeToken<List<OrderModel>>() {
+                        }.getType());
+                        for (OrderModel orderModel : orderModelList) {
                             orderMessage.append("Заказ №").append(orderModel.getOrderId()).append("\n");
                             orderMessage.append("На сумму: ").append(orderModel.getPrice()).append(" руб.").append("\n");
                             orderMessage.append("Состояние заказа: ").append(orderModel.getOrderState()).append("\n");
@@ -117,18 +118,18 @@ public class Bot extends TelegramLongPollingBot {
                             orderMessage.append("Телефон: ").append(orderModel.getCustomer().getUserPhoneNumber()).append("\n");
                             orderMessage.append("Email: ").append(orderModel.getCustomer().getUserEmail()).append("\n");
                             orderMessage.append("Товары: ").append(orderModel.getCustomer().getUserEmail()).append("\n").append("\n");
-                            for(ProductEndModel productEndModel: orderModel.getProductList()){
+                            for (ProductEndModel productEndModel : orderModel.getProductList()) {
                                 ProductModel productModel = productEndModel.getProduct();
                                 orderMessage.append("Товар: ").append(productModel.getProductName()).append(" ID: ").append(productModel.getProductId()).append("\n");
-                                for(ProductQuantityModel productQuantityModel: productEndModel.getDetails()){
+                                for (ProductQuantityModel productQuantityModel : productEndModel.getDetails()) {
                                     orderMessage.append("Цвет: ").append(productQuantityModel.getProductDataColor()).append("\n");
                                     orderMessage.append("Размер: ").append(productQuantityModel.getProductDataSize()).append("\n");
                                     orderMessage.append("Количество: ").append(productQuantityModel.getProductDataQuantity()).append("\n");
                                 }
                             }
-                            builder.text(orderMessage.toString());
                             try {
-                                execute(sendInlineKeyBoardMessage(orderMessage.toString(), chatId));
+                                String message = orderMessage.toString();
+                                execute(sendInlineKeyBoardMessage(message, chatId));
                             } catch (TelegramApiException e) {
                                 System.out.println(e);
                                 System.out.println(e.getMessage());
@@ -150,7 +151,7 @@ public class Bot extends TelegramLongPollingBot {
                         System.out.println(e.getCause().toString());
                     }
                 }
-            } else if(update.hasCallbackQuery()){
+            } else if (update.hasCallbackQuery()) {
 
             }
         }
