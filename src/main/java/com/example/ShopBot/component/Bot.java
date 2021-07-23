@@ -129,6 +129,7 @@ public class Bot extends TelegramLongPollingBot {
                             }
                             try {
                                 String message = orderMessage.toString();
+                                System.out.println(message);
                                 execute(sendInlineKeyBoardMessage(message, chatId));
                             } catch (TelegramApiException e) {
                                 System.out.println(e);
