@@ -118,7 +118,9 @@ public class OrderEntityController {
                 if (productDataEntity.getProductEntity().getId().equals(productEndResponseDTO.getProduct().getId())) {
                     ProductDataEntityDTO productDataEntityDTO = pdEntityToDTO(productDataEntity);
                     productDataEntityDTO.setQuantity(productQuantityEntity.getQuantity());
-                    details.add(productDataEntityDTO);
+                    if((!details.contains(productDataEntityDTO))){
+                        details.add(productDataEntityDTO);
+                    }
                 }
             }
             productEndResponseDTO.setDetails(details);
