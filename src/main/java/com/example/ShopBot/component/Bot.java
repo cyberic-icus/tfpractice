@@ -107,7 +107,6 @@ public class Bot extends TelegramLongPollingBot {
 
                         List<OrderModel> orderModelList = g.fromJson(inline, new TypeToken<List<OrderModel>>(){}.getType());
                         for(OrderModel orderModel: orderModelList){
-                            System.out.println(orderModel.getPrice());
                             orderMessage.append("Заказ №").append(orderModel.getOrderId()).append("\n");
                             orderMessage.append("На сумму: ").append(orderModel.getPrice()).append(" руб.").append("\n");
                             orderMessage.append("Состояние заказа: ").append(orderModel.getOrderState()).append("\n");
@@ -131,6 +130,9 @@ public class Bot extends TelegramLongPollingBot {
                             try {
                                 execute(sendInlineKeyBoardMessage(orderMessage.toString(), chatId));
                             } catch (TelegramApiException e) {
+                                System.out.println(e);
+                                System.out.println(e.getMessage());
+                                System.out.println(e.getCause().toString());
                             }
                         }
 
@@ -143,9 +145,9 @@ public class Bot extends TelegramLongPollingBot {
                     try {
                         execute(builder.build());
                     } catch (TelegramApiException ee) {
-                        builder.text("something went wrong");
-                        builder.text(ee.getMessage());
-                        builder.text(ee.getCause().toString());
+                        System.out.println(e);
+                        System.out.println(e.getMessage());
+                        System.out.println(e.getCause().toString());
                     }
                 }
             } else if(update.hasCallbackQuery()){
