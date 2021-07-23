@@ -21,6 +21,7 @@ public class ProductDataEntity {
     public Long quantity;
 
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @JoinColumn(name = "product_entity_id", nullable = false)
     public ProductEntity productEntity;
 
 }

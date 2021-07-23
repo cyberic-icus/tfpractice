@@ -66,15 +66,17 @@ public class ProductDataEntityController {
 
 
     @PostMapping
-    ProductDataEntity postProductDataEntity( @Valid @RequestBody ProductDataEntityDTO productDataEntityDTO, @PathVariable Long productId) {
+    ProductDataEntityDTO postProductDataEntity( @Valid @RequestBody ProductDataEntityDTO productDataEntityDTO, @PathVariable Long productId) {
             Optional<ProductEntity> productEntity = productEntityService.getProductAll().stream()
                     .filter(pe -> pe.getId().equals(productId)).findAny();
             if (productEntity.isPresent()) {
                 ProductDataEntity productDataEntity = DTOToEntity(productDataEntityDTO);
-                productEntity.get().getSizesAndColors().add(productDataEntity);
+                ProductEntity productEntity1 = productEntity.get();
+                //productEntity1.getSizesAndColors().add(productDataEntity);
+                productDataEntity.setProductEntity(productEntity1);
                 productDataEntityService.saveProductData(productDataEntity);
-                productEntityService.saveProduct(productEntity.get());
-                return productDataEntity;
+                //productEntityService.saveProduct(productEntity1);
+                return productDataEntityDTO;
             }
         return null;
     }
