@@ -105,8 +105,7 @@ public class Bot extends TelegramLongPollingBot {
                         Gson g = new Gson();
 
 
-                        List<OrderModel> orderModelList = g.fromJson(inline, new TypeToken<List<OrderModel>>() {
-                        }.getType());
+                        List<OrderModel> orderModelList = g.fromJson(inline, new TypeToken<List<OrderModel>>() {}.getType());
                         for (OrderModel orderModel : orderModelList) {
                             orderMessage.append("Заказ №").append(orderModel.getOrderId()).append("\n");
                             orderMessage.append("На сумму: ").append(orderModel.getPrice()).append(" руб.").append("\n");
@@ -130,7 +129,8 @@ public class Bot extends TelegramLongPollingBot {
                             try {
                                 String message = orderMessage.toString();
                                 System.out.println(message);
-                                execute(sendInlineKeyBoardMessage(message, chatId));
+                                builder.text(message);
+                                execute(builder.build());
                             } catch (TelegramApiException e) {
                                 System.out.println(e);
                                 System.out.println(e.getMessage());
@@ -158,25 +158,25 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
-    public static SendMessage sendInlineKeyBoardMessage(String mes, String chatId) {
-
-        InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
-        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
-        List<InlineKeyboardButton> rowInline = new ArrayList<>();
-        InlineKeyboardButton inlineKeyboardButton = new InlineKeyboardButton();
-        inlineKeyboardButton.setText("Some button");
-        rowInline.add(inlineKeyboardButton);
-        rowsInline.add(rowInline);
-        markupInline.setKeyboard(rowsInline);
-
-        SendMessage message = new SendMessage();
-        message.setChatId(chatId);
-        message.setText(mes);
-        message.setReplyMarkup(markupInline);
-
-
-        return message;
-    }
+//    public static SendMessage sendInlineKeyBoardMessage(String mes, String chatId) {
+//
+//        InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
+//        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
+//        List<InlineKeyboardButton> rowInline = new ArrayList<>();
+//        InlineKeyboardButton inlineKeyboardButton = new InlineKeyboardButton();
+//        inlineKeyboardButton.setText("Some button");
+//        rowInline.add(inlineKeyboardButton);
+//        rowsInline.add(rowInline);
+//        markupInline.setKeyboard(rowsInline);
+//
+//        SendMessage message = new SendMessage();
+//        message.setChatId(chatId);
+//        message.setText(mes);
+//        message.setReplyMarkup(markupInline);
+//
+//
+//        return message;
+//    }
 
     @Override
     public String getBotUsername() {
