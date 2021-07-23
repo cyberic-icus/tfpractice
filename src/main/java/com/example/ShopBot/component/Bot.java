@@ -120,11 +120,11 @@ public class Bot extends TelegramLongPollingBot {
                             orderMessage.append("Товары: ").append(orderModel.getCustomer().getUserEmail()).append("\n").append("\n");
                             for (ProductEndModel productEndModel : orderModel.getProductList()) {
                                 ProductModel productModel = productEndModel.getProduct();
-                                orderMessage.append("Товар: ").append(productModel.getProductName()).append(" ID: ").append(productModel.getProductId()).append("\n");
+                                orderMessage.append("Товар: ").append(productModel.getProductName()).append(" (ID: ").append(productModel.getProductId()).append(")").append("\n");
                                 for (ProductQuantityModel productQuantityModel : productEndModel.getDetails()) {
                                     orderMessage.append("Цвет: ").append(productQuantityModel.getProductDataColor()).append("\n");
                                     orderMessage.append("Размер: ").append(productQuantityModel.getProductDataSize()).append("\n");
-                                    orderMessage.append("Количество: ").append(productQuantityModel.getProductDataQuantity()).append("\n");
+                                    orderMessage.append("Количество: ").append(productQuantityModel.getProductDataQuantity()).append("\n\n");
                                 }
                             }
                             try {
@@ -165,11 +165,8 @@ public class Bot extends TelegramLongPollingBot {
         InlineKeyboardButton inlineKeyboardButton3 = new InlineKeyboardButton();
 
         inlineKeyboardButton1.setText("Кнопка 1");
-        inlineKeyboardButton1.setCallbackData("Надо добавить функционал, только какой?");
         inlineKeyboardButton2.setText("Кнопка 1\"");
-        inlineKeyboardButton2.setCallbackData("Надо добавить функционал, только какой?");
         inlineKeyboardButton3.setText("Кнопка 1\"");
-        inlineKeyboardButton3.setCallbackData("Надо добавить функционал, только какой?");
 
         List<InlineKeyboardButton> keyboardButtonsRow1 = new ArrayList<>();
         List<InlineKeyboardButton> keyboardButtonsRow2 = new ArrayList<>();
