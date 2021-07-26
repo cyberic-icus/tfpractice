@@ -295,7 +295,6 @@ public class Bot extends TelegramLongPollingBot {
                     else orderMessage.append("Заказ выполнен: нет").append("\n");
                     if (orderModel.getIsPaid()) orderMessage.append("Заказ оплачен: да").append("\n");
                     else orderMessage.append("Заказ оплачен: нет").append("\n");
-                    orderMessage.append("Заказ оплачен: ").append(orderModel.getIsPaid()).append("\n");
                     orderMessage.append("Адрес доставки: ").append(orderModel.getOrderDestination()).append("\n");
                     orderMessage.append("Заказчик: ").append(orderModel.getCustomer().getUserFirstname()).append(" ").append(orderModel.getCustomer().getUserLastname()).append("\n");
                     orderMessage.append("Телефон: ").append(orderModel.getCustomer().getUserPhoneNumber()).append("\n");
