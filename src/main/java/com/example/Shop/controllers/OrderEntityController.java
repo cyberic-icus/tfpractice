@@ -127,10 +127,14 @@ public class OrderEntityController {
             }
             productEndResponseDTO.setDetails(details);
         }
-        ArrayList<ProductEndResponseDTO> productsList = new ArrayList<>();
-        productsList.addAll(products);
-        order.setProductList(productsList);
 
+        ArrayList<ProductEndResponseDTO> productsList = new ArrayList<>();
+        for(ProductEndResponseDTO prod: products){
+            if(!(productsList.contains(prod))){
+                productsList.add(prod);
+            }
+        }
+        order.setProductList(productsList);
         return order;
     }
 
