@@ -163,7 +163,7 @@ public class Bot extends TelegramLongPollingBot {
                 OrderStateDTO orderStateDTO = new OrderStateDTO(state);
                 String json = g.toJson(orderStateDTO);
 
-                URL url = new URL("https://tfpractice.herokuapp.com/order/"+id+"/" + mes.substring(16) + "/state/");
+                URL url = new URL("https://tfpractice.herokuapp.com/order/"+id+ "/state/");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("PUT");
                 connection.setDoOutput(true);
