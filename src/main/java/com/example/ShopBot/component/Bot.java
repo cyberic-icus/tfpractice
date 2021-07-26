@@ -84,7 +84,7 @@ public class Bot extends TelegramLongPollingBot {
             } catch (TelegramApiException e) {
             }
         }
-        if(messageText.contains("/меню")){
+        if(messageText.contains("/menu")){
             ArrayList<KeyboardRow> keyboard = new ArrayList<>();
             KeyboardRow keyboardRow1 = new KeyboardRow();
             KeyboardRow keyboardRow2 = new KeyboardRow();
@@ -128,6 +128,7 @@ public class Bot extends TelegramLongPollingBot {
                             orderMessage.append("Количество: ").append(productQuantityModel.getProductDataQuantity()).append("\n\n");
                         }
                     }
+
                     try {
                         String message = orderMessage.toString();
                         System.out.println(message);
