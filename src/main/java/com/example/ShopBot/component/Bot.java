@@ -92,7 +92,6 @@ public class Bot extends TelegramLongPollingBot {
             }
         }
 
-        if (messageText.contains("/menu")) {
             ArrayList<KeyboardRow> keyboard = new ArrayList<>();
             KeyboardRow keyboardRow1 = new KeyboardRow();
             KeyboardRow keyboardRow2 = new KeyboardRow();
@@ -112,7 +111,7 @@ public class Bot extends TelegramLongPollingBot {
 
             replyKeyboardMarkup.setKeyboard(keyboard);
             sendMessage.setReplyMarkup(replyKeyboardMarkup);
-        }
+
         if (messageText.contains("Завершить заказ")) {
             if (messageText.equals("Завершить заказ")) {
                 try {
