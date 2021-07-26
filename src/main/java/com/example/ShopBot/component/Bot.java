@@ -87,24 +87,24 @@ public class Bot extends TelegramLongPollingBot {
             } catch (TelegramApiException e) {
             }
         }
-        if(messageText.contains("/menu")){
-            ArrayList<KeyboardRow> keyboard = new ArrayList<>();
-            KeyboardRow keyboardRow1 = new KeyboardRow();
-            KeyboardRow keyboardRow2 = new KeyboardRow();
+        ArrayList<KeyboardRow> keyboard = new ArrayList<>();
+        KeyboardRow keyboardRow1 = new KeyboardRow();
+        KeyboardRow keyboardRow2 = new KeyboardRow();
 
-            replyKeyboardMarkup.setSelective(true);
-            replyKeyboardMarkup.setOneTimeKeyboard(false);
-            replyKeyboardMarkup.setResizeKeyboard(true);
+        replyKeyboardMarkup.setSelective(true);
+        replyKeyboardMarkup.setOneTimeKeyboard(false);
+        replyKeyboardMarkup.setResizeKeyboard(true);
 
-            keyboardRow1.add(new KeyboardButton("Все заказы"));
-            keyboardRow1.add(new KeyboardButton("Оплаченные заказы"));
-            keyboardRow2.add(new KeyboardButton("Выполненные заказы"));
+        keyboardRow1.add(new KeyboardButton("Все заказы"));
+        keyboardRow1.add(new KeyboardButton("Оплаченные заказы"));
+        keyboardRow2.add(new KeyboardButton("Выполненные заказы"));
 
-            keyboard.add(keyboardRow1);
-            keyboard.add(keyboardRow2);
+        keyboard.add(keyboardRow1);
+        keyboard.add(keyboardRow2);
 
-            replyKeyboardMarkup.setKeyboard(keyboard);
-        }
+        replyKeyboardMarkup.setKeyboard(keyboard);
+        sendMessage.setReplyMarkup(replyKeyboardMarkup);
+
 
         if (messageText.contains("Все заказы")) {
             try {
