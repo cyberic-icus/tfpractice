@@ -96,21 +96,19 @@ public class Bot extends TelegramLongPollingBot {
             ArrayList<KeyboardRow> keyboard = new ArrayList<>();
             KeyboardRow keyboardRow1 = new KeyboardRow();
             KeyboardRow keyboardRow2 = new KeyboardRow();
-            KeyboardRow keyboardRow3 = new KeyboardRow();
 
             replyKeyboardMarkup.setSelective(true);
             replyKeyboardMarkup.setOneTimeKeyboard(false);
             replyKeyboardMarkup.setResizeKeyboard(true);
 
-            keyboardRow1.add(new KeyboardButton("Все заказы"));
-            keyboardRow1.add(new KeyboardButton("Оплаченные заказы"));
-            keyboardRow2.add(new KeyboardButton("Выполненные заказы"));
-            keyboardRow3.add(new KeyboardButton("Завершить заказ"));
-            keyboardRow3.add(new KeyboardButton("Изменить состояние"));
+            keyboardRow1.add(new KeyboardButton("Все"));
+            keyboardRow1.add(new KeyboardButton("Оплаченные"));
+            keyboardRow1.add(new KeyboardButton("Выполненные"));
+            keyboardRow2.add(new KeyboardButton("Завершить"));
+            keyboardRow2.add(new KeyboardButton("Изменить состояние"));
 
             keyboard.add(keyboardRow1);
             keyboard.add(keyboardRow2);
-            keyboard.add(keyboardRow3);
 
             replyKeyboardMarkup.setKeyboard(keyboard);
             sendMessage.setReplyMarkup(replyKeyboardMarkup);
