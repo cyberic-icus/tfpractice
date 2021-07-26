@@ -108,7 +108,12 @@ public class OrderEntityController {
                 ProductEntity productEntity = productDataEntity1.getProductEntity();
                 ProductEndResponseDTO productEndResponseDTO = new ProductEndResponseDTO();
                 productEndResponseDTO.setProduct(proEntityToDTO(productEntity));
-                if(!products.contains(productEndResponseDTO)){
+
+                List<Long> ids = products.stream()
+                        .map(pe->pe.getProduct().getId())
+                        .collect(Collectors.toList());
+
+                if(!(ids.contains(productEndResponseDTO.getProduct().getId()))){
                     products.add(productEndResponseDTO);
                 }
             }
@@ -128,12 +133,7 @@ public class OrderEntityController {
             productEndResponseDTO.setDetails(details);
         }
 
-        ArrayList<ProductEndResponseDTO> productsList = new ArrayList<>();
-        for(ProductEndResponseDTO prod: products){
-            if(!(productsList.contains(prod))){
-                productsList.add(prod);
-            }
-        }
+        List<ProductEndResponseDTO> productsList = new ArrayList<>(products);
         order.setProductList(productsList);
         return order;
     }
@@ -152,13 +152,6 @@ public class OrderEntityController {
 
     @GetMapping
     List<OrderEntityResponseDTO> getCategoryEntityAllTest() {
-        List<OrderEntityDTO> orders = new ArrayList<>();
-        for (OrderEntity orderEntity : orderEntityService.getOrdersAll()) {
-            UserEntityDTO userEntityDTO = userEntityToDTO(orderEntity.getOrderUserEntity());
-            OrderEntityDTO orderEntityDTO = EntityToDTO(orderEntity);
-            orderEntityDTO.setCustomer(userEntityDTO);
-            orders.add(orderEntityDTO);
-        }
         return orderEntityService.getOrdersAll().stream()
                 .map(this::convertToEndDTO)
                 .collect(Collectors.toList());
