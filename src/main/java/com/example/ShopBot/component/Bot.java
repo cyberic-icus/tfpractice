@@ -112,11 +112,11 @@ public class Bot extends TelegramLongPollingBot {
             replyKeyboardMarkup.setKeyboard(keyboard);
             sendMessage.setReplyMarkup(replyKeyboardMarkup);
 
-        if (messageText.contains("Завершить заказ")) {
-            if (messageText.equals("Завершить заказ")) {
+        if (messageText.contains("Завершить")) {
+            if (messageText.equals("Завершить")) {
                 try {
                     SendMessage mes = new SendMessage();
-                    mes.setText("Неверная семантика! Введите id\nЗавершить заказ {id}");
+                    mes.setText("Неверная семантика! Введите id\nЗавершить {id}");
                     execute(mes);
                 } catch (Exception e) {
                 }
@@ -170,7 +170,7 @@ public class Bot extends TelegramLongPollingBot {
                 System.err.println(connection.getResponseCode());
             }
         }
-        if (messageText.contains("Оплаченные заказы")) {
+        if (messageText.contains("Оплаченные")) {
             try {
                 List<OrderModel> orderModelList = getAllOrders().stream()
                         .filter(OrderModel::getIsPaid)
@@ -234,7 +234,7 @@ public class Bot extends TelegramLongPollingBot {
             }
         }
 
-        if (messageText.contains("Выполненные заказы")) {
+        if (messageText.contains("Выполненные")) {
             try {
                 List<OrderModel> orderModelList = getAllOrders().stream()
                         .filter(OrderModel::getCompleted)
@@ -276,7 +276,7 @@ public class Bot extends TelegramLongPollingBot {
             }
         }
 
-        if (messageText.contains("Все заказы")) {
+        if (messageText.contains("Все")) {
             try {
                 List<OrderModel> orderModelList = getAllOrders();
                 for (OrderModel orderModel : orderModelList) {
