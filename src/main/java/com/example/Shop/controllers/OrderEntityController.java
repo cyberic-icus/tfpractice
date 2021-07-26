@@ -1,6 +1,8 @@
 package com.example.Shop.controllers;
 
 
+import com.example.Shop.db.dto.BotRelatedDTO.OrderCompletedDTO;
+import com.example.Shop.db.dto.BotRelatedDTO.OrderStateDTO;
 import com.example.Shop.db.dto.OrderEntityDTO.OrderEntityDTO;
 import com.example.Shop.db.dto.OrderEntityDTO.OrderEntityResponseDTO;
 import com.example.Shop.db.dto.OrderEntityDTO.ProductEndResponseDTO;
@@ -219,5 +221,23 @@ public class OrderEntityController {
             return orderEntityDTO;
         } else orderEntityService.saveOrder(newOrder);
         return null;
+    }
+    @PutMapping("/{id}/complete/")
+    void putBotComplete(@PathVariable Long id, @Valid @RequestBody OrderCompletedDTO orderCompleteDTO) {
+        Optional<OrderEntity> orderEntity = orderEntityService.getOrderById(id);
+        if (orderEntity.isPresent()) {
+            OrderEntity oldOrder = orderEntity.get();
+            oldOrder.setCompleted(orderCompleteDTO.getCompleted());
+            orderEntityService.saveOrder(oldOrder);
+        }
+    }
+    @PutMapping("/{id}/state/")
+    void putBotState(@PathVariable Long id, @Valid @RequestBody OrderStateDTO orderStateDTO) {
+        Optional<OrderEntity> orderEntity = orderEntityService.getOrderById(id);
+        if (orderEntity.isPresent()) {
+            OrderEntity oldOrder = orderEntity.get();
+            oldOrder.setState(orderStateDTO.getState());
+            orderEntityService.saveOrder(oldOrder);
+        }
     }
 }
