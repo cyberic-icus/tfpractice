@@ -76,22 +76,6 @@ public class Bot extends TelegramLongPollingBot {
             messageText = update.getChannelPost().getText();
         }
 
-        ArrayList<KeyboardRow> keyboard = new ArrayList<>();
-        KeyboardRow keyboardRow1 = new KeyboardRow();
-        KeyboardRow keyboardRow2 = new KeyboardRow();
-
-        replyKeyboardMarkup.setSelective(true);
-        replyKeyboardMarkup.setOneTimeKeyboard(false);
-        replyKeyboardMarkup.setResizeKeyboard(true);
-
-        keyboardRow1.add("Все заказы");
-        keyboardRow1.add("Оплаченные заказы");
-        keyboardRow2.add("Выполненные заказы");
-
-        keyboard.add(keyboardRow1);
-        keyboard.add(keyboardRow2);
-
-        replyKeyboardMarkup.setKeyboard(keyboard);
 
         if (messageText.contains("/chartId")) {
             try {
@@ -99,6 +83,24 @@ public class Bot extends TelegramLongPollingBot {
                 execute(sendMessage);
             } catch (TelegramApiException e) {
             }
+        }
+        if(messageText.contains("/меню")){
+            ArrayList<KeyboardRow> keyboard = new ArrayList<>();
+            KeyboardRow keyboardRow1 = new KeyboardRow();
+            KeyboardRow keyboardRow2 = new KeyboardRow();
+
+            replyKeyboardMarkup.setSelective(true);
+            replyKeyboardMarkup.setOneTimeKeyboard(false);
+            replyKeyboardMarkup.setResizeKeyboard(true);
+
+            keyboardRow1.add("Все заказы");
+            keyboardRow1.add("Оплаченные заказы");
+            keyboardRow2.add("Выполненные заказы");
+
+            keyboard.add(keyboardRow1);
+            keyboard.add(keyboardRow2);
+
+            replyKeyboardMarkup.setKeyboard(keyboard);
         }
 
         if (messageText.contains("/orders")) {
