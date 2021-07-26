@@ -9,9 +9,11 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
+import javax.inject.Inject;
+
 @Component
 public class BotInitializer {
-    @Autowired
+    @Inject
     Bot bot;
 
     @EventListener({ContextRefreshedEvent.class})
