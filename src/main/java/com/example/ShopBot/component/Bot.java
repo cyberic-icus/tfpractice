@@ -12,6 +12,7 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -66,6 +67,8 @@ public class Bot extends TelegramLongPollingBot {
         update.getUpdateId();
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
+        sendMessage.enableMarkdown(true);
+
         String messageText;
         String chatId;
         if (update.getMessage() != null) {
@@ -93,9 +96,9 @@ public class Bot extends TelegramLongPollingBot {
             replyKeyboardMarkup.setOneTimeKeyboard(false);
             replyKeyboardMarkup.setResizeKeyboard(true);
 
-            keyboardRow1.add("Все заказы");
-            keyboardRow1.add("Оплаченные заказы");
-            keyboardRow2.add("Выполненные заказы");
+            keyboardRow1.add(new KeyboardButton("Все заказы"));
+            keyboardRow1.add(new KeyboardButton("Оплаченные заказы"));
+            keyboardRow2.add(new KeyboardButton("Выполненные заказы"));
 
             keyboard.add(keyboardRow1);
             keyboard.add(keyboardRow2);
@@ -103,12 +106,11 @@ public class Bot extends TelegramLongPollingBot {
             replyKeyboardMarkup.setKeyboard(keyboard);
         }
 
-        if (messageText.contains("/orders")) {
+        if (messageText.contains("Все заказы")) {
             try {
-                StringBuilder builder = new StringBuilder();
-                StringBuilder orderMessage = new StringBuilder();
                 List<OrderModel> orderModelList = getAllOrders();
                 for (OrderModel orderModel : orderModelList) {
+                    StringBuilder orderMessage = new StringBuilder();
                     orderMessage.append("Заказ №").append(orderModel.getOrderId()).append("\n");
                     orderMessage.append("На сумму: ").append(orderModel.getPrice()).append(" руб.").append("\n");
                     orderMessage.append("Состояние заказа: ").append(orderModel.getOrderState()).append("\n");
