@@ -20,7 +20,7 @@ public class ProductQuantityEntity {
     public Long dataId;
     public Long quantity;
 
-    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
-    @JoinColumn
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @JoinColumn(name = "order_id", nullable = false)
     OrderEntity order;
 }

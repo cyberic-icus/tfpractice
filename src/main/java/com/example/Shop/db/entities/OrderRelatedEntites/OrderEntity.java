@@ -27,10 +27,11 @@ public class OrderEntity {
     public Boolean isPaid = false;
     public String state;
 
-    @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     List<ProductQuantityEntity> orderProductQuantityEntityList = new ArrayList<>();
-    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
-    @JoinColumn
+
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @JoinColumn(name = "order_user_entity_id", nullable = false)
     UserEntity orderUserEntity;
 
 }

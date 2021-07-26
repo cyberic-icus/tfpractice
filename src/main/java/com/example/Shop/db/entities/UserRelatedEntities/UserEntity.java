@@ -43,11 +43,11 @@ public class UserEntity implements UserDetails {
     }, fetch = FetchType.LAZY)
     private Set<RoleEntity> roles = new HashSet<RoleEntity>();
 
-    @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "orderUserEntity",cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     private Set<OrderEntity> orders = new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<OrderEntity> orders_history = new ArrayList<>();
+//    @OneToMany(mappedBy = "userEntity",cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+//    private List<OrderEntity> orders_history = new ArrayList<>();
 
 //    @OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
 //    private CartEntity cartEntity = new CartEntity();

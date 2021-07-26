@@ -161,13 +161,10 @@ public class OrderEntityController {
     }
 
     @GetMapping("/{id}")
-    OrderEntityDTO getOrderEntityById(@PathVariable Long id) {
-        Optional<OrderEntity> orderEntity = orderEntityService.getOrderById(id);
-        if (orderEntity.isPresent()) {
-            UserEntityDTO userEntityDTO = userEntityToDTO(orderEntity.get().getOrderUserEntity());
-            OrderEntityDTO orderEntityDTO = EntityToDTO(orderEntity.get());
-            orderEntityDTO.setCustomer(userEntityDTO);
-            return orderEntityDTO;
+    OrderEntityResponseDTO getOrderEntityById(@PathVariable Long id) {
+        Optional<OrderEntity> orderEntity1 = orderEntityService.getOrderById(id);
+        if (orderEntity1.isPresent()) {
+            return convertToEndDTO(orderEntity1.get());
         }
         return null;
     }
@@ -182,6 +179,9 @@ public class OrderEntityController {
                 .collect(Collectors.toList());
         orderEntity.setOrderProductQuantityEntityList(productQuantityEntities);
         orderEntity.setOrderUserEntity(userEntity);
+        for(ProductQuantityEntity productQuantityEntity: productQuantityEntities){
+            productQuantityEntity.setOrder(orderEntity);
+        }
 
         Long price = 0L;
         for (ProductQuantityEntity pq : productQuantityEntities) {
@@ -195,9 +195,10 @@ public class OrderEntityController {
         }
         if (price > 0L) {
             orderEntity.setPrice(price);
-            productQuantityService.saveProductQuantityAll(orderEntity.getOrderProductQuantityEntityList());
+
             userEntityService.saveUser(userEntity);
             orderEntityService.saveOrder(orderEntity);
+            productQuantityService.saveProductQuantityAll(orderEntity.getOrderProductQuantityEntityList());
             return orderEntityDTO;
         }
 
