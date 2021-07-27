@@ -160,6 +160,9 @@ public class Bot extends TelegramLongPollingBot {
                 System.out.println(id);
                 System.out.println(state);
 
+                System.out.println(id.length());
+                System.out.println(state.length());
+
 
                 Gson g = new Gson();
                 OrderStateDTO orderStateDTO = new OrderStateDTO(state);
