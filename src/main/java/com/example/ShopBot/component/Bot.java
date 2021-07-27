@@ -152,10 +152,16 @@ public class Bot extends TelegramLongPollingBot {
             } else {
                 String mes = messageText;
                 int lastb = mes.lastIndexOf(" ");
+
                 String state = mes.substring(lastb);
                 String nsting = mes.substring(0, lastb);
+
                 int lastbk = nsting.lastIndexOf(" ");
+
                 String id = nsting.substring(lastbk);
+
+                Long idL = Long.valueOf(id);
+                String test = state.stripTrailing();
 
                 System.out.println(id);
                 System.out.println(state);
@@ -165,10 +171,10 @@ public class Bot extends TelegramLongPollingBot {
 
 
                 Gson g = new Gson();
-                OrderStateDTO orderStateDTO = new OrderStateDTO(state);
+                OrderStateDTO orderStateDTO = new OrderStateDTO(test);
                 String json = g.toJson(orderStateDTO);
 
-                URL url = new URL("https://tfpractice.herokuapp.com/order/"+id+ "/state/");
+                URL url = new URL("https://tfpractice.herokuapp.com/order/"+idL.toString()+ "/state/");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("PUT");
                 connection.setDoOutput(true);
