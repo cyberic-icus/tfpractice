@@ -158,10 +158,8 @@ public class Bot extends TelegramLongPollingBot {
 
                 int lastbk = nsting.lastIndexOf(" ");
 
-                String id = nsting.substring(lastbk);
-
-                Long idL = Long.valueOf(id);
-                String test = state.stripTrailing();
+                String id = nsting.substring(lastbk).stripLeading().stripTrailing();
+                String test = state.stripTrailing().stripLeading();
 
                 System.out.println(id);
                 System.out.println(state);
@@ -174,7 +172,7 @@ public class Bot extends TelegramLongPollingBot {
                 OrderStateDTO orderStateDTO = new OrderStateDTO(test);
                 String json = g.toJson(orderStateDTO);
 
-                URL url = new URL("https://tfpractice.herokuapp.com/order/"+idL.toString()+ "/state/");
+                URL url = new URL("https://tfpractice.herokuapp.com/order/"+id+ "/state/");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("PUT");
                 connection.setDoOutput(true);
