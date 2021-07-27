@@ -92,25 +92,25 @@ public class Bot extends TelegramLongPollingBot {
             }
         }
 
-            ArrayList<KeyboardRow> keyboard = new ArrayList<>();
-            KeyboardRow keyboardRow1 = new KeyboardRow();
-            KeyboardRow keyboardRow2 = new KeyboardRow();
+        ArrayList<KeyboardRow> keyboard = new ArrayList<>();
+        KeyboardRow keyboardRow1 = new KeyboardRow();
+        KeyboardRow keyboardRow2 = new KeyboardRow();
 
-            replyKeyboardMarkup.setSelective(true);
-            replyKeyboardMarkup.setOneTimeKeyboard(false);
-            replyKeyboardMarkup.setResizeKeyboard(true);
+        replyKeyboardMarkup.setSelective(true);
+        replyKeyboardMarkup.setOneTimeKeyboard(false);
+        replyKeyboardMarkup.setResizeKeyboard(true);
 
-            keyboardRow1.add(new KeyboardButton("Все"));
-            keyboardRow1.add(new KeyboardButton("Оплаченные"));
-            keyboardRow1.add(new KeyboardButton("Выполненные"));
-            keyboardRow2.add(new KeyboardButton("Завершить"));
-            keyboardRow2.add(new KeyboardButton("Изменить состояние"));
+        keyboardRow1.add(new KeyboardButton("Все"));
+        keyboardRow1.add(new KeyboardButton("Оплаченные"));
+        keyboardRow1.add(new KeyboardButton("Выполненные"));
+        keyboardRow2.add(new KeyboardButton("Завершить"));
+        keyboardRow2.add(new KeyboardButton("Изменить состояние"));
 
-            keyboard.add(keyboardRow1);
-            keyboard.add(keyboardRow2);
+        keyboard.add(keyboardRow1);
+        keyboard.add(keyboardRow2);
 
-            replyKeyboardMarkup.setKeyboard(keyboard);
-            sendMessage.setReplyMarkup(replyKeyboardMarkup);
+        replyKeyboardMarkup.setKeyboard(keyboard);
+        sendMessage.setReplyMarkup(replyKeyboardMarkup);
 
         if (messageText.contains("Завершить")) {
             if (messageText.equals("Завершить")) {
@@ -155,8 +155,10 @@ public class Bot extends TelegramLongPollingBot {
                 String state = mes.substring(lastb);
                 String nsting = mes.substring(0, lastb);
                 int lastbk = nsting.lastIndexOf(" ");
-
                 String id = nsting.substring(lastbk);
+
+                System.out.println(id);
+                System.out.println(state);
 
 
                 Gson g = new Gson();
@@ -182,24 +184,6 @@ public class Bot extends TelegramLongPollingBot {
                         .filter(OrderModel::getIsPaid)
                         .collect(Collectors.toList());
                 for (OrderModel orderModel : orderModelList) {
-//
-//                    InlineKeyboardMarkup mesbuts = new InlineKeyboardMarkup();
-//                    InlineKeyboardButton bsetState = new InlineKeyboardButton();
-//                    bsetState.setText("Изменить состояние");
-//                    InlineKeyboardButton bsetCompleted = new InlineKeyboardButton();
-//                    bsetCompleted.setText("Завершить заказ");
-//
-//                    List<InlineKeyboardButton> r1 = new ArrayList<>();
-//                    r1.add(bsetState);
-//                    r1.add(bsetCompleted);
-//
-//                    List<List<InlineKeyboardButton>> rf = new ArrayList<>();
-//                    rf.add(r1);
-//
-//                    mesbuts.setKeyboard(rf);
-//
-//
-//                    bsetState.setCallbackData(String.valueOf(orderModel.getOrderId()));
 
                     StringBuilder orderMessage = new StringBuilder();
                     orderMessage.append("Заказ №").append(orderModel.getOrderId()).append("\n");
@@ -327,26 +311,6 @@ public class Bot extends TelegramLongPollingBot {
             }
         }
     }
-
-//    public static SendMessage sendInlineKeyBoardMessage(String mes, String chatId) {
-//
-//        InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
-//        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
-//        List<InlineKeyboardButton> rowInline = new ArrayList<>();
-//        InlineKeyboardButton inlineKeyboardButton = new InlineKeyboardButton();
-//        inlineKeyboardButton.setText("Some button");
-//        rowInline.add(inlineKeyboardButton);
-//        rowsInline.add(rowInline);
-//        markupInline.setKeyboard(rowsInline);
-//
-//        SendMessage message = new SendMessage();
-//        message.setChatId(chatId);
-//        message.setText(mes);
-//        message.setReplyMarkup(markupInline);
-//
-//
-//        return message;
-//    }
 
     @Override
     public String getBotUsername() {
