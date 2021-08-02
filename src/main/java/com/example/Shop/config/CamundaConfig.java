@@ -12,46 +12,6 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class CamundaConfig {
-//    @Bean
-//    public ProcessEngineService processEngineService() {
-//        return BpmPlatform.getProcessEngineService();
-//    }
-//
-//    @Bean(destroyMethod = "")
-//    public ProcessEngine processEngine(){
-//        return BpmPlatform.getDefaultProcessEngine();
-//    }
-//
-//    @Bean
-//    public SpringProcessApplication processApplication() {
-//        return new SpringProcessApplication();
-//    }
-//
-//    @Bean
-//    public RepositoryService repositoryService(ProcessEngine processEngine) {
-//        return processEngine.getRepositoryService();
-//    }
-
-//    @Bean
-//    public RuntimeService runtimeService(ProcessEngine processEngine) {
-//        return processEngine.getRuntimeService();
-//    }
-
-//    @Bean
-//    public TaskService taskService(ProcessEngine processEngine) {
-//        return processEngine.getTaskService();
-//    }
-//
-//    @Bean
-//    public HistoryService historyService(ProcessEngine processEngine) {
-//        return processEngine.getHistoryService();
-//    }
-//
-//    @Bean
-//    public ManagementService managementService(ProcessEngine processEngine) {
-//        return processEngine.getManagementService();
-//    }
-
     @Bean
     public TelegramPostService binSendMsgTelegram() {
         return new TelegramPostService();
