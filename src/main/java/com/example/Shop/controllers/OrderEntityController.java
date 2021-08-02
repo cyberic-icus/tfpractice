@@ -241,11 +241,20 @@ public class OrderEntityController {
             OrderEntity oldOrder = orderEntity.get();
             oldOrder.setState(orderStateDTO.getState());
             if(orderStateDTO.getState().equals("Собран")){
-                runtimeService.correlateMessage("Activity_1dp8m4r", Map.of(
-                        "ID", oldOrder.getId()
+                runtimeService.correlateMessage("Message_1h8irgj", Map.of(
+                        "ID", oldOrder.getId(),
+                        "paid", oldOrder.getIsPaid()
                 ));
             }
             orderEntityService.saveOrder(oldOrder);
         }
     }
+    @GetMapping("/{id}/pay")
+    void fakePay(@PathVariable Long id){
+        Optional<OrderEntity> orderEntity = orderEntityService.getOrderById(id);
+        if (orderEntity.isPresent()) {
+            orderEntity.get().setIsPaid(true);
+        }
+        }
+
 }
