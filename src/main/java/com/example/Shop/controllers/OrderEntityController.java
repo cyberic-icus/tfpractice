@@ -241,7 +241,7 @@ public class OrderEntityController {
             OrderEntity oldOrder = orderEntity.get();
             oldOrder.setState(orderStateDTO.getState());
             if(orderStateDTO.getState().equals("Собран")){
-                runtimeService.createMessageCorrelation("Activity_1dp8m4r")
+                runtimeService.createMessageCorrelation("Message_1h8irgj")
                         .processInstanceBusinessKey("111")
                         .setVariable("paid", oldOrder.getIsPaid())
                         .correlateWithResult();
