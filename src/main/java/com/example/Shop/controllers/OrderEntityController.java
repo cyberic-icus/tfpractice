@@ -241,10 +241,15 @@ public class OrderEntityController {
             OrderEntity oldOrder = orderEntity.get();
             oldOrder.setState(orderStateDTO.getState());
             if(orderStateDTO.getState().equals("Собран")){
-                runtimeService.correlateMessage("Message_1h8irgj", Map.of(
-                        "ID", oldOrder.getId(),
-                        "paid", oldOrder.getIsPaid()
-                ));
+//                runtimeService.correlateMessage(CamundaMessageType,
+//                        Map.of(
+//                        "ID", oldOrder.getId(),
+//                        "paid", oldOrder.getIsPaid()
+//                ));
+                runtimeService.createMessageCorrelation("Activity_1dp8m4r")
+                        .processInstanceId("Process_0o6v8bi")
+                        .setVariable("paid", oldOrder.getIsPaid())
+                        .correlateWithResult();
             }
             orderEntityService.saveOrder(oldOrder);
         }
@@ -253,7 +258,9 @@ public class OrderEntityController {
     void fakePay(@PathVariable Long id){
         Optional<OrderEntity> orderEntity = orderEntityService.getOrderById(id);
         if (orderEntity.isPresent()) {
-            orderEntity.get().setIsPaid(true);
+            OrderEntity orderEntity1 = orderEntity.get();
+            orderEntity1.setIsPaid(true);
+            orderEntityService.saveOrder(orderEntity1);
         }
         }
 
