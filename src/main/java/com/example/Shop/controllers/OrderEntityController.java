@@ -21,6 +21,7 @@ import com.example.Shop.services.ProductEntityService;
 import com.example.Shop.services.ProductQuantityService;
 import com.example.Shop.services.UserEntityService;
 import io.swagger.annotations.Api;
+import org.camunda.bpm.engine.RuntimeService;
 import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,14 +41,16 @@ public class OrderEntityController {
     final private ProductQuantityService productQuantityService;
     final private ProductDataEntityRepository productDataEntityRepository;
     final private ProductEntityService productEntityService;
+    final private RuntimeService runtimeService;
 
-    public OrderEntityController(OrderEntityService orderEntityService, ModelMapper modelMapper, UserEntityService userEntityService, ProductQuantityService productQuantityService, ProductDataEntityRepository productDataEntityRepository, ProductEntityService productEntityService) {
+    public OrderEntityController(OrderEntityService orderEntityService, ModelMapper modelMapper, UserEntityService userEntityService, ProductQuantityService productQuantityService, ProductDataEntityRepository productDataEntityRepository, ProductEntityService productEntityService, RuntimeService runtimeService) {
         this.orderEntityService = orderEntityService;
         this.modelMapper = modelMapper;
         this.userEntityService = userEntityService;
         this.productQuantityService = productQuantityService;
         this.productDataEntityRepository = productDataEntityRepository;
         this.productEntityService = productEntityService;
+        this.runtimeService = runtimeService;
     }
 
     public OrderEntityDTO EntityToDTO(OrderEntity orderEntity) {
@@ -237,6 +240,11 @@ public class OrderEntityController {
         if (orderEntity.isPresent()) {
             OrderEntity oldOrder = orderEntity.get();
             oldOrder.setState(orderStateDTO.getState());
+            if(orderStateDTO.getState().equals("Собран")){
+                runtimeService.correlateMessage("Activity_1dp8m4r", Map.of(
+                        "ID", oldOrder.getId()
+                ));
+            }
             orderEntityService.saveOrder(oldOrder);
         }
     }
