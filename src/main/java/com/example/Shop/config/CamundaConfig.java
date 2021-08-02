@@ -1,12 +1,10 @@
 package com.example.Shop.config;
 
 
+import com.example.Shop.config.beans.CancelOrderService;
+import com.example.Shop.config.beans.ShowPaymentService;
 import com.example.Shop.config.beans.TelegramPostService;
-import com.example.Shop.config.beans.TestService;
-import org.camunda.bpm.BpmPlatform;
-import org.camunda.bpm.ProcessEngineService;
-import org.camunda.bpm.engine.*;
-import org.camunda.bpm.engine.spring.application.SpringProcessApplication;
+import com.example.Shop.config.beans.SendToTKService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -18,7 +16,15 @@ public class CamundaConfig {
     }
 
     @Bean
-    public TestService binSendMsgSomwhere() {
-        return new TestService();
+    public SendToTKService binSendMsgSomwhere() {
+        return new SendToTKService();
+    }
+    @Bean
+    public ShowPaymentService binPayment() {
+        return new ShowPaymentService();
+    }
+    @Bean
+    public CancelOrderService binCancelOrder() {
+        return new CancelOrderService();
     }
 }

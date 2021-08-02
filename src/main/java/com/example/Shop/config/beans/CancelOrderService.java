@@ -3,8 +3,8 @@ package com.example.Shop.config.beans;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 
-public class TestService implements JavaDelegate {
+public class CancelOrderService implements JavaDelegate {
     public void execute(DelegateExecution delegate) {
-        System.out.println("Send to tk");
+        System.out.println("Order canceled");
     }
 }
