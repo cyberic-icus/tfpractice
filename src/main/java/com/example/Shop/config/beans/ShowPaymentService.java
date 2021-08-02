@@ -5,6 +5,6 @@ import org.camunda.bpm.engine.delegate.JavaDelegate;
 
 public class ShowPaymentService implements JavaDelegate {
     public void execute(DelegateExecution delegate) {
-        System.out.println("Payment is");
+        System.out.println("Payment showed");
     }
 }

@@ -26,6 +26,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -115,10 +117,10 @@ public class OrderEntityController {
                 productEndResponseDTO.setProduct(proEntityToDTO(productEntity));
 
                 List<Long> ids = products.stream()
-                        .map(pe->pe.getProduct().getId())
+                        .map(pe -> pe.getProduct().getId())
                         .collect(Collectors.toList());
 
-                if(!(ids.contains(productEndResponseDTO.getProduct().getId()))){
+                if (!(ids.contains(productEndResponseDTO.getProduct().getId()))) {
                     products.add(productEndResponseDTO);
                 }
             }
@@ -130,7 +132,7 @@ public class OrderEntityController {
                 if (productDataEntity.getProductEntity().getId().equals(productEndResponseDTO.getProduct().getId())) {
                     ProductDataEntityDTO productDataEntityDTO = pdEntityToDTO(productDataEntity);
                     productDataEntityDTO.setQuantity(productQuantityEntity.getQuantity());
-                    if((!details.contains(productDataEntityDTO))){
+                    if ((!details.contains(productDataEntityDTO))) {
                         details.add(productDataEntityDTO);
                     }
                 }
@@ -181,7 +183,7 @@ public class OrderEntityController {
                 .collect(Collectors.toList());
         orderEntity.setOrderProductQuantityEntityList(productQuantityEntities);
         orderEntity.setOrderUserEntity(userEntity);
-        for(ProductQuantityEntity productQuantityEntity: productQuantityEntities){
+        for (ProductQuantityEntity productQuantityEntity : productQuantityEntities) {
             productQuantityEntity.setOrder(orderEntity);
         }
 
@@ -201,6 +203,10 @@ public class OrderEntityController {
             userEntityService.saveUser(userEntity);
             orderEntityService.saveOrder(orderEntity);
             productQuantityService.saveProductQuantityAll(orderEntity.getOrderProductQuantityEntityList());
+            runtimeService.createProcessInstanceByKey("Process_0o6v8bi")
+                    .businessKey(orderEntity.getId().toString())
+                    .execute();
+
             return orderEntityDTO;
         }
 
@@ -225,6 +231,7 @@ public class OrderEntityController {
         } else orderEntityService.saveOrder(newOrder);
         return null;
     }
+
     @PutMapping("/{id}/complete/")
     void putBotComplete(@PathVariable Long id, @Valid @RequestBody OrderCompletedDTO orderCompleteDTO) {
         Optional<OrderEntity> orderEntity = orderEntityService.getOrderById(id);
@@ -234,29 +241,67 @@ public class OrderEntityController {
             orderEntityService.saveOrder(oldOrder);
         }
     }
+
     @PutMapping("/{id}/state/")
     void putBotState(@PathVariable Long id, @Valid @RequestBody OrderStateDTO orderStateDTO) {
         Optional<OrderEntity> orderEntity = orderEntityService.getOrderById(id);
         if (orderEntity.isPresent()) {
             OrderEntity oldOrder = orderEntity.get();
             oldOrder.setState(orderStateDTO.getState());
-            if(orderStateDTO.getState().equals("Собран")){
-                runtimeService.createMessageCorrelation("Message_1h8irgj")
-                        .processInstanceBusinessKey("111")
-                        .setVariable("paid", oldOrder.getIsPaid())
-                        .correlateWithResult();
+            if (orderStateDTO.getState().equals("Собран")) {
+                if (oldOrder.getIsPaid()) {
+                    runtimeService.createMessageCorrelation("Message_1h8irgj")
+                            .processInstanceBusinessKey(id.toString())
+                            .setVariable("paid", oldOrder.getIsPaid())
+                            .correlate();
+                } else {
+                    runtimeService.createMessageCorrelation("Message_1h8irgj")
+                            .processInstanceBusinessKey(id.toString())
+                            .setVariable("paid", oldOrder.getIsPaid())
+                            .setVariable("deadlinePayments", Date.from(Instant.now().plusSeconds(180L)))
+                            .correlate();
+                }
+
             }
             orderEntityService.saveOrder(oldOrder);
         }
     }
-    @GetMapping("/{id}/pay")
-    void fakePay(@PathVariable Long id){
+
+    @GetMapping("/{id}/tpay")
+    void fakePay(@PathVariable Long id) {
         Optional<OrderEntity> orderEntity = orderEntityService.getOrderById(id);
         if (orderEntity.isPresent()) {
             OrderEntity orderEntity1 = orderEntity.get();
             orderEntity1.setIsPaid(true);
             orderEntityService.saveOrder(orderEntity1);
         }
+    }
+
+    @GetMapping("/{id}/pay")
+    Long payWait(@PathVariable Long id) {
+        Optional<OrderEntity> orderEntity = orderEntityService.getOrderById(id);
+        if (orderEntity.isPresent()) {
+            OrderEntity orderEntity1 = orderEntity.get();
+            runtimeService.createMessageCorrelation("Message_24fd06q")
+                    .processInstanceBusinessKey(id.toString())
+                    .setVariable("deadlinePayments", LocalDateTime.now().plusMinutes(2L))
+                    .correlate();
+            return orderEntity1.getPrice();
         }
+        return null;
+    }
+
+    @GetMapping("/{id}/answer")
+    Long otvetKek(@PathVariable Long id) {
+        Optional<OrderEntity> orderEntity = orderEntityService.getOrderById(id);
+        if (orderEntity.isPresent()) {
+            runtimeService.createMessageCorrelation("Message_1bknnqf")
+                    .processInstanceBusinessKey(id.toString())
+                    .correlate();
+            return 1L;
+        }
+        return 0L;
+    }
+
 
 }

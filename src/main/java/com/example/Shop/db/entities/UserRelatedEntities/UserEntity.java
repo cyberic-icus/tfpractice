@@ -13,7 +13,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.time.Instant;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Entity
@@ -43,7 +45,7 @@ public class UserEntity implements UserDetails {
     }, fetch = FetchType.LAZY)
     private Set<RoleEntity> roles = new HashSet<RoleEntity>();
 
-    @OneToMany(mappedBy = "orderUserEntity",cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "orderUserEntity", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     private Set<OrderEntity> orders = new HashSet<>();
 
 //    @OneToMany(mappedBy = "userEntity",cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
