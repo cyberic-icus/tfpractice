@@ -241,13 +241,8 @@ public class OrderEntityController {
             OrderEntity oldOrder = orderEntity.get();
             oldOrder.setState(orderStateDTO.getState());
             if(orderStateDTO.getState().equals("Собран")){
-//                runtimeService.correlateMessage(CamundaMessageType,
-//                        Map.of(
-//                        "ID", oldOrder.getId(),
-//                        "paid", oldOrder.getIsPaid()
-//                ));
                 runtimeService.createMessageCorrelation("Activity_1dp8m4r")
-                        .processInstanceId("Process_0o6v8bi")
+                        .processInstanceBusinessKey("111")
                         .setVariable("paid", oldOrder.getIsPaid())
                         .correlateWithResult();
             }
